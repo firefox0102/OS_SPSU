@@ -1,0 +1,8 @@
+c:\users\peter\documents\visual studio 2013\Projects\OS Project\OS Project\bin\Debug\OS Project.exe.config
+c:\users\peter\documents\visual studio 2013\Projects\OS Project\OS Project\bin\Debug\OS Project.exe
+c:\users\peter\documents\visual studio 2013\Projects\OS Project\OS Project\bin\Debug\OS Project.pdb
+c:\users\peter\documents\visual studio 2013\Projects\OS Project\OS Project\obj\Debug\OS Project.csprojResolveAssemblyReference.cache
+c:\users\peter\documents\visual studio 2013\Projects\OS Project\OS Project\obj\Debug\OS_Project.Properties.Resources.resources
+c:\users\peter\documents\visual studio 2013\Projects\OS Project\OS Project\obj\Debug\OS Project.csproj.GenerateResource.Cache
+c:\users\peter\documents\visual studio 2013\Projects\OS Project\OS Project\obj\Debug\OS Project.exe
+c:\users\peter\documents\visual studio 2013\Projects\OS Project\OS Project\obj\Debug\OS Project.pdb
