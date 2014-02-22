@@ -10,12 +10,10 @@ namespace OS_Project
     public class Loader
     {
         StreamReader sr;
-        PCB pcb;
         
-        public Loader(p)
+        public Loader()
         {
             StreamReader sr = new Streamreader();
-            pcb = p;
         }
         
         string getFromFile()
@@ -24,8 +22,8 @@ namespace OS_Project
             {
                 if(/*I didn't hit the next// marks*/)
                 {
+                    //dont forget to create the process class
                     Process temp = new Process();
-                    storeInPCB(pcb, temp);
                 }
             }
         }
@@ -33,11 +31,6 @@ namespace OS_Project
         string convertToBinaryString()
         {
             
-        }
-        
-        void storeInPCB(p)
-        {
-           //store a reference of the process in the pcb
         }
     }
 }
