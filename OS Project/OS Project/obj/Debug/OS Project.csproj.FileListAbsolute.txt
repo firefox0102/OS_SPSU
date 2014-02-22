@@ -9,3 +9,6 @@ c:\users\peter\documents\visual studio 2013\Projects\OS Project\OS Project\obj\D
 C:\Users\DrewP\Documents\GitHub\OS_SPSU\OS Project\OS Project\bin\Debug\OS Project.exe.config
 C:\Users\DrewP\Documents\GitHub\OS_SPSU\OS Project\OS Project\obj\Debug\OS Project.exe
 C:\Users\DrewP\Documents\GitHub\OS_SPSU\OS Project\OS Project\obj\Debug\OS Project.pdb
+C:\Users\apfundst\Documents\GitHub\OS_SPSU\OS Project\OS Project\bin\Debug\OS Project.exe.config
+C:\Users\apfundst\Documents\GitHub\OS_SPSU\OS Project\OS Project\obj\Debug\OS Project.exe
+C:\Users\apfundst\Documents\GitHub\OS_SPSU\OS Project\OS Project\obj\Debug\OS Project.pdb

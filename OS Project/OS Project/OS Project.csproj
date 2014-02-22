@@ -47,6 +47,7 @@
     <Compile Include="Classes\CPU Class.cs" />
     <Compile Include="Classes\Disk.cs" />
     <Compile Include="Classes\Dispatcher.cs" />
+    <Compile Include="Classes\Instruction.cs" />
     <Compile Include="Classes\Process.cs" />
     <Compile Include="Classes\ReadyQueue.cs" />
     <Compile Include="Form1.cs">
