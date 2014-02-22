@@ -8,20 +8,20 @@ namespace OS_Project
 {
     public class Disk
     {
-        List<list<string>> Disk;
-        List<list<int>> DiskRecord;
+        List<List<string>> Disk;
+        List<List<int>> DiskRecord;
         
         public Disk()
         {
-            Disk = new List<string>();
+            Disk = new List<List<string>>();
         }
         
         void AddToDisk(string Data)
         {
-            Disk.add(Data);
+            Disk.Add(Data);
         }
         
-        list<string> GetData(int DataStart)
+        List<string> GetData(int DataStart)
         {
             return Disk[DataStart];
         }
