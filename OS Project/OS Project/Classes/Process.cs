@@ -31,5 +31,10 @@ namespace OS_Project.Classes
         //getters and setters? maybe just all public?
 
 
+
+        internal string Substring(int p1, int p2)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

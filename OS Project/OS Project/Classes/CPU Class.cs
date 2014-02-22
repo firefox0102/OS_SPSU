@@ -45,7 +45,41 @@ namespace OS_Project.Classes
 
         void Execute()
         {
-            String opCode = currentProcess.opCode;
+            string instructionFormat = currentProcess.Substring(0, 2);
+
+            if (instructionFormat == "00")
+                Arithmetic();
+            else if (instructionFormat == "01")
+                BranchandImmediate();
+            else if (instructionFormat == "10")
+                UnconditionalJump();
+            else if (instructionFormat == "11")
+                IO();
+            else
+                Console.Out.WriteLine("INSTRUCTION FORMAT DETERMINATION MUFFED UP");
+            
+        }
+
+        void Arithmetic()
+        {
+            string opCode = currentProcess.Substring(2, 6);
+            string s1 = currentProcess.Substring(8, 4);
+            string s2 = currentProcess.Substring(12, 16);
+        }
+
+        void BranchandImmediate()
+        {
+
+        }
+
+        void UnconditionalJump()
+        {
+
+        }
+
+        void IO()
+        {
+        String opCode = currentProcess.Substring(2,4);
             int tempRegister1 = currentProcess.Register1;
             int tempRegister2 = currentProcess.Register2;
             int address = currentProcess.Address;
@@ -67,29 +101,10 @@ namespace OS_Project.Classes
                 case "000001":
                     string write = "0x" + register[Accumulator].ToString("X8");
                     break;
-            }
+        
         }
 
-        void Arithmetic()
-        {
-
         }
-
-        void BranchandImmediate()
-        {
-
-        }
-
-        void UnconditionalJump()
-        {
-
-        }
-
-        void IO()
-        {
-
-        }
-
     }
 }
 
