@@ -18,3 +18,6 @@ C:\Users\Peter\Documents\GitHub\OS_SPSU\OS Project\OS Project\obj\Debug\OS Proje
 C:\Users\tscovill\Documents\GitHub\OS_SPSU\OS Project\OS Project\bin\Debug\OS Project.exe.config
 C:\Users\tscovill\Documents\GitHub\OS_SPSU\OS Project\OS Project\obj\Debug\OS Project.exe
 C:\Users\tscovill\Documents\GitHub\OS_SPSU\OS Project\OS Project\obj\Debug\OS Project.pdb
+C:\Users\Tyler\Documents\GitHub\OS_SPSU\OS Project\OS Project\bin\Debug\OS Project.exe.config
+C:\Users\Tyler\Documents\GitHub\OS_SPSU\OS Project\OS Project\obj\Debug\OS Project.exe
+C:\Users\Tyler\Documents\GitHub\OS_SPSU\OS Project\OS Project\obj\Debug\OS Project.pdb
