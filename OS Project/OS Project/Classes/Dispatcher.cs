@@ -8,9 +8,12 @@ namespace OS_Project
 {
     public class Dispatcher
     {
-        
+        public Process current;
+        private bool idle;
         public Dispatcher()
         {
+            
+
             
         }
         //Drew will write the dispatcher
