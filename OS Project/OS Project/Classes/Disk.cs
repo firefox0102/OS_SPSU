@@ -8,7 +8,8 @@ namespace OS_Project
 {
     public class Disk
     {
-        List<list<string>> Disk {get; set;}
+        List<list<string>> Disk;
+        List<list<int>> DiskRecord;
         
         public Disk()
         {
