@@ -8,7 +8,7 @@ namespace OS_Project
 {
     public class Disk
     {
-        List<string> Disk {get; set;}
+        List<list<string>> Disk {get; set;}
         
         public Disk()
         {
@@ -20,16 +20,9 @@ namespace OS_Project
             Disk.add(Data);
         }
         
-        list<string> GetData(int DataStart, int DataSize)
+        list<string> GetData(int DataStart)
         {
-            list<string> FromDisk = new List<string>();
-            
-            for(int i = DataStart; i < (DataStart + DataSize); i++)
-                FromDisk.add(Disk[i]);
-                
-            return FromDisk;
+            return Disk[DataStart];
         }
-        
-        
     }
 }
