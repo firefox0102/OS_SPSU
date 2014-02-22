@@ -64,9 +64,47 @@ namespace OS_Project.Classes
         void Arithmetic()
         {
             string opCode = currentProcess.Substring(2, 6);
-            string s1 = currentProcess.Substring(8, 4);
-            string s2 = currentProcess.Substring(12, 16);
+            int s1 = Int32.Parse(currentProcess.Substring(8, 4));
+            int s2 = Int32.Parse(currentProcess.Substring(12, 4));
+            int D = Int32.Parse(currentProcess.Substring(16, 4));
 
+            switch (opCode)
+            {
+                case "000100":  //MOV
+                    register[s1] = register[s2];
+                    break;
+                case "000101":  //ADD
+                    register[D] = register[s1] + register[s2];
+                    break;
+                case "000110":  //SUB
+                    register[D] = register[s1] - register[s2];
+                    break;
+                case "000111":  //MUL
+                    register[D] = register[s1] * register[s2];
+                    break;
+                case "001000":  //DIV
+                    register[D] = register[s1] / register[s2];
+                    break;
+                case "001001":  //AND
+                    if (register[s1] != 0 && register[s2] != 0)
+                        register[D] = 1;
+                    else
+                        register[D] = 0;
+                    break;
+                case "001010":  //OR
+                    if (register[s1] == 0 && register[s2] == 0)
+                        register[D] = 0;
+                    else
+                        register[D] = 1;
+                    break;
+                case "010000":  //SLT
+                    if (register[s1] < register[s2])
+                        register[D] = 1;
+                    else
+                        register[D] = 0;
+                    break;
+                default : 
+                    break;
 
         }
 
