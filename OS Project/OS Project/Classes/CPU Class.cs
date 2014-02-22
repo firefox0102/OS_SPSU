@@ -146,7 +146,7 @@ namespace OS_Project.Classes
         {
             String newCurrentProcess;
             String currentaddress = address.ToString();
-            int decimaladdress = Convert.ToInt32(currentaddress, 2);
+            int decimaladdress = (Convert.ToInt32(currentaddress, 2)/4)-1;
             newCurrentProcess = instructionList[decimaladdress];
 
             return newCurrentProcess;
@@ -158,7 +158,7 @@ namespace OS_Project.Classes
 
         void BranchandImmediate()
         {
-            String opCode = currentProcess.Substring(2, 4);
+            String opCode = currentProcess.Substring(2, 6);
             int B = Convert.ToInt32(currentProcess.Substring(8,4),2);
             int D = Convert.ToInt32(currentProcess.Substring(12,4),2);
             int address = Convert.ToInt32(currentProcess.Substring(16,16),2);
@@ -215,7 +215,7 @@ namespace OS_Project.Classes
 
         void UnconditionalJump()
         {
-            String opCode = currentProcess.Substring(2, 4);
+            String opCode = currentProcess.Substring(2, 6);
             int address = Convert.ToInt32(currentProcess.Substring(8, currentProcess.Length-8),2);
             switch (opCode)
             {
@@ -231,7 +231,7 @@ namespace OS_Project.Classes
 
         void IO()
         {
-            String opCode = currentProcess.Substring(2, 4);
+            String opCode = currentProcess.Substring(2, 6);
             int tempRegister1 = Int32.Parse(currentProcess.Substring(8, 4));
             int tempRegister2 = Int32.Parse(currentProcess.Substring(12, 4));
             int address = Int32.Parse(currentProcess.Substring(16, 16));
