@@ -23,6 +23,10 @@ namespace OS_Project.Classes
         {
             //default constcutor
         }
+        public Process()
+        {
+            //default constcutor
+        }
 
         //getters and setters? maybe just all public?
 
