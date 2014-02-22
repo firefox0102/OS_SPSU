@@ -6,18 +6,18 @@ using System.Windows.Forms;
 
 namespace OS_Project.Classes
 {
-    public class CPU
+     public class CPU
     {
         public int[] register;
         //do we need a program cache????
         public String currentProcess;
-        public PCB currentPCB;
+        public PCBObject currentPCB;
         public int processPosition;
         //accumulator stores results
         // zero is register always set to zero
         public const int Accumulator = 0;
         public const int Zero = 0;
-
+        public List<String> instructionList;
         public CPU()
         {
             register = new int[16];
@@ -36,6 +36,7 @@ namespace OS_Project.Classes
         void Fetch()
         {
             //is passed pcb id then gets pcb info
+            //FILLS instructionList
 
         }
 
@@ -103,14 +104,82 @@ namespace OS_Project.Classes
                     else
                         register[D] = 0;
                     break;
-                default : 
+                default:
                     break;
 
+            }
         }
+        
+        
+        String convertAddress(int address)
+        {
+            String newCurrentProcess;
+            String currentaddress = address.ToString();
+            int decimaladdress = Convert.ToInt32(currentaddress, 2);
+            newCurrentProcess = instructionList[decimaladdress];
+
+            return newCurrentProcess;
+        }
+
+
+
+
 
         void BranchandImmediate()
         {
+            String opCode = currentProcess.Substring(2, 4);
+            int B = Int32.Parse(currentProcess.Substring(8,4));
+            int D = Int32.Parse(currentProcess.Substring(12,4));
+            int address = Int32.Parse(currentProcess.Substring(16,16));
 
+            switch (opCode)
+            {
+                case "001011":  //MOVI
+                    register[D] = register[B];
+                    break;
+                case "001100":  //ADDI
+                    register[D] = register[B] + address;
+                    break;
+                case "001101":  //MULI
+                    register[D] = register[B] * address;
+                    break;
+                case "001110":  //DIVI
+                    register[D] = register[B] / address;
+                    break;
+                case "001111":  //LDI
+                    register[D] = address;
+                    break;
+                case "010001":  //SLTI
+                    if (register[B] < address)
+                        register[D] = 1;
+                    else
+                        register[D] = 0;
+                    break;
+                case "010101":  //BEQ
+                    if (register[D] == register[B])
+                        currentProcess = convertAddress(address);
+                    break;
+                case "010110":  //BNE
+                    if (register[D] != register[B])
+                        currentProcess = convertAddress(address);
+                    break;
+                case "010111":  //BEZ
+                    if (register[D] == register[Zero])
+                        currentProcess = convertAddress(address);
+                    break;
+                case "011000":  //BNZ
+                    if (register[D] != register[Zero])
+                        currentProcess = convertAddress(address);
+                    break;
+                case "011001":  //BGZ
+                    if (register[D] > register[Zero])
+                        currentProcess = convertAddress(address);
+                    break;
+                case "011010":  //BLZ
+                    if (register[D] < register[Zero])
+                        currentProcess = convertAddress(address);
+                    break;
+            }
         }
 
         void UnconditionalJump()
@@ -120,7 +189,7 @@ namespace OS_Project.Classes
 
         void IO()
         {
-        String opCode = currentProcess.Substring(2,4);
+            String opCode = currentProcess.Substring(2,4);
             int tempRegister1 = currentPCB.registers[2];
             int tempRegister2 = currentPCB.registers[3];
             int address = currentProcess.Address;
