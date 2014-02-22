@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
 namespace OS_Project.Classes
 {
      public class CPU
@@ -72,9 +73,9 @@ namespace OS_Project.Classes
         void Arithmetic()
         {
             string opCode = currentProcess.Substring(2, 6);
-            int s1 = Int32.Parse(currentProcess.Substring(8, 4));
-            int s2 = Int32.Parse(currentProcess.Substring(12, 4));
-            int D = Int32.Parse(currentProcess.Substring(16, 4));
+            int s1 = Convert.ToInt32(currentProcess.Substring(8, 4),2);
+            int s2 = Convert.ToInt32(currentProcess.Substring(12, 4),2);
+            int D = Convert.ToInt32(currentProcess.Substring(16, 4),2);
 
             switch (opCode)
             {
@@ -135,10 +136,10 @@ namespace OS_Project.Classes
         void BranchandImmediate()
         {
             String opCode = currentProcess.Substring(2, 4);
-            int B = Int32.Parse(currentProcess.Substring(8,4));
-            int D = Int32.Parse(currentProcess.Substring(12,4));
-            int address = Int32.Parse(currentProcess.Substring(16,16));
-
+            int B = Convert.ToInt32(currentProcess.Substring(8,4),2);
+            int D = Convert.ToInt32(currentProcess.Substring(12,4),2);
+            int address = Convert.ToInt32(currentProcess.Substring(16,16),2);
+           
             switch (opCode)
             {
                 case "001011":  //MOVI
