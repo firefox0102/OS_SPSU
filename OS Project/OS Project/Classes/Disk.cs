@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OS_Project
 {
-    class Disk
+    public class Disk
     {
         List<string> Disk {get; set;}
         
@@ -20,7 +20,7 @@ namespace OS_Project
             Disk.add(Data);
         }
         
-        GetData(int DataStart, int DataSize)
+        list<string> GetData(int DataStart, int DataSize)
         {
             list<string> FromDisk = new List<string>();
             
