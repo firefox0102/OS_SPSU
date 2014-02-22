@@ -216,7 +216,7 @@ namespace OS_Project.Classes
         void UnconditionalJump()
         {
             String opCode = currentProcess.Substring(2, 4);
-            int address = Int32.Parse(currentProcess.Substring(8, 24));
+            int address = Convert.ToInt32(currentProcess.Substring(8, currentProcess.Length-8),2);
             switch (opCode)
             {
                 case "010010":  //HLT
