@@ -8,27 +8,34 @@ namespace OS_Project
 {
     public class Memory
     {
-        const int maxSize = 1024;
-        List<List<string>> memory 
+        public const int maxSize = 1024;
+        public List<List<string>> memory;
+        public int currentSize;
         
         public Memory()
         {
-            memory = new Memory();
+            memory = new List<List<string>>();
+            currentSize = 0;
         }
         
-        string get(int index, int pc)
+        List<string> getJob(int index)
         {
-            return memory[index, pc];
+            return memory[index];
         }
         
-        void set(List<string> temp)
+        void addJob(List<string> temp)
         {
-            memory.Add(temp);
+            int newTot = temp.Count() + currentSize;
+            if ((currentSize < 1024) && (newTot < 1024))
+            {
+                memory.Add(temp);
+                currentSize += temp.Count();
+            }
         }
         
-        void remove(int index)
+        void removeJob(int index)
         {
-            memory.Remove[index];
+            memory.RemoveAt(index);
         }
     }
 }
