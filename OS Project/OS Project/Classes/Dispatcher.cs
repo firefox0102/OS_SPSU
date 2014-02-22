@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 namespace OS_Project
 {
-    class Dispatcher
+    public class Dispatcher
     {
+        
+        public Dispatcher()
+        {
+            
+        }
+        //Drew will write the dispatcher
     }
 }
