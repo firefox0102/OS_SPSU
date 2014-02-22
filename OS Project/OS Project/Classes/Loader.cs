@@ -13,7 +13,7 @@ namespace OS_Project
         
         public Loader()
         {
-            StreamReader sr = new Streamreader();
+            StreamReader sr = new StreamReader();
         }
         
         string getFromFile()

@@ -10,4 +10,6 @@ namespace OS_Project.Classes
     {
         string sReg1();
     }
+
+    class 
 }

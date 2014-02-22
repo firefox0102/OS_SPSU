@@ -8,15 +8,17 @@ namespace OS_Project.Classes
 {
     class Process
     {
-        private int id;
-        private int diskPos;
-        private int memPos;
-        private int pc;
-        private int diskDataPos;
-        private int memDataPos;
+        public int id;
+        public int diskPos;
+        public int memPos;
+        public int pc;
+        public int diskDataPos;
+        public int memDataPos;
+        public int jobLength;
 
-        private enum State { created, ready, waiting, running, terminated}; //created instead of new since new is resered word
-            
+        public enum Status { error, created, ready, waiting, running, terminated }; //created instead of new since new is resered word
+        public Status state;
+
         public Process()
         {
             //default constcutor
