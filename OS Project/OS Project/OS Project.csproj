@@ -48,6 +48,7 @@
     <Compile Include="Classes\Disk.cs" />
     <Compile Include="Classes\Dispatcher.cs" />
     <Compile Include="Classes\Process.cs" />
+    <Compile Include="Classes\ReadyQueue.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
