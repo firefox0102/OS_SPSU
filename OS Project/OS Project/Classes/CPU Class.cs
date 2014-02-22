@@ -6,24 +6,68 @@ using System.Windows.Forms;
 
 public class CPU
 {
-	public CPU()
-	{
-        Console.Write("hello world????");
-	}
 
 
-    public void Fetch()
-    {
+        public int[] register;
+        //do we need a program cache????
+        public Process currentProcess;
+        public int processPosition;
+        //accumulator stores results
+        // zero is register always set to zero
+        public const int Accumulator =0;
+        public const int Zero = 0;
 
-    }
+        public CPU()
+        {
+            register = new int[16];
+            processPosition = 0;
 
-    public void Decode()
-    {
+        }
 
-    }
+        void run()
+        {
+            Fetch();
+            Decode();
+            Execute();
+        }
 
-    public void Execute()
-    {
+
+        void Fetch()
+        {
+            //is passed pcb id then gets pcb info
+            
+        }
+
+        void Decode()
+        {
+
+        }
+
+        void Execute()
+        {
+
+
+        }
+
+        void Arithmetic()
+        {
+
+        }
+
+        void BranchandImmediate()
+        {
+
+        }
+
+        void UnconditionalJump()
+        {
+
+        }
+
+        void IO()
+        {
+
+        }
 
     }
 }
