@@ -45,8 +45,29 @@ namespace OS_Project.Classes
 
         void Execute()
         {
-
-
+            String opCode = currentProcess.opCode;
+            int tempRegister1 = currentProcess.Register1;
+            int tempRegister2 = currentProcess.Register2;
+            int address = currentProcess.Address;
+            string hex = "0";
+            
+            switch(opCode)
+            {
+                case "000000":
+                    if(tempRegister1 != 0 && tempRegister2 != 0)
+                    {
+                        //I have no idea what to even do here
+                    }
+                    else
+                    {
+                        //Again, what the heck do I do here
+                    }
+                    register[Accumulator] += int.Parse(hex, System.Globalization.NumberStyles.HexNumber)
+                    break;
+                case "000001":
+                    string write = "0x" + register[Accumulator].ToString("X8");
+                    break;
+            }
         }
 
         void Arithmetic()
