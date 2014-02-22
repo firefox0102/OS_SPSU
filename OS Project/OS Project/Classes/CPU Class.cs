@@ -10,7 +10,8 @@ namespace OS_Project.Classes
     {
         public int[] register;
         //do we need a program cache????
-        public Process currentProcess;
+        public String currentProcess;
+        public PCB currentPCB;
         public int processPosition;
         //accumulator stores results
         // zero is register always set to zero
@@ -40,7 +41,7 @@ namespace OS_Project.Classes
 
         void Decode()
         {
-
+            //supposed to convert to binary, but it doesn't need to decode because its already in binary
         }
 
         void Execute()
@@ -65,6 +66,8 @@ namespace OS_Project.Classes
             string opCode = currentProcess.Substring(2, 6);
             string s1 = currentProcess.Substring(8, 4);
             string s2 = currentProcess.Substring(12, 16);
+
+
         }
 
         void BranchandImmediate()
@@ -80,8 +83,8 @@ namespace OS_Project.Classes
         void IO()
         {
         String opCode = currentProcess.Substring(2,4);
-            int tempRegister1 = currentProcess.Register1;
-            int tempRegister2 = currentProcess.Register2;
+            int tempRegister1 = currentPCB.registers[2];
+            int tempRegister2 = currentPCB.registers[3];
             int address = currentProcess.Address;
             string hex = "0";
             
