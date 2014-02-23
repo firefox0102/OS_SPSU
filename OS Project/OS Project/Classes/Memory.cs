@@ -19,6 +19,10 @@ namespace OS_Project
             memory = new List<List<string>>();
             currentSize = 0;
         }
+        public Memory(List<string> temp)
+        {
+            memory[0] = temp;
+        }
 
 
         //singleton for remote access in other classes

@@ -11,7 +11,11 @@ namespace OS_Project.Classes
         private static ReadyQueue q;
         List<int> readyQ = new List<int>();
 
-        protected ReadyQueue() { }
+        public ReadyQueue() 
+        { 
+            
+        
+        }
         public static ReadyQueue GetQueue()
         {
             if (q == null)
