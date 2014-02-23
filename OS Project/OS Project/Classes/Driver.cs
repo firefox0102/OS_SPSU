@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using OS_Project.Classes;
 
 namespace OS_Project
 {
-    static class Program
+    static class Driver
     {
         /// <summary>
         /// The main entry point for the application.
@@ -19,6 +20,8 @@ namespace OS_Project
             Application.SetCompatibleTextRenderingDefault(true);
             Application.Run(new Form1());
             */
+            CPU cpu = new CPU();
+            cpu.run();
             
         }
     }

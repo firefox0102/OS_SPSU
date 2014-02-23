@@ -26,7 +26,7 @@ namespace OS_Project.Classes
 
         }
 
-        void run()
+        public void run()
         {
             Fetch();
             Decode();
@@ -34,7 +34,7 @@ namespace OS_Project.Classes
         }
 
 
-        void Fetch()
+        private void Fetch()
         {
             //is passed pcb id then gets pcb info
             //FILLS instructionList
@@ -65,12 +65,12 @@ namespace OS_Project.Classes
 
         }
 
-        void Decode()
+        private void Decode()
         {
             //supposed to convert to binary, but it doesn't need to decode because its already in binary
         }
 
-        void Execute()
+        private void Execute()
         {
             for(int i = 0; i<instructionList.Count; i++ )
             {
