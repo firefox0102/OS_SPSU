@@ -7,7 +7,7 @@ using OS_Project.Classes;
 
 namespace OS_Project
 {
-    class PCBObject
+    class PCB
     {
         public int id;
         public int memPos;
@@ -20,7 +20,7 @@ namespace OS_Project
         public Status state;
         public List<string> registers;//16 long
    
-        public PCBObject()
+        public PCB()
         {
             id = -1;
             memPos = -1;
@@ -33,7 +33,7 @@ namespace OS_Project
                 registers[i] = "00000000000000000000000000000000";
             }       
         }
-        public PCBObject(Process p)
+        /*public PCB(Process p)
         {
             id = p.id;
             memPos = p.memPos;
@@ -45,7 +45,7 @@ namespace OS_Project
             {
                 registers[i] = "00000000000000000000000000000000";
             }      
-        }
+        }*/
         public bool isDone()
         {
             return done;

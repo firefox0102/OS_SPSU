@@ -47,18 +47,24 @@ namespace OS_Project.Classes
 
         void Execute()
         {
-            string instructionFormat = currentProcess.Substring(0, 2);
+            for(int i = 0; i<instructionList.Count; i++ )
+            {
+                currentProcess = instructionList[i];
+                string instructionFormat = currentProcess.Substring(0, 2);
 
-            if (instructionFormat == "00")
-                Arithmetic();
-            else if (instructionFormat == "01")
-                BranchandImmediate();
-            else if (instructionFormat == "10")
-                UnconditionalJump();
-            else if (instructionFormat == "11")
-                IO();
-            else
-                Console.Out.WriteLine("INSTRUCTION FORMAT DETERMINATION MUFFED UP");
+                if (instructionFormat == "00")
+                    Arithmetic();
+                else if (instructionFormat == "01")
+                    BranchandImmediate();
+                else if (instructionFormat == "10")
+                    UnconditionalJump();
+                else if (instructionFormat == "11")
+                    IO();
+                else
+                    Console.Out.WriteLine("INSTRUCTION FORMAT DETERMINATION MUFFED UP");
+
+            }
+            
             
         }
 
