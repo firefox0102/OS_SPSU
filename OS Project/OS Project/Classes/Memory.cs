@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace OS_Project
 {
     public class Memory
     {
+        public static Memory Ram;
         public const int maxSize = 1024;
         public List<List<string>> memory;
         public int currentSize;
@@ -17,8 +19,21 @@ namespace OS_Project
             memory = new List<List<string>>();
             currentSize = 0;
         }
-        
-        List<string> getJob(int index)
+
+
+        //singleton for remote access in other classes
+        public static Memory Instance
+        {
+            get
+            {
+                if (Ram == null)
+                {
+                    Ram = new Memory();
+                }
+                return Ram;
+            }
+        }
+        List<string> read(int index)
         {
             return memory[index];
         }
@@ -37,7 +52,7 @@ namespace OS_Project
             }
         }
         
-        void removeJob(int index)
+        void remove(int index)
         {
             memory.RemoveAt(index);
         }
