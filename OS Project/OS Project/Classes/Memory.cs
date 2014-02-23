@@ -23,13 +23,17 @@ namespace OS_Project
             return memory[index];
         }
         
-        void addJob(List<string> temp)
+        void write(List<string> temp)
         {
             int newTot = temp.Count() + currentSize;
             if ((currentSize < 1024) && (newTot < 1024))
             {
                 memory.Add(temp);
                 currentSize += temp.Count();
+            }
+            else
+            {
+                throw new ArgumentException("Memory overflow");
             }
         }
         
