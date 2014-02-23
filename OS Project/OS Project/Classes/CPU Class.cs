@@ -37,6 +37,7 @@ namespace OS_Project.Classes
         {
             //is passed pcb id then gets pcb info
             //FILLS instructionList
+            Dispatcher.Instance.sendProcess();
 
         }
 
