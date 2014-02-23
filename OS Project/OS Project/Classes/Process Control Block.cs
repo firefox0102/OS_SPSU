@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -46,10 +46,10 @@ namespace OS_Project
                 registers[i] = "00000000000000000000000000000000";
             }      
         }*/
-        public bool isDone()
+      /*  public bool isDone()
         {
             return done;
         }
         
     }
-}
+}*/

@@ -12,7 +12,7 @@ namespace OS_Project.Classes
         public int[] register;
         //do we need a program cache????
         public String currentProcess;
-        public PCB currentPCB;
+        //public PCB currentPCB;
         public int processPosition;
         //accumulator stores results
         // zero is register always set to zero
@@ -221,7 +221,7 @@ namespace OS_Project.Classes
             {
                 case "010010":  //HLT
                     //End of program
-                    currentPCB.done=true;
+                    //currentPCB.done=true;
                     break;
                 case "010100":  //JMP
                     currentProcess = convertAddress(address);
