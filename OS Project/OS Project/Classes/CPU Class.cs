@@ -184,33 +184,47 @@ namespace OS_Project.Classes
 
         void UnconditionalJump()
         {
-
+            String opCode = currentProcess.Substring(2, 4);
+            int address = Int32.Parse(currentProcess.Substring(8, 24));
+            switch (opCode)
+            {
+                case "010010":  //HLT
+                    //End of program
+                    PCBObject.done(true);
+                    break;
+                case "010100":  //JMP
+                    currentProcess = convertAddress(address);
+                    break;
+            }
         }
 
         void IO()
         {
-            String opCode = currentProcess.Substring(2,4);
-            int tempRegister1 = currentPCB.registers[2];
-            int tempRegister2 = currentPCB.registers[3];
-            int address = currentProcess.Address;
-            string hex = "0";
-            
-            switch(opCode)
+            String opCode = currentProcess.Substring(2, 4);
+            int tempRegister1 = Int32.Parse(currentProcess.Substring(8, 4));
+            int tempRegister2 = Int32.Parse(currentProcess.Substring(12, 4));
+            int address = Int32.Parse(currentProcess.Substring(16, 16));
+            int ipBuffer = 0;
+
+            switch (opCode)
             {
                 case "000000":
-                    if(tempRegister1 != 0 && tempRegister2 != 0)
+                    if (tempRegister1 != 0 && tempRegister2 != 0)
                     {
-                        //I have no idea what to even do here
+                        ipBuffer = Int32.Parse(convertAddress(tempRegister2));
                     }
-                    else
                     {
-                        //Again, what the heck do I do here
+                        ipBuffer = Int32.Parse(convertAddress(address));
                     }
-                    register[Accumulator] += int.Parse(hex, System.Globalization.NumberStyles.HexNumber)
+                    register[0] += ipBuffer;
                     break;
                 case "000001":
-                    string write = "0x" + register[Accumulator].ToString("X8");
-                    break;
+                    {
+                        string opBuffer = register[0].ToString();
+
+                        break;
+
+                    }
         
         }
 
