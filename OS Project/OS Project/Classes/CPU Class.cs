@@ -39,11 +39,11 @@ namespace OS_Project.Classes
             //is passed pcb id then gets pcb info
             //FILLS instructionList
            // Dispatcher.Instance.sendProcess();
-            instructionList = new List<string>(new string[] {   "C050005C",
-                                                                "4B060000",
-                                                                "4B010000",
-                                                                "4B000000",
-                                                                "4F0A005C",
+            instructionList = new List<string>(new string[] {  "C050005C",
+                                                               "4B060000",
+                                                               "4B010000",
+                                                               "4B000000",
+                                                               "4F0A005C",
                                                                 "4F0D00DC",
                                                                 "4C0A0004",
                                                                 "C0BA0000",
@@ -61,7 +61,51 @@ namespace OS_Project.Classes
                                                                 "10658000",
                                                                 "5681003C",
                                                                 "C10000AC",
-                                                                "92000000" });
+                                                                "92000000",
+                                                                "0000000A",
+                                                                "00000006",
+                                                                "0000002C",
+                                                                "00000045",
+                                                                "00000001",
+                                                                "00000007",
+                                                                "00000000",
+                                                                "00000001",
+                                                                "00000005",
+                                                                "0000000A",
+                                                                "00000055",
+                                                                "00000000",
+                                                                "00000000",
+                                                                "00000000",
+                                                                "00000000",
+                                                                "00000000",
+                                                                "00000000",
+                                                                "00000000",
+                                                                "00000000",
+                                                                "00000000",
+                                                                "00000000",
+                                                                "00000000",
+                                                                "00000000",
+                                                                "00000000",
+                                                                "00000000",
+                                                                "00000000",
+                                                                "00000000",
+                                                                "00000000",
+                                                                "00000000",
+                                                                "00000000",
+                                                                "00000000",
+                                                                "00000000",
+                                                                "00000000",
+                                                                "00000000",
+                                                                "00000000",
+                                                                "00000000",
+                                                                "00000000",
+                                                                "00000000",
+                                                                "00000000",
+                                                                "00000000",
+                                                                "00000000",
+                                                                "00000000",
+                                                                "00000000",
+                                                                "00000000" });
 
         }
 
@@ -75,20 +119,24 @@ namespace OS_Project.Classes
             for(int i = 0; i<instructionList.Count; i++ )
             {
                 currentProcess = Convert.ToString(Convert.ToInt32(instructionList[i],16),2);
+                currentProcess = currentProcess.PadLeft(32, '0');
+                Console.WriteLine(currentProcess);
                 string instructionFormat = currentProcess.Substring(0, 2);
 
-                if (instructionFormat == "00")
+                if (instructionFormat.Equals("00"))
                     Arithmetic();
-                else if (instructionFormat == "01")
+                else if (instructionFormat.Equals("01"))
                     BranchandImmediate();
-                else if (instructionFormat == "10")
+                else if (instructionFormat.Equals("10"))
                     UnconditionalJump();
-                else if (instructionFormat == "11")
+                else if (instructionFormat.Equals("11"))
                     IO();
                 else
                     Console.Out.WriteLine("INSTRUCTION FORMAT DETERMINATION MUFFED UP");
 
             }
+            for(int j = 0; j < register.Length; j++)
+             Console.WriteLine(register[j]);
             
             
         }
@@ -137,24 +185,20 @@ namespace OS_Project.Classes
                     break;
                 default:
                     break;
-
             }
-        }
-        
+        }    
         
         String convertAddress(int address)
         {
             String newCurrentProcess;
             String currentaddress = address.ToString();
-            int decimaladdress = (Convert.ToInt32(currentaddress, 2)/4)-1;
-            newCurrentProcess = instructionList[decimaladdress];
+       //     int decimaladdress = (Convert.ToInt32(currentaddress, 2));
+            newCurrentProcess = Convert.ToString(address, 2);
+            newCurrentProcess = newCurrentProcess.PadLeft(32, '0');
+       //     newCurrentProcess = instructionList[decimaladdress];
 
             return newCurrentProcess;
         }
-
-
-
-
 
         void BranchandImmediate()
         {
@@ -192,7 +236,8 @@ namespace OS_Project.Classes
                     break;
                 case "010110":  //BNE
                     if (register[D] != register[B])
-                        currentProcess = convertAddress(address);
+                        //       currentProcess = convertAddress(address);
+                        currentProcess = instructionList[address-1];
                     break;
                 case "010111":  //BEZ
                     if (register[D] == register[Zero])
@@ -226,39 +271,40 @@ namespace OS_Project.Classes
                 case "010100":  //JMP
                     currentProcess = convertAddress(address);
                     break;
+                default:
+                    break;
             }
         }
 
         void IO()
         {
             String opCode = currentProcess.Substring(2, 6);
-            int tempRegister1 = Int32.Parse(currentProcess.Substring(8, 4));
-            int tempRegister2 = Int32.Parse(currentProcess.Substring(12, 4));
-            int address = Int32.Parse(currentProcess.Substring(16, 16));
+            int tempRegister1 = Convert.ToInt32(currentProcess.Substring(8, 4),2);
+            int tempRegister2 = Convert.ToInt32(currentProcess.Substring(12, 4),2);
+            int address = Convert.ToInt32(currentProcess.Substring(16, 16),2);
             int ipBuffer = 0;
-
+            //int D = Convert.ToInt32(currentProcess.Substring(12,4),2);
             switch (opCode)
             {
                 case "000000":
                     if (tempRegister1 != 0 && tempRegister2 != 0)
                     {
-                        ipBuffer = Int32.Parse(convertAddress(tempRegister2));
+                        ipBuffer = tempRegister2;
                     }
                     {
-                        ipBuffer = Int32.Parse(convertAddress(address));
+                        ipBuffer = address;
                     }
                     register[0] += ipBuffer;
                     break;
                 case "000001":
                     {
                         string opBuffer = register[0].ToString();
-
+                        Console.WriteLine(opBuffer);
                         break;
 
                     }
         
-        }
-
+             }
         }
     }
 }

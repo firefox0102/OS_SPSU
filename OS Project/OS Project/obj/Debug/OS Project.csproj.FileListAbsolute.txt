@@ -30,3 +30,8 @@ C:\Users\Tyler\Documents\GitHub\OS_SPSU\OS Project\OS Project\bin\Debug\OS Proje
 C:\Users\Tyler\Documents\GitHub\OS_SPSU\OS Project\OS Project\bin\Debug\OS Project.pdb
 C:\Users\Tyler\Documents\GitHub\OS_SPSU\OS Project\OS Project\obj\Debug\OS_Project.Properties.Resources.resources
 C:\Users\Tyler\Documents\GitHub\OS_SPSU\OS Project\OS Project\obj\Debug\OS Project.csproj.GenerateResource.Cache
+C:\Users\tscovill\Documents\GitHub\OS_SPSU\OS Project\OS Project\bin\Debug\OS Project.exe
+C:\Users\tscovill\Documents\GitHub\OS_SPSU\OS Project\OS Project\bin\Debug\OS Project.pdb
+C:\Users\tscovill\Documents\GitHub\OS_SPSU\OS Project\OS Project\obj\Debug\OS Project.csprojResolveAssemblyReference.cache
+C:\Users\tscovill\Documents\GitHub\OS_SPSU\OS Project\OS Project\obj\Debug\OS_Project.Properties.Resources.resources
+C:\Users\tscovill\Documents\GitHub\OS_SPSU\OS Project\OS Project\obj\Debug\OS Project.csproj.GenerateResource.Cache
