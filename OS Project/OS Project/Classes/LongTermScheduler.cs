@@ -9,8 +9,9 @@ namespace OS_Project.Classes
     public class LongTermScheduler
     {
         public static LongTermScheduler lts;
-        //create a list of loaded processes
+        //Processes that have been loaded into RAM
         public List<Process> LoadedProcesses;
+        //Processes that have not been loaded into RAM yet
         public List<Process> ProcessQueue;
 
         //singleton for remote access in other classes
@@ -58,7 +59,7 @@ namespace OS_Project.Classes
         {
             PCB pcb = GetNextProcess();
             Process p = ProcessQueue[0];
-            Memory.Instance.write()
+            Memory.Instance.write(/*the data list*/);
             //Add PCB to Short Term Scheduler
         }
     }

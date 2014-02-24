@@ -24,6 +24,9 @@ namespace OS_Project.Classes
             }
         }
 
-
+        public void AddToShortTermScheduler(PCB p)
+        {
+            PCBList.Add(p);
+        }
     }
 }

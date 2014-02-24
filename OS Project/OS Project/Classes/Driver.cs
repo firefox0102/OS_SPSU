@@ -20,6 +20,8 @@ namespace OS_Project
             Application.SetCompatibleTextRenderingDefault(true);
             Application.Run(new Form1());
             */
+            LongTermScheduler LongTermScheduler = new LongTermScheduler();
+            ShortTermScheduler ShortTermScheduler = new ShortTermScheduler();
             CPU cpu = new CPU();
             cpu.run();
             
