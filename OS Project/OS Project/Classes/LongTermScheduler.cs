@@ -11,7 +11,7 @@ namespace OS_Project.Classes
         public static LongTermScheduler lts;
         //create a list of loaded processes
         public List<Process> LoadedProcesses;
-        public List<Process> 
+        public List<Process> ProcessQueue;
 
         //singleton for remote access in other classes
         public static LongTermScheduler Instance
@@ -29,28 +29,36 @@ namespace OS_Project.Classes
         public PCB GetNextProcess()
         {
             //get next instruction from the disk
-            foreach (Process p in Instance.diskProcessTable)
+            List<Process> temp = Disk.Instance.diskProcessTable;
+            PCB pcb = new PCB();
+
+            foreach (Process p in temp)
             {
                 int matches = 0;
                 //get job id for each process
                 //see if its in RAM or Completed
-                for(int i = 0; i < diskProcessTable.Size????; )
+                for(int i = 0; i < temp.Count; i++)
                 {
-                    if(p.id == )
+                    if(p.jobID == temp[i].jobID){
                         matches++;
+                    }
                 }
-                if(matches == 0)
-
+                if (matches == 0)
+                {
+                    ProcessQueue.Add(p);
+                    pcb = new PCB(p);
+                    break;
+                }
             }
-            
-            return PCB;
+
+            return pcb;
         }
 
         public void AddToSTScheduler()
         {
-            Process p = GetNextProcess();
-            PCB pcb = new PCB(p);
-            //write process to RAM
+            PCB pcb = GetNextProcess();
+            Process p = ProcessQueue[0];
+            Memory.Instance.write()
             //Add PCB to Short Term Scheduler
         }
     }

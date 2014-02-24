@@ -37,12 +37,12 @@ namespace OS_Project
                 return Ram;
             }
         }
-        List<string> read(int index)
+        public List<string> read(int index)
         {
             return memory[index];
         }
         
-        void write(List<string> temp)
+        public void write(List<string> temp)
         {
             int newTot = temp.Count() + currentSize;
             if ((currentSize < 1024) && (newTot < 1024))
@@ -56,7 +56,7 @@ namespace OS_Project
             }
         }
         
-        void remove(int index)
+        public void remove(int index)
         {
             memory.RemoveAt(index);
         }

@@ -8,18 +8,19 @@ namespace OS_Project.Classes
 {
     class ShortTermScheduler
     {
+        public static ShortTermScheduler sts;
         List<PCB> PCBList;
 
         //singleton for remote access in other classes
-        public static LongTermScheduler Instance
+        public static ShortTermScheduler Instance
         {
             get
             {
-                if (lts == null)
+                if (sts == null)
                 {
-                    lts = new LongTermScheduler();
+                    sts = new ShortTermScheduler();
                 }
-                return lts;
+                return sts;
             }
         }
 
