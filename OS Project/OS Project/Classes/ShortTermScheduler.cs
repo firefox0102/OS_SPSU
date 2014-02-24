@@ -10,6 +10,19 @@ namespace OS_Project.Classes
     {
         List<PCB> PCBList;
 
+        //singleton for remote access in other classes
+        public static LongTermScheduler Instance
+        {
+            get
+            {
+                if (lts == null)
+                {
+                    lts = new LongTermScheduler();
+                }
+                return lts;
+            }
+        }
+
 
     }
 }
