@@ -15,6 +15,7 @@ namespace OS_Project
         public int memDataPos;
         public int jobLength;
         public bool done;
+        public int priority;
 
         public enum Status {error, created, ready, waiting, running, terminated }; //created instead of new since new is resered word
         public Status state;
@@ -40,6 +41,7 @@ namespace OS_Project
             pc = p.pc;
             memDataPos = p.memDataPos;
             jobLength = p.jobLength;
+            priority = p.priority;
             state = p.state;
             for (int i = 0; i < 16; i++)
             {
