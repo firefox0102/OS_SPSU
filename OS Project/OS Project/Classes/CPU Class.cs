@@ -116,11 +116,11 @@ namespace OS_Project.Classes
 
         private void Execute()
         {
-            for(int i = 0; i<instructionList.Count; i++ )
+            for(int i = 0; i<23; i++ )
             {
                 currentProcess = Convert.ToString(Convert.ToInt32(instructionList[i],16),2);
                 currentProcess = currentProcess.PadLeft(32, '0');
-                Console.WriteLine(currentProcess);
+              
                 string instructionFormat = currentProcess.Substring(0, 2);
 
                 if (instructionFormat.Equals("00"))
