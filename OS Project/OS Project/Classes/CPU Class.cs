@@ -116,7 +116,7 @@ namespace OS_Project.Classes
 
         private void Execute()
         {
-            for(int i = 0; i<23; i++ )
+            for(int i = 0; i<23; i++ )//get from pcb
             {
                 currentProcess = Convert.ToString(Convert.ToInt32(instructionList[i],16),2);
                 currentProcess = currentProcess.PadLeft(32, '0');
@@ -232,28 +232,28 @@ namespace OS_Project.Classes
                     break;
                 case "010101":  //BEQ
                     if (register[D] == register[B])
-                        currentProcess = convertAddress(address);
+                        currentProcess = instructionList[address];
                     break;
                 case "010110":  //BNE
                     if (register[D] != register[B])
                         //       currentProcess = convertAddress(address);
-                        currentProcess = instructionList[address-1];
+                        currentProcess = instructionList[address];
                     break;
                 case "010111":  //BEZ
                     if (register[D] == register[Zero])
-                        currentProcess = convertAddress(address);
+                        currentProcess = instructionList[address];
                     break;
                 case "011000":  //BNZ
                     if (register[D] != register[Zero])
-                        currentProcess = convertAddress(address);
+                        currentProcess = instructionList[address];
                     break;
                 case "011001":  //BGZ
                     if (register[D] > register[Zero])
-                        currentProcess = convertAddress(address);
+                        currentProcess = instructionList[address];
                     break;
                 case "011010":  //BLZ
                     if (register[D] < register[Zero])
-                        currentProcess = convertAddress(address);
+                        currentProcess = instructionList[address];
                     break;
             }
         }
