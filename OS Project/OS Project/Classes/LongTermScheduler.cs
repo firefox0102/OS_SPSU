@@ -60,6 +60,7 @@ namespace OS_Project.Classes
             PCB pcb = GetNextProcess();
             Process p = ProcessQueue[0];
             Memory.Instance.write(/*the data list*/);
+            //update the start and end positions in the PCB
             //Add PCB to Short Term Scheduler
         }
     }
