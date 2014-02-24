@@ -1,29 +1,37 @@
-﻿/*using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OS_Project
-{
-    public class Disk
-    {
-        List<List<string>> Disk;
-        List<List<int>> DiskRecord;
-        
-        public Disk()
-        {
-            Disk = new List<List<string>>();
+namespace OS_Project{
+
+    public class Disk{
+
+        public static Disk disk;
+        public List<string> diskData;
+        public List<Process> diskProcessTable;
+        public int diskSize;
+        public int numberProcesses;
+
+        public Disk(){
+            diskData = new List<string>(0);
+            diskProcessTable = new List<Process>(0);
+            diskSize = 0;
+            numberProcesses = 0;
         }
-        
-        void AddToDisk(string Data)
-        {
-            Disk.Add(Data);
+
+        //singleton for remote access in other classes
+        public static Disk Instance{
+            get{
+                if (disk == null){
+                    disk = new Disk();
+                }
+                return disk;
+            }
         }
-        
-        List<string> GetData(int DataStart)
-        {
-            return Disk[DataStart];
-        }
+     
+
     }
-}*/
+
+}
