@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OS_Project.Classes
 {
-    class ShortTermScheduler
+    public class ShortTermScheduler
     {
         public static ShortTermScheduler sts;
         public List<PCB> ReadyQueue;
