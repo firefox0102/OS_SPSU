@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using OS_Project;
 
-namespace OS_Project
+namespace OS_Project.Classes
 {
 
-    class PCB
+    public class PCB
     {
         public static PCB pcb;
         public int id;
@@ -36,14 +36,7 @@ namespace OS_Project
         public enum Status { error, created, ready, waiting, running, terminated }; //created instead of new since new is resered word
         public Status state;
 
-        public List<string> registers;//16 long
-
-        //singleton for remote access in other classes
-        public static PCB Instance{
-            get{
-                return pcb;
-            }
-        }
+        public List<string> registers;
 
         public PCB(int id, int priority, int diskInstrStartPos){
             this.id = id;
@@ -67,14 +60,21 @@ namespace OS_Project
 
             done = false;
             state = Status.created;
+            registers = new List<string>(16);
             for (int i = 0; i < 16; i++){
-                registers[i] = "00000000000000000000000000000000";
+                registers.Add("00000000000000000000000000000000");
             }
 
         }
 
-        public int calcSizeOfJob(PCB job){
-            return ((totalLength * 32) / 8);
+        public void printPCBInfo(){
+            Console.WriteLine("ID : "+id );
+            Console.WriteLine("PC : "+pc );
+            Console.WriteLine("Priority   : "+priority );
+            Console.WriteLine("Disk Instructions Start   : "+diskInstrStartPos );
+            Console.WriteLine("Disk Intructions End   : "+ diskInstrEndPos);
+            Console.WriteLine("Disk Data Start   : "+diskDataStartPos );
+            Console.WriteLine("Disk Data End   : "+diskDataEndPos );
         }
 
     }

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OS_Project;
 
-namespace OS_Project{
+namespace OS_Project.Classes{
 
     public class Disk{
 
@@ -21,16 +22,28 @@ namespace OS_Project{
             numberProcesses = 0;
         }
 
-        //singleton for remote access in other classes
-        public static Disk Instance{
-            get{
-                if (disk == null){
-                    disk = new Disk();
-                }
-                return disk;
+        public void printDiskData(){
+            for (int i = 0; i < diskData.Count; i++ ){
+                Console.WriteLine("Line "+i+": "+ diskData[i]);
+            }
+            Console.WriteLine("Disk size: " + diskSize + " Bytes");
+        }
+
+        public void printDiskProcessTable(){
+            foreach (PCB job in diskProcessTable){
+                job.printPCBInfo();
             }
         }
-     
+
+        public int calcDiskSize(){
+            int tempSize = 0;
+            for(int i = 0; i < diskProcessTable.Count; ++i){
+                tempSize += diskProcessTable[i].sizeInBytes;
+            }
+            diskSize = tempSize;
+            return tempSize;
+        }
+
 
     }
 

@@ -4,77 +4,80 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using OS_Project;
 
-namespace OS_Project
+namespace OS_Project.Classes
 {
-    public class Loader
+    class Loader
     {
-        /// <summary>
-        /// The loader will load the file information onto the disk
-        /// the disk will create a process with the object variables
-        /// - Job Number
-        /// - Priority
-        /// - Job length
-        /// - List for instructions
-        /// - List for data
-        /// The file lines will be parsed into 32 bit lenth binary
-        /// except for first three variables which are created first
-        /// from the first commented lines of the file.
-        /// </summary>
-        
-        string getFromFile(){
+        static void Main(string[] args)
+        {
+
             Disk disk = new Disk();
-            
-           List<string> lines = File.ReadAllLines("DataFile2-Jobs1+2.txt").ToList();
 
-           List<Process> processList = new List<Process>(0);
-           List<int> jobLocations;
+            string[] lines = System.IO.File.ReadAllLines(@"D:\\j\\Documents\\CS 3243-OS\\OS_SPSU-master\\OS Project\\OS Project\\Classes\\DataFile.txt");
+            lines.ToList();
 
-           int jobID = 0;
-           int jobLocation = -1;
-           int diskLinePosition = 0;
+            int jobID = 0;
+            int diskPos = 0;
 
-           // Goes through each line from the file
-           // and finds the jobs and creates a process
-           // this process is added to the processList
-           // which will be given to the disk
-           foreach(string line in lines){
-               if (line.Contains("// Job")) {
-                   jobID++;
-                   jobLocation++;
-                   int lineLength = line.Count();
-                   // Gets the priority and converts it to an int
-                   int tempPriority = int.Parse( ( line.Substring( lineLength - 1 ) ) ); 
+            foreach (string line in lines)
+            {
+                Console.WriteLine("This is disk Position: " + diskPos);
+                string tempLine = "";
+                int tempBinary = 0;
+                if (line.Contains("JOB"))
+                {
 
+                    jobID++;
 
-                   disk.diskProcessTable.Add(new Process(jobID));
-
-               }
-               else if(line.Contains("// Data")){
-
-               }
-               else if(line.Contains("// End")){
-
-               }
-               else{
-                   //will call the convert hex to binary then to string
+                    int lineLength = line.Count();
+                    // Gets the priority and converts it to an int
+                    int tempPriority = Convert.ToInt32(line.Substring(lineLength - 1));
+                    disk.diskProcessTable.Add(new PCB(jobID, tempPriority, diskPos));
+                    disk.numberProcesses++; 
+                }
+                else if (line.Contains("Data"))
+                {
+                    disk.diskProcessTable[jobID - 1].diskInstrEndPos = diskPos - 1;
+                    disk.diskProcessTable[jobID - 1].diskDataStartPos = diskPos;
+                    disk.diskProcessTable[jobID - 1].instrLength = disk.diskProcessTable[jobID - 1].diskInstrEndPos - disk.diskProcessTable[jobID - 1].diskInstrStartPos;
+                }
+                else if (line.Contains("END"))
+                {
+                    disk.diskProcessTable[jobID - 1].diskDataEndPos = diskPos - 1;
+                    disk.diskProcessTable[jobID - 1].dataLength = disk.diskProcessTable[jobID - 1].diskDataEndPos - disk.diskProcessTable[jobID - 1].diskDataStartPos;
+                    disk.diskProcessTable[jobID - 1].totalLength = disk.diskProcessTable[jobID - 1].instrLength + disk.diskProcessTable[jobID - 1].dataLength + 2;
+                    disk.diskProcessTable[jobID - 1].sizeInBytes = disk.diskProcessTable[jobID - 1].totalLength * 4;
                     
-                   disk.diskData.Add(line);
-               }
-                 
-        }
-        
-        string convertToBinaryString(string temp){
-            // Strips the hexadecimal tag from the front of lines
-            // Converts the hex to binary
-            // Casts the binary as a string
-            string convertedText = "";
-            temp = temp.Substring(2);
-            int temp = Convert.ToInt32(line, 2);
+                }
+                else
+                {
+                    //will call the convert hex to binary then to string
+                    tempLine = line.Substring(2);
+                    Console.WriteLine(tempLine);
+                    tempBinary = Convert.ToInt32(tempLine, 16);
+                    tempLine = Convert.ToString(tempBinary, 2);
 
-            return convertedText;
-        }
+                    //Necessary to add leading zeros to ensure 32 bits
+                    while (tempLine.Count() != 32){
+                        tempLine = tempLine.Insert(0, "0");
+                    }
+                    
+
+                    disk.diskData.Add(tempLine);
+                    diskPos++;
+                }
 
 
-    }
-}
+            }
+            disk.calcDiskSize();
+            disk.printDiskProcessTable();
+            disk.printDiskData();
+
+        }//end main
+
+
+    }//end class
+
+}//end namespace
