@@ -10,13 +10,13 @@ namespace OS_Project{
 
         public static Disk disk;
         public List<string> diskData;
-        public List<Process> diskProcessTable;
+        public List<PCB> diskProcessTable;
         public int diskSize;
         public int numberProcesses;
 
         public Disk(){
             diskData = new List<string>(0);
-            diskProcessTable = new List<Process>(0);
+            diskProcessTable = new List<PCB>(0);
             diskSize = 0;
             numberProcesses = 0;
         }
