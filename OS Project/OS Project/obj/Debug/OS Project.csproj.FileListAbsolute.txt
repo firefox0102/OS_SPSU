@@ -39,3 +39,6 @@ C:\Users\Tyler\Documents\GitHub\OS_SPSU\OS Project\OS Project\obj\Debug\OS Proje
 T:\Documents\GitHub\OS_SPSU\OS Project\OS Project\bin\Debug\OS Project.exe.config
 T:\Documents\GitHub\OS_SPSU\OS Project\OS Project\obj\Debug\OS Project.exe
 T:\Documents\GitHub\OS_SPSU\OS Project\OS Project\obj\Debug\OS Project.pdb
+C:\Users\j\Documents\GitHub\OS_SPSU\OS Project\OS Project\bin\Debug\OS Project.exe.config
+C:\Users\j\Documents\GitHub\OS_SPSU\OS Project\OS Project\obj\Debug\OS Project.exe
+C:\Users\j\Documents\GitHub\OS_SPSU\OS Project\OS Project\obj\Debug\OS Project.pdb
