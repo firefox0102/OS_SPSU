@@ -10,9 +10,9 @@ namespace OS_Project.Classes
     {
         public static LongTermScheduler lts;
         //Processes that have been loaded into RAM
-        public List<Process> LoadedProcesses;
+        public List<PCB> LoadedProcesses;
         //Processes that have not been loaded into RAM yet
-        public List<Process> ProcessQueue;
+        public List<PCB> ProcessQueue;
 
         //singleton for remote access in other classes
         public static LongTermScheduler Instance
@@ -27,42 +27,99 @@ namespace OS_Project.Classes
             }
         }
 
-        public PCB GetNextProcess()
+        public void GetNextProcess()
         {
             //get next instruction from the disk
-            List<Process> temp = Disk.Instance.diskProcessTable;
-            PCB pcb = new PCB();
+            List<PCB> temp = Disk.Instance.diskProcessTable;
 
-            foreach (Process p in temp)
+            foreach (PCB p in LoadedProcesses)
             {
                 int matches = 0;
                 //get job id for each process
                 //see if its in RAM or Completed
                 for(int i = 0; i < temp.Count; i++)
                 {
-                    if(p.jobID == temp[i].jobID){
+                    if(p.id == temp[i].id){
                         matches++;
                     }
                 }
                 if (matches == 0)
                 {
                     ProcessQueue.Add(p);
-                    pcb = new PCB(p);
                     break;
                 }
             }
-            return pcb;
         }
 
         public void AddToSTScheduler()
         {
-            PCB pcb = GetNextProcess();
-            Process p = ProcessQueue[0];
-            //add the Data and instruction to Memory
-            //Memory.Instance.write();
-            
-            //update the start and end positions in the PCB
-            //Add PCB to Short Term Scheduler
+            GetNextProcess();
+            int pc = 0;
+            PCB p = ProcessQueue[pc];
+            bool success = false;            
+
+            while(success != true)
+            {
+                //check if data and instruction will fit in RAM
+                if(p.sizeInBytes + Memory.Instance.currentSize <= Memory.Instance.)
+                {
+                    int newInstrStartPos;
+                    int newInstrEndPos;
+                    int newDataStartPos;
+                    int newDataEndPos;
+
+                    //add the instruction to memory
+                    for(int i = p.diskInstrStartPos; i <= p.diskInstrEndPos; i++)
+                    {
+                        //update the start pos
+                        if(i == p.diskInstrStartPos)
+                        {
+                            newInstrStartPos = Memory.Instance.memory.Count - 1;
+                        }
+                        //update the end pos
+                        if(i == p.diskInstrEndPos)
+                        {
+                            newInstrEndPos = Memory.Instance.memory.Count - 1;
+                        }
+                        Memory.Instance.memory.Add(Disk.Instance.diskData[i]);
+                    }
+
+                    //add the Data to Memory
+                    for(int i = p.diskDataStartPos; i < p.diskDataEndPos; i++)
+                    {
+                        //update the start position
+                        if(i == p.diskDataStartPos)
+                        {
+                            newDataStartPos = Memory.Instance.memory.Count - 1;
+                        }
+                        //Update the new end position
+                        if(i == p.diskDataEndPos)
+                        {
+                            newDataEndPos = Memory.Instance.memory.Count - 1;
+                        }
+                        Memory.Instance.memory.Add(Disk.Instance.diskData[i]);
+                    }
+
+                    p.memDataStartPos = newDataStartPos;
+                    p.memDataEndPos = newDataEndPos;
+                    p.memInstrStartPos = newDataStartPos;
+                    p.memInstrEndPos = newDataEndPos;
+
+                    //Update the current size of RAM
+                    Memory.Instance.currentSize += p.sizeInBytes;
+
+                    //Add PCB to Short Term Scheduler
+                    ShortTermScheduler.Instance.ReadyQueue.Add(p);
+                    
+                    success = true;
+                }
+                else
+                {
+                    GetNextProcess();
+                    pc++;
+                    p = ProcessQueue[pc];
+                }
+            }
         }
     }
 }
