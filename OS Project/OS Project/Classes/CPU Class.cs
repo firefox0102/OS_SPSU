@@ -160,7 +160,7 @@ namespace OS_Project
             }
             
             idle = true;
-            currentPCB.state = terminated;
+            currentPCB.Status.state = terminated;
             currentPCB.elapsedTime.Stop();
             
             
