@@ -38,6 +38,10 @@ namespace OS_Project
 
         private void Fetch()
         {
+             
+             
+             
+             Dispatcher.sendProcess(this);
             //is passed pcb id then gets pcb info
             //FILLS instructionList
            // Dispatcher.Instance.sendProcess();
