@@ -28,5 +28,12 @@ namespace OS_Project.Classes
         {
             ReadyQueue.Add(p);
         }
+         public PCB getNextJob()
+        {
+            PCB i = ReadyQueue[0];//gets first element
+            ReadyQueue.RemoveAt(0);//removed first element like a pop front
+            return i;
+
+        }
     }
 }
