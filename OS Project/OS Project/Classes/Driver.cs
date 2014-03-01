@@ -23,8 +23,11 @@ namespace OS_Project
             LongTermScheduler LongTermScheduler = new LongTermScheduler();
             ShortTermScheduler ShortTermScheduler = new ShortTermScheduler();
             CPU cpu = new CPU();
-            cpu.run();
-            
+            Thread newThread = new Thread(cpu.run);
+            newThread.Start();
+            CPU cpu2 = new CPU();
+            Thread newThread2 = new Thread(cpu2.run);
+            newThread2.Start();
         }
     }
 }
