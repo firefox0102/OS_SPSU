@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +9,7 @@ namespace OS_Project.Classes{
 
     public class Disk{
 
-        public static Disk disk;
+        // public static Disk disk;
         public List<string> diskData;
         public List<PCB> diskProcessTable;
         public int diskSize;
