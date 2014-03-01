@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 using OS_Project;
 
 namespace OS_Project.Classes
@@ -32,11 +33,10 @@ namespace OS_Project.Classes
         public int diskDataStartPos;
         public int diskDataEndPos;
 
-        public bool done;
         public enum Status { error, created, ready, waiting, running, terminated }; //created instead of new since new is resered word
         public Status state;
-
-        public List<string> registers;
+        public Stopwatch elapsedTime;
+        public int[] registers;
 
         public PCB(int id, int priority, int diskInstrStartPos){
             this.id = id;
@@ -58,11 +58,11 @@ namespace OS_Project.Classes
             diskDataStartPos = -1;
             diskDataEndPos = -1;
 
-            done = false;
             state = Status.created;
-            registers = new List<string>(16);
+            elapsedTime = new Stopwatch();
+            registers = new int[16];
             for (int i = 0; i < 16; i++){
-                registers.Add("00000000000000000000000000000000");
+                registers[i] = 0;
             }
 
         }
