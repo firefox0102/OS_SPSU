@@ -10,17 +10,13 @@ namespace OS_Project
      public class CPU
     {
         public int[] register;
-        //do we need a program cache????
         public String currentProcess;
-        //public PCB currentPCB;
+        public PCB currentPCB;
         public int processPosition;
-        //accumulator stores results
-        // zero is register always set to zero
         public const int Accumulator = 0;
         public const int Zero = 1;
         public int pc = 0;
-        public List<String> instructionList;
-   //     public int ipBuffer = 0;
+        public List<String> ProgramCache;
 
         public CPU()
         
@@ -43,7 +39,7 @@ namespace OS_Project
             //is passed pcb id then gets pcb info
             //FILLS instructionList
            // Dispatcher.Instance.sendProcess();
-            instructionList = new List<string>(new string[] {  "C0500070",
+            ProgramCache = new List<string>(new string[] {  "C0500070",
                                                                 "4B060000",
                                                                 "4B010000",
                                                                 "4B000000",
@@ -128,11 +124,11 @@ namespace OS_Project
         public void Execute()
         {
             
-            for(pc = 0; pc<67  ; pc++ )//get from pcb
+            for(pc = 0; pc<currentPCB.memDataStartPos  ; pc++ )//get from pcb
             {
              
        
-                currentProcess = Convert.ToString(Convert.ToInt32(instructionList[pc], 16), 2);
+                currentProcess = Convert.ToString(Convert.ToInt32(ProgramCache[pc], 16), 2);
                 currentProcess = currentProcess.PadLeft(32, '0');
               
                 string instructionFormat = currentProcess.Substring(0, 2);
@@ -213,10 +209,9 @@ namespace OS_Project
         {
             String newCurrentProcess;
             String currentaddress = address.ToString();
-       //     int decimaladdress = (Convert.ToInt32(currentaddress, 2));
             newCurrentProcess = Convert.ToString(address, 2);
             newCurrentProcess = newCurrentProcess.PadLeft(32, '0');
-       //     newCurrentProcess = instructionList[decimaladdress];
+
 
             return newCurrentProcess;
         }
@@ -248,7 +243,7 @@ namespace OS_Project
                     register[D] += B / (address);
                     break;
                 case "001111":  //LDI
-                    register[D] += address/4;
+                    register[D] = address/4;
                     break;
                 case "010001":  //SLTI
                     if (register[B] < (address))
@@ -259,52 +254,44 @@ namespace OS_Project
                 case "010101":  //BEQ
                     if (register[D] == register[B])
                     {
-
-                        //        currentProcess = instructionList[address];
                         pc = (address/4)-1;
                     }
                     break;
                 case "010110":  //BNE
                     if (register[D] != register[B])
                     {
-                        //       currentProcess = convertAddress(address);
-                        //     currentProcess = instructionList[address];
                         pc = (address/4)-1;
                     }
                     break;
                 case "010111":  //BEZ
                     if (register[D] == register[Zero])
                     {
-                        //                currentProcess = instructionList[address];
                         pc = (address/4)-1;
                     }
                     break;
                 case "011000":  //BNZ
                     if (register[D] != register[Zero])
                     {
-                        //              currentProcess = instructionList[address];
                         pc = (address/4)-1;
                     }
                     break;
                 case "011001":  //BGZ
                     if (register[D] > register[Zero])
                     {
-                        //            currentProcess = instructionList[address];
                         pc = (address/4)-1;
                     }
                     break;
                 case "011010":  //BLZ
                     if (register[D] < register[Zero])
                     {
-                        //          currentProcess = instructionList[address];
-                        pc = (address/4);
+                        pc = (address/4)-1;
                     }
                     
                     break;
                 case "000010": //ST
                     if (D != 0 && B != 0)
                     {
-                        instructionList[register[D]] = register[B].ToString(); 
+                        ProgramCache[register[D]] = register[B].ToString(); 
                     }
                     else
                     {
@@ -313,7 +300,7 @@ namespace OS_Project
                     
                     break;
                 case "000011": //LW
-                    register[D] = int.Parse(instructionList[register[B]]) ;
+                    register[D] = int.Parse(ProgramCache[register[B]]) ;
                     break;
 
             }
@@ -326,16 +313,14 @@ namespace OS_Project
             switch (opCode)
             {
                 case "010010":  //HLT
-                    //End of program
-                    //currentPCB.done=true;
                     Console.WriteLine("process halted");
                     Console.ReadLine();
+                    currentPCB.Status.state = terminated;
 
                     break;
                 case "010100": //JMP
                     
-                        //  currentProcess = convertAddress(address);
-                        pc = (address / 4)-1;
+                    pc = (address / 4)-1;
                     
                     break;
                 default:
@@ -349,20 +334,17 @@ namespace OS_Project
             int tempRegister1 = Convert.ToInt32(currentProcess.Substring(8, 4),2);
             int tempRegister2 = Convert.ToInt32(currentProcess.Substring(12, 4),2);
             int address = Convert.ToInt32(currentProcess.Substring(16, 16),2);
-     //       int ipBuffer = 0;
-            //int D = Convert.ToInt32(currentProcess.Substring(12,4),2);
             switch (opCode)
             {
                 case "000000":
                     if (tempRegister1 != 0 && tempRegister2 != 0)
                     {
-                        register[tempRegister1] = int.Parse(instructionList[register[tempRegister2]], System.Globalization.NumberStyles.HexNumber);
+                        register[tempRegister1] = int.Parse(ProgramCache[register[tempRegister2]], System.Globalization.NumberStyles.HexNumber);
                     }
                     else
                     {
-                        register[tempRegister1] = int.Parse(instructionList[address/4],System.Globalization.NumberStyles.HexNumber);
+                        register[tempRegister1] = int.Parse(ProgramCache[address/4],System.Globalization.NumberStyles.HexNumber);
                     }
-              //      register[0] += ipBuffer;
                     break;
                 case "000001":
                     {
@@ -377,4 +359,5 @@ namespace OS_Project
         }
     }
 }
+
 
