@@ -10,7 +10,6 @@ namespace OS_Project
     public class Dispatcher
     {
         public static Dispatcher dis;
-        public Process current;
         private bool idle;
         public Dispatcher()
         {
@@ -27,13 +26,18 @@ namespace OS_Project
             }
         }
         //Drew will write the dispatcher
-        public void sendProcess()
+        public void sendProcess(CPU cpu)
         {
-            int pid = ReadyQueue.GetQueue().getNextJob();
-            current = PCB.Instance.getProcessWithId(pid);
-            CPU.Instance.instructionList = Memory.Instance.memory[current.memPos];
-            idle = false;
+            PCB pid = ShortTermScheduler.Instance.getNextJob();
+            //CPU.Instance.instructionList = Memory.Instance.memory[current.memPos];
+            List<string> instuctionList = Memory.memory.GetRange(pid.memInstrStartPos, pid.totalLength);
+            cpu.ProgramCache = instructionList;
+            pid.elapsedTime.Start();
+            pid.Status.state = running;
+            cpu.currentPCB = pid;
+            cpu.idle = false;
         }
+        
         //dispatcher seems to send instuctions one at a time to the cpu. we can implement this by calling a get current instuction function or some other way
         public bool isIdle()
         {
