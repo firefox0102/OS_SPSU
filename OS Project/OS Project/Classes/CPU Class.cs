@@ -242,13 +242,13 @@ namespace OS_Project
                         register[D] = register[D] + address;
                     break;
                 case "001101":  //MULI
-                    register[D] = B * (address);
+                    register[D] += B * (address);
                     break;
                 case "001110":  //DIVI
-                    register[D] = B / (address);
+                    register[D] += B / (address);
                     break;
                 case "001111":  //LDI
-                    register[D] = address/4;
+                    register[D] += address/4;
                     break;
                 case "010001":  //SLTI
                     if (register[B] < (address))
@@ -276,28 +276,28 @@ namespace OS_Project
                     if (register[D] == register[Zero])
                     {
                         //                currentProcess = instructionList[address];
-                        pc = address;
+                        pc = (address/4)-1;
                     }
                     break;
                 case "011000":  //BNZ
                     if (register[D] != register[Zero])
                     {
                         //              currentProcess = instructionList[address];
-                        pc = address/4-1;
+                        pc = (address/4)-1;
                     }
                     break;
                 case "011001":  //BGZ
                     if (register[D] > register[Zero])
                     {
                         //            currentProcess = instructionList[address];
-                        pc = address;
+                        pc = (address/4)-1;
                     }
                     break;
                 case "011010":  //BLZ
                     if (register[D] < register[Zero])
                     {
                         //          currentProcess = instructionList[address];
-                        pc = address;
+                        pc = (address/4);
                     }
                     
                     break;
@@ -335,7 +335,7 @@ namespace OS_Project
                 case "010100": //JMP
                     
                         //  currentProcess = convertAddress(address);
-                        pc = address / 4;
+                        pc = (address / 4)-1;
                     
                     break;
                 default:
