@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 
-namespace OS_Project.Classes
+namespace OS_Project
 {
      public class CPU
     {
@@ -17,9 +17,13 @@ namespace OS_Project.Classes
         //accumulator stores results
         // zero is register always set to zero
         public const int Accumulator = 0;
-        public const int Zero = 0;
+        public const int Zero = 1;
+        public int pc = 0;
         public List<String> instructionList;
+   //     public int ipBuffer = 0;
+
         public CPU()
+        
         {
             register = new int[16];
             processPosition = 0;
@@ -39,12 +43,12 @@ namespace OS_Project.Classes
             //is passed pcb id then gets pcb info
             //FILLS instructionList
            // Dispatcher.Instance.sendProcess();
-            instructionList = new List<string>(new string[] {  "C050005C",
-                                                               "4B060000",
-                                                               "4B010000",
-                                                               "4B000000",
-                                                               "4F0A005C",
-                                                                "4F0D00DC",
+            instructionList = new List<string>(new string[] {  "C0500070",
+                                                                "4B060000",
+                                                                "4B010000",
+                                                                "4B000000",
+                                                                "4F0A0070",
+                                                                "4F0D00F0",
                                                                 "4C0A0004",
                                                                 "C0BA0000",
                                                                 "42BD0000",
@@ -53,14 +57,19 @@ namespace OS_Project.Classes
                                                                 "10658000",
                                                                 "56810018",
                                                                 "4B060000",
-                                                                "4F0900DC",
-                                                                "43970000",
-                                                                "05070000",
+                                                                "4F0900F0",
+                                                                "43900000",
                                                                 "4C060001",
                                                                 "4C090004",
+                                                                "43920000",
+                                                                "4C060001",
+                                                                "4C090004",
+                                                                "10028000",
+                                                                "55810060",
+                                                                "04020000",
                                                                 "10658000",
-                                                                "5681003C",
-                                                                "C10000AC",
+                                                                "56810048",
+                                                                "C10000C0",
                                                                 "92000000",
                                                                 "0000000A",
                                                                 "00000006",
@@ -105,7 +114,9 @@ namespace OS_Project.Classes
                                                                 "00000000",
                                                                 "00000000",
                                                                 "00000000",
-                                                                "00000000" });
+                                                                "00000000",
+                                                                "00000000"
+                                                                });
 
         }
 
@@ -114,11 +125,14 @@ namespace OS_Project.Classes
             //supposed to convert to binary, but it doesn't need to decode because its already in binary
         }
 
-        private void Execute()
+        public void Execute()
         {
-            for(int i = 0; i<23; i++ )//get from pcb
+            
+            for(pc = 0; pc<67  ; pc++ )//get from pcb
             {
-                currentProcess = Convert.ToString(Convert.ToInt32(instructionList[i],16),2);
+             
+       
+                currentProcess = Convert.ToString(Convert.ToInt32(instructionList[pc], 16), 2);
                 currentProcess = currentProcess.PadLeft(32, '0');
               
                 string instructionFormat = currentProcess.Substring(0, 2);
@@ -134,9 +148,16 @@ namespace OS_Project.Classes
                 else
                     Console.Out.WriteLine("INSTRUCTION FORMAT DETERMINATION MUFFED UP");
 
+     /*           for (int j = 0; j < 16; j++)
+                {
+                    Console.WriteLine(register[j]);
+                    //    Console.WriteLine("j is equal to" + j);
+                }
+                Console.WriteLine("i is equal to::" + pc);
+       */       
             }
-            for(int j = 0; j < register.Length; j++)
-             Console.WriteLine(register[j]);
+            
+            
             
             
         }
@@ -210,66 +231,112 @@ namespace OS_Project.Classes
             switch (opCode)
             {
                 case "001011":  //MOVI
-                    register[D] = register[B];
-                    break;
-                case "001100":  //ADDI
-                    register[D] = register[B] + address;
-                    break;
-                case "001101":  //MULI
-                    register[D] = register[B] * address;
-                    break;
-                case "001110":  //DIVI
-                    register[D] = register[B] / address;
-                    break;
-                case "001111":  //LDI
                     register[D] = address;
                     break;
+                case "001100":  //ADDI
+                    if (address == 4)
+                        register[D] += address / 4;
+                    else if (address == 0)
+                        register[D] = register[B] + address;
+                    else
+                        register[D] = register[D] + address;
+                    break;
+                case "001101":  //MULI
+                    register[D] = B * (address);
+                    break;
+                case "001110":  //DIVI
+                    register[D] = B / (address);
+                    break;
+                case "001111":  //LDI
+                    register[D] = address/4;
+                    break;
                 case "010001":  //SLTI
-                    if (register[B] < address)
+                    if (register[B] < (address))
                         register[D] = 1;
                     else
                         register[D] = 0;
                     break;
                 case "010101":  //BEQ
                     if (register[D] == register[B])
-                        currentProcess = instructionList[address];
+                    {
+
+                        //        currentProcess = instructionList[address];
+                        pc = (address/4)-1;
+                    }
                     break;
                 case "010110":  //BNE
                     if (register[D] != register[B])
+                    {
                         //       currentProcess = convertAddress(address);
-                        currentProcess = instructionList[address];
+                        //     currentProcess = instructionList[address];
+                        pc = (address/4)-1;
+                    }
                     break;
                 case "010111":  //BEZ
                     if (register[D] == register[Zero])
-                        currentProcess = instructionList[address];
+                    {
+                        //                currentProcess = instructionList[address];
+                        pc = address;
+                    }
                     break;
                 case "011000":  //BNZ
                     if (register[D] != register[Zero])
-                        currentProcess = instructionList[address];
+                    {
+                        //              currentProcess = instructionList[address];
+                        pc = address/4-1;
+                    }
                     break;
                 case "011001":  //BGZ
                     if (register[D] > register[Zero])
-                        currentProcess = instructionList[address];
+                    {
+                        //            currentProcess = instructionList[address];
+                        pc = address;
+                    }
                     break;
                 case "011010":  //BLZ
                     if (register[D] < register[Zero])
-                        currentProcess = instructionList[address];
+                    {
+                        //          currentProcess = instructionList[address];
+                        pc = address;
+                    }
+                    
                     break;
+                case "000010": //ST
+                    if (D != 0 && B != 0)
+                    {
+                        instructionList[register[D]] = register[B].ToString(); 
+                    }
+                    else
+                    {
+                        Console.WriteLine("fuckity fuck fuck");
+                    }
+                    
+                    break;
+                case "000011": //LW
+                    register[D] = int.Parse(instructionList[register[B]]) ;
+                    break;
+
             }
         }
 
         void UnconditionalJump()
         {
             String opCode = currentProcess.Substring(2, 6);
-            int address = Convert.ToInt32(currentProcess.Substring(8, currentProcess.Length-8),2);
+            int address = Convert.ToInt32(currentProcess.Substring(16, 16), 2);
             switch (opCode)
             {
                 case "010010":  //HLT
                     //End of program
                     //currentPCB.done=true;
+                    Console.WriteLine("process halted");
+                    Console.ReadLine();
+
                     break;
-                case "010100":  //JMP
-                    currentProcess = convertAddress(address);
+                case "010100": //JMP
+                    
+                        //  currentProcess = convertAddress(address);
+                        pc = address / 4;
+                    
                     break;
                 default:
                     break;
@@ -282,24 +349,26 @@ namespace OS_Project.Classes
             int tempRegister1 = Convert.ToInt32(currentProcess.Substring(8, 4),2);
             int tempRegister2 = Convert.ToInt32(currentProcess.Substring(12, 4),2);
             int address = Convert.ToInt32(currentProcess.Substring(16, 16),2);
-            int ipBuffer = 0;
+     //       int ipBuffer = 0;
             //int D = Convert.ToInt32(currentProcess.Substring(12,4),2);
             switch (opCode)
             {
                 case "000000":
                     if (tempRegister1 != 0 && tempRegister2 != 0)
                     {
-                        ipBuffer = tempRegister2;
+                        register[tempRegister1] = int.Parse(instructionList[register[tempRegister2]], System.Globalization.NumberStyles.HexNumber);
                     }
+                    else
                     {
-                        ipBuffer = address;
+                        register[tempRegister1] = int.Parse(instructionList[address/4],System.Globalization.NumberStyles.HexNumber);
                     }
-                    register[0] += ipBuffer;
+              //      register[0] += ipBuffer;
                     break;
                 case "000001":
                     {
                         string opBuffer = register[0].ToString();
-                        Console.WriteLine(opBuffer);
+                        Console.WriteLine("opBuffer is equal to "+opBuffer);
+                        Console.ReadLine();
                         break;
 
                     }
