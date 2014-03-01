@@ -157,7 +157,7 @@ namespace OS_Project
             
             idle = true;
             currentPCB.state = terminated;
-            disk.diskProcessTable[currentPCB.id].elapsedTime.Stop();
+            currentPCB.elapsedTime.Stop();
             
             
             
