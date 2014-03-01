@@ -17,7 +17,9 @@ namespace OS_Project
         public const int Zero = 1;
         public int pc = 0;
         public List<String> ProgramCache;
-
+        public bool idle;
+        
+        
         public CPU()
         
         {
@@ -39,7 +41,7 @@ namespace OS_Project
             //is passed pcb id then gets pcb info
             //FILLS instructionList
            // Dispatcher.Instance.sendProcess();
-            ProgramCache = new List<string>(new string[] {  "C0500070",
+       /*     ProgramCache = new List<string>(new string[] {  "C0500070",
                                                                 "4B060000",
                                                                 "4B010000",
                                                                 "4B000000",
@@ -112,7 +114,7 @@ namespace OS_Project
                                                                 "00000000",
                                                                 "00000000",
                                                                 "00000000"
-                                                                });
+                                                                }); */
 
         }
 
@@ -153,6 +155,9 @@ namespace OS_Project
        */       
             }
             
+            idle = true;
+            currentPCB.state = terminated;
+            disk.diskProcessTable[currentPCB.id].elapsedTime.Stop();
             
             
             
