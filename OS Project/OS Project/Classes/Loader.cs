@@ -18,7 +18,7 @@ namespace OS_Project.Classes
             
 
             //Need to find a standard place for the file within our visual studio project folder
-            string[] lines = System.IO.File.ReadAllLines(@"C:\\Users\\apfundst\\Documents\\Visual Studio 2012\\Projects\\ConsoleApplication1\\ConsoleApplication1\\DataFile2-Cleaned.txt");
+            string[] lines = System.IO.File.ReadAllLines(@"C:\users\peter\documents\visual studio 2013\Projects\OS Project\OS Project\DataFile2-Cleaned.txt");
             lines.ToList();
 
             int jobID = 0;

@@ -35,10 +35,19 @@ namespace OS_Project.Classes
         
         public PCB getNextJob()
         {
-            PCB i = ReadyQueue[0];//gets first element
-            
-            ReadyQueue.RemoveAt(0);//removed first element like a pop front
-            return i;
+            if (ReadyQueue.Count > 0)
+            {
+                PCB i = ReadyQueue[0];//gets first element
+                ReadyQueue.RemoveAt(0);//removed first element like a pop front
+                return i;
+            }
+            else
+            {
+                LongTermScheduler.Instance.Clean();
+                PCB i = ReadyQueue[0];//gets first element
+                ReadyQueue.RemoveAt(0);//removed first element like a pop front
+                return i;
+            }
 
         }
     }

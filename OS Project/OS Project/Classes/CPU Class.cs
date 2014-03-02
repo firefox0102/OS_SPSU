@@ -30,9 +30,14 @@ namespace OS_Project
 
         public void run()
         {
+            pc = 0;
+            Console.WriteLine(pc);
+
             Fetch();
             Decode();
             Execute();
+            Console.WriteLine("this job is: "+this.currentPCB.id);
+
         }
 
 
@@ -130,19 +135,25 @@ namespace OS_Project
         public void Execute()
         {
             
-            for(pc = 0; pc<currentPCB.memDataStartPos  ; pc++ )//get from pcb
+            for(pc = 0; pc<currentPCB.instrLength  ; pc++ )//get from pcb
             {
-             
-       
+
+  //              Console.WriteLine(pc);
                 currentProcess = Convert.ToString(Convert.ToInt32(ProgramCache[pc], 16), 2);
                 currentProcess = currentProcess.PadLeft(32, '0');
               
                 string instructionFormat = currentProcess.Substring(0, 2);
 
                 if (instructionFormat.Equals("00"))
+                {
                     Arithmetic();
+         //           Console.WriteLine(pc);
+                }
                 else if (instructionFormat.Equals("01"))
+                {
                     BranchandImmediate();
+                    //           Console.WriteLine(pc);
+                }
                 else if (instructionFormat.Equals("10"))
                     UnconditionalJump();
                 else if (instructionFormat.Equals("11"))
@@ -161,10 +172,7 @@ namespace OS_Project
             
             idle = true;
             currentPCB.state = PCB.Status.terminated;
-            currentPCB.elapsedTime.Stop();
-            
-            
-            
+            currentPCB.elapsedTime.Stop();            
         }
 
         void Arithmetic()
@@ -304,7 +312,7 @@ namespace OS_Project
                     }
                     else
                     {
-                        Console.WriteLine("fuckity fuck fuck");
+                        Console.WriteLine("ST");
                     }
                     
                     break;

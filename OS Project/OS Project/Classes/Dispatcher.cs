@@ -30,8 +30,9 @@ namespace OS_Project
         {
             PCB pid = ShortTermScheduler.Instance.getNextJob();
             //CPU.Instance.instructionList = Memory.Instance.memory[current.memPos];
-            List<string> instuctionList = Memory.Instance.memory.GetRange(pid.memInstrStartPos, pid.totalLength-1);
+            List<string> instuctionList = Memory.Instance.memory.GetRange(pid.memInstrStartPos, pid.totalLength);
             cpu.ProgramCache = instuctionList;
+            cpu.register = pid.registers;
             pid.elapsedTime.Start();
             pid.state = PCB.Status.running;
             cpu.currentPCB = pid;

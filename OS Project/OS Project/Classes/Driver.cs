@@ -23,11 +23,18 @@ namespace OS_Project
             Loader.load();
             LongTermScheduler.Instance.UpdateLTS();
             CPU cpu = new CPU();
-            Thread newThread = new Thread(cpu.run);
-            newThread.Start();
-            CPU cpu2 = new CPU();
-            Thread newThread2 = new Thread(cpu2.run);
-            newThread2.Start();
+            while(Memory.Instance.currentSize != 0)
+            {
+                cpu.run();
+                LongTermScheduler.Instance.UpdateLTS();
+            }
+            
+            //Thread newThread = new Thread(cpu.run);
+            //newThread.Start();
+           // CPU cpu2 = new CPU();
+            //Thread newThread2 = new Thread(cpu2.run);
+            //newThread2.Start();
+            
         }
     }
 }
