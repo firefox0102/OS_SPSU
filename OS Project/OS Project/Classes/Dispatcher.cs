@@ -1,4 +1,4 @@
-﻿/*using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +10,7 @@ namespace OS_Project
     public class Dispatcher
     {
         public static Dispatcher dis;
-        private bool idle;
+        public bool idle = true;
         public Dispatcher()
         {
         }
@@ -30,10 +30,10 @@ namespace OS_Project
         {
             PCB pid = ShortTermScheduler.Instance.getNextJob();
             //CPU.Instance.instructionList = Memory.Instance.memory[current.memPos];
-            List<string> instuctionList = Memory.memory.GetRange(pid.memInstrStartPos, pid.totalLength);
-            cpu.ProgramCache = instructionList;
+            List<string> instuctionList = Memory.Instance.memory.GetRange(pid.memInstrStartPos, pid.totalLength-1);
+            cpu.ProgramCache = instuctionList;
             pid.elapsedTime.Start();
-            pid.Status.state = running;
+            pid.state = PCB.Status.running;
             cpu.currentPCB = pid;
             cpu.idle = false;
         }
@@ -50,4 +50,4 @@ namespace OS_Project
 
     }
 }
-*/
+

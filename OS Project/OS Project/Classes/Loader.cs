@@ -1,7 +1,24 @@
-Disk disk = new Disk();
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.IO;
+using OS_Project;
+
+namespace OS_Project.Classes
+{
+    class Loader
+    {
+        public static Disk disk = Disk.Instance;
+
+        public static void load()
+        {
+
+            
 
             //Need to find a standard place for the file within our visual studio project folder
-            string[] lines = System.IO.File.ReadAllLines(@"C:\\Users\\jcathcar\\Documents\\Visual Studio 2012\\Projects\\ConsoleApplication1\\ConsoleApplication1\\DataFile2-Cleaned.txt");
+            string[] lines = System.IO.File.ReadAllLines(@"C:\\Users\\apfundst\\Documents\\Visual Studio 2012\\Projects\\ConsoleApplication1\\ConsoleApplication1\\DataFile2-Cleaned.txt");
             lines.ToList();
 
             int jobID = 0;
@@ -17,7 +34,7 @@ Disk disk = new Disk();
                     jobID++;
                     // Gets the priority and converts it to an int
                     int lastSpace = line.LastIndexOf(' ');
-                    int tempPriority = Convert.ToInt32( line.Substring(lastSpace+1) , 16);
+                    int tempPriority = Convert.ToInt32(line.Substring(lastSpace + 1), 16);
                     disk.diskProcessTable.Add(new PCB(jobID, tempPriority, diskPos));
                     disk.numberProcesses++;
                 }
@@ -33,7 +50,7 @@ Disk disk = new Disk();
                     disk.diskProcessTable[jobID - 1].dataLength = disk.diskProcessTable[jobID - 1].diskDataEndPos - disk.diskProcessTable[jobID - 1].diskDataStartPos;
                     disk.diskProcessTable[jobID - 1].totalLength = disk.diskProcessTable[jobID - 1].instrLength + disk.diskProcessTable[jobID - 1].dataLength + 2;
                     //Multiply each line in the job by 32 for number of bits and then divide by 8 to get bytes
-                    disk.diskProcessTable[jobID - 1].sizeInBytes = (disk.diskProcessTable[jobID - 1].totalLength * 32) / 8;
+                    disk.diskProcessTable[jobID - 1].sizeInBytes = (disk.diskProcessTable[jobID - 1].totalLength);
 
                 }
                 else
@@ -45,3 +62,11 @@ Disk disk = new Disk();
                     diskPos++;
                 }
             }
+
+
+        }//end main
+
+
+    }//end class
+
+}//end namespace

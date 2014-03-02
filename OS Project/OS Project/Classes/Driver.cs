@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.Threading;
 using OS_Project.Classes;
 
 namespace OS_Project
@@ -20,8 +20,8 @@ namespace OS_Project
             Application.SetCompatibleTextRenderingDefault(true);
             Application.Run(new Form1());
             */
-            LongTermScheduler LongTermScheduler = new LongTermScheduler();
-            ShortTermScheduler ShortTermScheduler = new ShortTermScheduler();
+            Loader.load();
+            LongTermScheduler.Instance.UpdateLTS();
             CPU cpu = new CPU();
             Thread newThread = new Thread(cpu.run);
             newThread.Start();

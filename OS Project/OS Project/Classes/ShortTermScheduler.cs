@@ -26,11 +26,17 @@ namespace OS_Project.Classes
 
         public void AddToShortTermScheduler(PCB p)
         {
+            if(ReadyQueue == null)
+            {
+                ReadyQueue = new List<PCB>();
+            }
             ReadyQueue.Add(p);
         }
-         public PCB getNextJob()
+        
+        public PCB getNextJob()
         {
             PCB i = ReadyQueue[0];//gets first element
+            
             ReadyQueue.RemoveAt(0);//removed first element like a pop front
             return i;
 

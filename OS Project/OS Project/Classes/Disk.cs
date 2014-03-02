@@ -9,7 +9,7 @@ namespace OS_Project.Classes{
 
     public class Disk{
 
-        // public static Disk disk;
+        public static Disk disk;
         public List<string> diskData;
         public List<PCB> diskProcessTable;
         public int diskSize;
@@ -20,6 +20,17 @@ namespace OS_Project.Classes{
             diskProcessTable = new List<PCB>(0);
             diskSize = 0;
             numberProcesses = 0;
+        }
+        public static Disk Instance
+        {
+            get
+            {
+                if (disk == null)
+                {
+                    disk = new Disk();
+                }
+                return disk;
+            }
         }
 
         public void printDiskData(){
@@ -38,7 +49,7 @@ namespace OS_Project.Classes{
         public int calcDiskSize(){
             int tempSize = 0;
             for(int i = 0; i < diskProcessTable.Count; ++i){
-                tempSize += diskProcessTable[i].sizeInBytes;
+                tempSize += diskProcessTable[i].totalLength;
             }
             diskSize = tempSize;
             return tempSize;

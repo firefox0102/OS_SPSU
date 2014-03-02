@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Forms;
+
 
 
 namespace OS_Project
@@ -41,7 +41,7 @@ namespace OS_Project
              
              
              
-             Dispatcher.sendProcess(this);
+             Dispatcher.Instance.sendProcess(this);
             //is passed pcb id then gets pcb info
             //FILLS instructionList
            // Dispatcher.Instance.sendProcess();
@@ -160,7 +160,7 @@ namespace OS_Project
             }
             
             idle = true;
-            currentPCB.Status.state = terminated;
+            currentPCB.state = PCB.Status.terminated;
             currentPCB.elapsedTime.Stop();
             
             
@@ -324,7 +324,7 @@ namespace OS_Project
                 case "010010":  //HLT
                     Console.WriteLine("process halted");
                     Console.ReadLine();
-                    currentPCB.Status.state = terminated;
+                    currentPCB.state = PCB.Status.terminated;
 
                     break;
                 case "010100": //JMP

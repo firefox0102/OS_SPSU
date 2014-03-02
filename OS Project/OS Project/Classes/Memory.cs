@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
+
 namespace OS_Project{
     public class Memory
     {
@@ -18,6 +19,17 @@ namespace OS_Project{
             memory = new List<string>(0);
             currentSize = 0;
             freeSpace = 1024;
+        }
+        public static Memory Instance
+        {
+            get
+            {
+                if (Ram == null)
+                {
+                    Ram = new Memory();
+                }
+                return Ram;
+            }
         }
 
     }

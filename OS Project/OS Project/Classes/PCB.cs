@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using OS_Project;
 
-namespace OS_Project.Classes
+namespace OS_Project
 {
 
     public class PCB
