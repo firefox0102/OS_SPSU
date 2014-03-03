@@ -38,6 +38,7 @@ namespace OS_Project.Classes
             if (ReadyQueue.Count > 0)
             {
                 PCB i = ReadyQueue[0];//gets first element
+                ReadyQueue[0].waitingTime.Stop();
                 ReadyQueue.RemoveAt(0);//removed first element like a pop front
                 return i;
             }

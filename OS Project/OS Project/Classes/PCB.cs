@@ -36,6 +36,7 @@ namespace OS_Project
         public enum Status { error, created, ready, waiting, running, terminated }; //created instead of new since new is resered word
         public Status state;
         public Stopwatch elapsedTime;
+        public Stopwatch waitingTime;
         public int[] registers;
 
         public PCB(int id, int priority, int diskInstrStartPos){
@@ -60,6 +61,7 @@ namespace OS_Project
 
             state = Status.created;
             elapsedTime = new Stopwatch();
+            waitingTime = new Stopwatch();
             registers = new int[16];
             for (int i = 0; i < 16; i++){
                 registers[i] = 0;

@@ -10,6 +10,7 @@ namespace OS_Project
     public class LongTermScheduler
     {
         public int nextJob;
+        public int counter;
         public static LongTermScheduler lts;
         //Processes that have been loaded into RAM
         public List<PCB> LoadedProcesses;
@@ -57,7 +58,7 @@ namespace OS_Project
             
             while(Memory.Instance.currentSize <= 1024)
             {
-                if(loop > 15)
+                if(loop > 50)
                 {
                     break;
                 }
@@ -73,6 +74,7 @@ namespace OS_Project
         public void GetNextProcess()
         {
             //get next instruction from the disk
+            bool success = false;
             List<PCB> temp = Disk.Instance.diskProcessTable;
             if (LoadedProcesses.Count <= 30)
             {
@@ -82,96 +84,109 @@ namespace OS_Project
                     {
                         Disk.Instance.diskProcessTable[i].state = PCB.Status.waiting;
                         ProcessQueue.Add(temp[i]);
+                        success = true;
+                        break;
                     }
                 }
-                nextJob++;
+                if (success)
+                {
+                    nextJob = ProcessQueue.ElementAt(ProcessQueue.Count - 1).id + 1;
+                }
             }
         }
 
         public void Clean()
         {
             Memory.Instance.wipeMemory();
-            lts = new LongTermScheduler(nextJob); 
+            if (nextJob == 31)
+            {
+                lts = new LongTermScheduler(16);
+            }
+            else
+                Console.WriteLine("Error");
             LongTermScheduler.Instance.UpdateLTS();
         }
         public void AddToSTScheduler()
         {
             int pc = 0;
-            PCB p = ProcessQueue[pc];
-            bool success = false;            
-
-            while(success != true)
+            if (ProcessQueue.Count != 0)
             {
-                //check if data and instruction will fit in RAM
-                if(p.totalLength + Memory.Instance.currentSize <= 1024)
-                {
-                    int newInstrStartPos = 0;
-                    int newInstrEndPos = 0;
-                    int newDataStartPos = 0;
-                    int newDataEndPos = 0;
+                PCB p = ProcessQueue[pc];
+                bool success = false;
 
-                    //add the instruction to memory
-                    for(int i = p.diskInstrStartPos; i <= p.diskInstrEndPos; i++)
+                while (success != true)
+                {
+                    //check if data and instruction will fit in RAM
+                    if (p.totalLength + Memory.Instance.currentSize <= 1024)
                     {
-                        //update the start pos
-                        if(i == p.diskInstrStartPos)
+                        int newInstrStartPos = 0;
+                        int newInstrEndPos = 0;
+                        int newDataStartPos = 0;
+                        int newDataEndPos = 0;
+
+                        //add the instruction to memory
+                        for (int i = p.diskInstrStartPos; i <= p.diskInstrEndPos; i++)
                         {
+                            //update the start pos
+                            if (i == p.diskInstrStartPos)
+                            {
                                 newInstrStartPos = Memory.Instance.memory.Count;
+                            }
+                            //update the end pos
+                            if (i == p.diskInstrEndPos)
+                            {
+                                newInstrEndPos = Memory.Instance.memory.Count - 1;
+                            }
+                            Memory.Instance.memory.Add(Disk.Instance.diskData[i]);
                         }
-                        //update the end pos
-                        if(i == p.diskInstrEndPos)
-                        {
-                                newInstrEndPos = Memory.Instance.memory.Count-1;
-                        }
-                        Memory.Instance.memory.Add(Disk.Instance.diskData[i]);
-                    }
 
-                    //add the Data to Memory
-                    for(int i = p.diskDataStartPos; i <= p.diskDataEndPos; i++)
+                        //add the Data to Memory
+                        for (int i = p.diskDataStartPos; i <= p.diskDataEndPos; i++)
+                        {
+                            //update the start position
+                            if (i == p.diskDataStartPos)
+                            {
+                                newDataStartPos = Memory.Instance.memory.Count - 1;
+                            }
+                            //Update the new end position
+                            if (i == p.diskDataEndPos)
+                            {
+                                newDataEndPos = Memory.Instance.memory.Count - 1;
+                            }
+                            Memory.Instance.memory.Add(Disk.Instance.diskData[i]);
+                        }
+
+                        p.memDataStartPos = newDataStartPos;
+                        p.memDataEndPos = newDataEndPos;
+                        p.memInstrStartPos = newInstrStartPos;
+                        p.memInstrEndPos = newInstrEndPos;
+
+                        //Update the current size of RAM
+                        Memory.Instance.currentSize += p.totalLength;
+
+                        //Add PCB to Short Term Scheduler
+                        p.state = PCB.Status.ready;
+                        p.waitingTime.Start();
+                        ShortTermScheduler.Instance.AddToShortTermScheduler(p);
+                        LoadedProcesses.Add(p);
+                        ProcessQueue.RemoveAt(pc);
+                        pc++;
+                    }
+                    else
                     {
-                        //update the start position
-                        if(i == p.diskDataStartPos)
-                        {
-                            newDataStartPos = Memory.Instance.memory.Count-1;
-                        }
-                        //Update the new end position
-                        if(i == p.diskDataEndPos)
-                        {
-                            newDataEndPos = Memory.Instance.memory.Count-1;
-                        }
-                        Memory.Instance.memory.Add(Disk.Instance.diskData[i]);
+                        GetNextProcess();
+                        p = ProcessQueue[pc];
+                        pc++;
+
+                        break;
                     }
-
-                    p.memDataStartPos = newDataStartPos;
-                    p.memDataEndPos = newDataEndPos;
-                    p.memInstrStartPos = newInstrStartPos;
-                    p.memInstrEndPos = newInstrEndPos;
-
-                    //Update the current size of RAM
-                    Memory.Instance.currentSize += p.totalLength;
-
-                    //Add PCB to Short Term Scheduler
-                    p.state = PCB.Status.ready;
-                    ShortTermScheduler.Instance.AddToShortTermScheduler(p);
-                    LoadedProcesses.Add(p);
-                    ProcessQueue.RemoveAt(pc);
-                    pc++;
+                    if (pc >= ProcessQueue.Count)
+                    {
+                        success = true;
+                    }
                 }
-                else
-                {
-                    
-                    
-                    GetNextProcess();
-                    pc++;
-                    p = ProcessQueue[pc];
-                    break;
-                }
-                if(pc >= ProcessQueue.Count)
-                {
-                    success = true;
-                }
+                //done = true;
             }
-            //done = true;
         }
     }
 }

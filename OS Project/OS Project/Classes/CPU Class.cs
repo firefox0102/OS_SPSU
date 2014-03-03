@@ -331,7 +331,7 @@ namespace OS_Project
             {
                 case "010010":  //HLT
                     Console.WriteLine("process halted");
-                    Console.ReadLine();
+            //        Console.ReadLine();
                     currentPCB.state = PCB.Status.terminated;
 
                     break;
@@ -367,7 +367,7 @@ namespace OS_Project
                     {
                         string opBuffer = register[0].ToString();
                         Console.WriteLine("opBuffer is equal to "+opBuffer);
-                        Console.ReadLine();
+           //             Console.ReadLine();
                         break;
 
                     }
