@@ -26,6 +26,16 @@ namespace OS_Project
             }
         }
         //Drew will write the dispatcher
+        public void contextSwitch(CPU cpu, PCB pcb){
+        
+            //Get cpu current process(pcb)
+            //update that pcb and push to the disk table
+            //push the PCB back onto the Ready Queue
+            //use dma to write the program cache back to memory
+            //call sendProcess function with cpu to load new process
+            
+        
+        }
         public void sendProcess(CPU cpu)
         {
             PCB pid = ShortTermScheduler.Instance.getNextJob();
