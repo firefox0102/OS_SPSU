@@ -9,13 +9,22 @@ using OS_Project.Classes;
 
 namespace OS_Project
 {
-    static class Driver
+    public class Driver
     {
+
+
+
+        public static CPU cpu = new CPU();
+        public static CPU cpu2 = new CPU();
+        public static CPU cpu3 = new CPU();
+        public static CPU cpu4 = new CPU();
+
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        public static void Main()
         {
             //Generic stuff that allows the window to show up
             /*Application.EnableVisualStyles();
@@ -24,12 +33,19 @@ namespace OS_Project
             */
             Loader.load();
             LongTermScheduler.Instance.UpdateLTS();
+
+            /* moved cpu declarations to outside of main
+
             CPU cpu = new CPU();
             CPU cpu2 = new CPU();
             CPU cpu3 = new CPU();
             CPU cpu4 = new CPU();
+             * 
+          */
             double counter = 0;
-            for(int i = 0; i < 3; 
+            for(int i = 0; i < 3; i++)
+            {
+
             while(Memory.Instance.currentSize != 0 && counter < 7.5)
             {
                 LongTermScheduler.Instance.UpdateLTS();
