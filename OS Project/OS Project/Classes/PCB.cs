@@ -2,25 +2,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Diagnostics;
 using OS_Project;
 
-namespace OS_Project
-{
+namespace OS_Project{
 
-    public class PCB
-    {
+    public class PCB{
+
         public static PCB pcb;
         public int id;
         public int pc;
         public int priority;
-
-        public int memInstrStartPos;
-        public int memInstrEndPos;
-
-        public int memDataStartPos;
-        public int memDataEndPos;
+        // Will contain the indexes of frames for instructions
+        public int[] memInstrPos;
+        // Will contain the indexes of frames for data
+        public int[] memDataPos;
 
         public int instrLength;
         public int dataLength;
@@ -28,10 +24,10 @@ namespace OS_Project
         public int totalLength;
         public int sizeInBytes;
 
-        public int diskInstrStartPos;
-        public int diskInstrEndPos;
-        public int diskDataStartPos;
-        public int diskDataEndPos;
+        public int[] diskInstrStartPos; // now an array of 2 coordinates
+        public int[] diskInstrEndPos;   // now an array of 2 coordinates
+        public int[] diskDataStartPos;  // now an array of 2 coordinates
+        public int[] diskDataEndPos;    // now an array of 2 coordinates
 
         public enum Status { error, created, ready, waiting, running, terminated }; //created instead of new since new is resered word
         public Status state;
@@ -39,25 +35,26 @@ namespace OS_Project
         public Stopwatch waitingTime;
         public int[] registers;
 
-        public PCB(int id, int priority, int diskInstrStartPos){
+        public PCB(int id, int priority, int[] startPos){
             this.id = id;
             pc = 0;
             this.priority = priority;
 
-            memInstrStartPos = -1;
-            memInstrEndPos = -1;
-            memDataStartPos = -1;
-            memDataEndPos = -1;
+            diskInstrStartPos = new int[2];
+            diskInstrEndPos = new int[2];
+            diskDataStartPos = new int[2];
+            diskDataEndPos = new int[2];    
+
+            memInstrPos =  new int[2];
+            memDataPos = new int[2];
 
             instrLength = -1;
             dataLength = -1;
             totalLength = -1;
             sizeInBytes = -1;
 
-            this.diskInstrStartPos = diskInstrStartPos;
-            diskInstrEndPos = -1;
-            diskDataStartPos = -1;
-            diskDataEndPos = -1;
+            diskInstrStartPos[0] = startPos[0];
+            diskInstrStartPos[1] = startPos[1];
 
             state = Status.created;
             elapsedTime = new Stopwatch();
@@ -73,10 +70,10 @@ namespace OS_Project
             Console.WriteLine("ID : "+id );
             Console.WriteLine("PC : "+pc );
             Console.WriteLine("Priority   : "+priority );
-            Console.WriteLine("Disk Instructions Start   : "+diskInstrStartPos );
-            Console.WriteLine("Disk Intructions End   : "+ diskInstrEndPos);
-            Console.WriteLine("Disk Data Start   : "+diskDataStartPos );
-            Console.WriteLine("Disk Data End   : "+diskDataEndPos );
+            Console.WriteLine("Disk Instructions Start   : "+diskInstrStartPos[0]+","+diskInstrStartPos[1] );
+            Console.WriteLine("Disk Intructions End   : "+ diskInstrEndPos[0]+","+diskInstrEndPos[1]);
+            Console.WriteLine("Disk Data Start   : "+diskDataStartPos[0]+","+diskDataStartPos[1] );
+            Console.WriteLine("Disk Data End   : "+diskDataEndPos[0]+","+diskDataEndPos[1] );
         }
 
     }
