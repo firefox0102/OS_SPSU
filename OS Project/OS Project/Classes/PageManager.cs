@@ -8,8 +8,7 @@ namespace OS_Project
 {
     class PageManager
     {
-        
-        //Constructor
+        public enum PageFaultType{ up, down };//Constructor
         public static PageManager pm;
 
         //singleton for remote access in other classes
@@ -41,6 +40,10 @@ namespace OS_Project
             //return the number for the next empty frame in RAM
         }
 
-
+        public List<string> PageFault()
+        {
+            //if up, return the page before this one, minus one to PageSet
+            //if down, return the page after this one and add 1 to the PageSet
+        }
     }
 }
