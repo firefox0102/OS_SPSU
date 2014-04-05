@@ -11,13 +11,17 @@ namespace OS_Project
      public class CPU
     {
         public int[] register;
+
         public String currentProcess;
         public PCB currentPCB;
         public int processPosition;
         public const int Accumulator = 0;
         public const int Zero = 1;
         public int pc = 0;
-        public List<String> ProgramCache;
+        public int pageSet;
+        public List<String> instructionCache;
+        public List<String> inputCache;
+        public List<String> outputCache;
         public bool idle;
         public int[] iocounter = new int[33];
         
@@ -36,7 +40,6 @@ namespace OS_Project
             Console.WriteLine(pc);
 
             Fetch();
-            Decode();
             Execute();
             Console.WriteLine("this job is: "+this.currentPCB.id);
 
@@ -51,125 +54,64 @@ namespace OS_Project
              Dispatcher.Instance.sendProcess(this);
             //is passed pcb id then gets pcb info
             //FILLS instructionList
-           // Dispatcher.Instance.sendProcess();
-       /*     ProgramCache = new List<string>(new string[] {  "C0500070",
-                                                                "4B060000",
-                                                                "4B010000",
-                                                                "4B000000",
-                                                                "4F0A0070",
-                                                                "4F0D00F0",
-                                                                "4C0A0004",
-                                                                "C0BA0000",
-                                                                "42BD0000",
-                                                                "4C0D0004",
-                                                                "4C060001",
-                                                                "10658000",
-                                                                "56810018",
-                                                                "4B060000",
-                                                                "4F0900F0",
-                                                                "43900000",
-                                                                "4C060001",
-                                                                "4C090004",
-                                                                "43920000",
-                                                                "4C060001",
-                                                                "4C090004",
-                                                                "10028000",
-                                                                "55810060",
-                                                                "04020000",
-                                                                "10658000",
-                                                                "56810048",
-                                                                "C10000C0",
-                                                                "92000000",
-                                                                "0000000A",
-                                                                "00000006",
-                                                                "0000002C",
-                                                                "00000045",
-                                                                "00000001",
-                                                                "00000007",
-                                                                "00000000",
-                                                                "00000001",
-                                                                "00000005",
-                                                                "0000000A",
-                                                                "00000055",
-                                                                "00000000",
-                                                                "00000000",
-                                                                "00000000",
-                                                                "00000000",
-                                                                "00000000",
-                                                                "00000000",
-                                                                "00000000",
-                                                                "00000000",
-                                                                "00000000",
-                                                                "00000000",
-                                                                "00000000",
-                                                                "00000000",
-                                                                "00000000",
-                                                                "00000000",
-                                                                "00000000",
-                                                                "00000000",
-                                                                "00000000",
-                                                                "00000000",
-                                                                "00000000",
-                                                                "00000000",
-                                                                "00000000",
-                                                                "00000000",
-                                                                "00000000",
-                                                                "00000000",
-                                                                "00000000",
-                                                                "00000000",
-                                                                "00000000",
-                                                                "00000000",
-                                                                "00000000",
-                                                                "00000000",
-                                                                "00000000",
-                                                                "00000000",
-                                                                "00000000",
-                                                                "00000000"
-                                                                }); */
+         
 
         }
 
-        private void Decode()
-        {
-            //supposed to convert to binary, but it doesn't need to decode because its already in binary
-        }
 
         public void Execute()
         {
+
             
             for(pc = 0; pc<currentPCB.instrLength  ; pc++ )//get from pcb
             {
-
-  //              Console.WriteLine(pc);
-                currentProcess = Convert.ToString(Convert.ToInt32(ProgramCache[pc], 16), 2);
-                currentProcess = currentProcess.PadLeft(32, '0');
-              
-                string instructionFormat = currentProcess.Substring(0, 2);
-
-                if (instructionFormat.Equals("00"))
+                if(pc<0)
                 {
-                    Arithmetic();
-         //           Console.WriteLine(pc);
+                    instructionCache = PageManager.Instance.PageFault(pageSet, "down");
+                    pageSet--;
                 }
-                else if (instructionFormat.Equals("01"))
-                {
-                    BranchandImmediate();
-                    //           Console.WriteLine(pc);
-                }
-                else if (instructionFormat.Equals("10"))
-                    UnconditionalJump();
-                else if (instructionFormat.Equals("11"))
-                    IO();
-                else
-                    Console.Out.WriteLine("INSTRUCTION FORMAT DETERMINATION MUFFED UP");
 
-     /*           for (int j = 0; j < 16; j++)
+                if (pc >= 0 &&pc < 16)
                 {
-                    Console.WriteLine(register[j]);
-                    //    Console.WriteLine("j is equal to" + j);
+
+                    //              Console.WriteLine(pc);
+                    currentProcess = Convert.ToString(Convert.ToInt32(instructionCache[pc], 16), 2);
+                    currentProcess = currentProcess.PadLeft(32, '0');
+
+                    string instructionFormat = currentProcess.Substring(0, 2);
+
+                    if (instructionFormat.Equals("00"))
+                    {
+                        Arithmetic();
+                        //           Console.WriteLine(pc);
+                    }
+                    else if (instructionFormat.Equals("01"))
+                    {
+                        BranchandImmediate();
+                        //           Console.WriteLine(pc);
+                    }
+                    else if (instructionFormat.Equals("10"))
+                        UnconditionalJump();
+                    else if (instructionFormat.Equals("11"))
+                        IO();
+                    else
+                        Console.Out.WriteLine("INSTRUCTION FORMAT DETERMINATION MUFFED UP");
+
+                    /*           for (int j = 0; j < 16; j++)
+                               {
+                                   Console.WriteLine(register[j]);
+                                   //    Console.WriteLine("j is equal to" + j);
+                               }
+                               Console.WriteLine("i is equal to::" + pc);
+                      */
                 }
-                Console.WriteLine("i is equal to::" + pc);
-       */       
+
+                //pagefault
+                if (pc >= 16)
+                {
+                    instructionCache = PageManager.Instance.PageFault(pageSet,"up");
+                    pageSet++;
+                }
             }
             
             idle = true;
@@ -224,7 +166,7 @@ namespace OS_Project
             }
         }    
         
-        String convertAddress(int address)
+        String Decode(int address)
         {
             String newCurrentProcess;
             String currentaddress = address.ToString();
@@ -310,7 +252,14 @@ namespace OS_Project
                 case "000010": //ST
                     if (D != 0 && B != 0)
                     {
-                        ProgramCache[register[D]] = register[B].ToString(); 
+                        if(d<16)
+                            instructionCache[register[D]] = register[B].ToString(); 
+                        if(d>=16 && d<32)
+                            inputCache[register[D]] = register[B].ToString();
+                        if(d=>32)
+                            outputCache[register[D]] = register[B].ToString();
+
+
                     }
                     else
                     {
