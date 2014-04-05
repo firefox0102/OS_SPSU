@@ -8,7 +8,6 @@ namespace OS_Project
 {
     class PageManager
     {
-        private enum PageFaultType{ up, down };//Constructor
         public static PageManager pm;
 
         //singleton for remote access in other classes
@@ -24,9 +23,9 @@ namespace OS_Project
             }
         }
 
-        public void Clean()
+        public void Clean(PCB terminatedPCB)
         {
-            //clean the terminated processes from where???
+            //clean the terminated processes from ram
         }
 
         public int NumEmptyFrames()
@@ -40,11 +39,24 @@ namespace OS_Project
             //return the number for the next empty frame in RAM
         }
 
-        public List<string> PageFault(int y ,String x)
+        public List<string> PageFault(PCB currentPCB, int y, String x)
         {
-            
-            //if up, return the page before this one, minus one to PageSet
-            //if down, return the page after this one and add 1 to the PageSet
+            //if up, return the instruction set from the page before this one
+            if (x.Equals("up"))
+            {
+                if(y > 0)
+                {
+                    //somehow get the currentPcb.pagetable[y-1] instruction set
+                }
+            }
+            //if down, return the instruction set from the page after this one
+            if (x.Equals("down"))
+            {
+                if (y < /*page table size-1*/)
+                {
+                    //somehow get the currentPcb.pagetable[y+1] instruction set
+                }
+            }
         }
     }
 }
