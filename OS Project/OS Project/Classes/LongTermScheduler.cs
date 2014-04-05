@@ -9,6 +9,8 @@ namespace OS_Project
 {
     public class LongTermScheduler
     {
+        //Created in Part 1
+        //**********************************************************
         public int nextJob;
         public int counter;
         public static LongTermScheduler lts;
@@ -16,6 +18,8 @@ namespace OS_Project
         public List<PCB> LoadedProcesses;
         //Processes that have not been loaded into RAM yet
         public List<PCB> ProcessQueue;
+        //End of Part 1 stuff
+        //**********************************************************
 
         public LongTermScheduler()
         {
@@ -58,7 +62,7 @@ namespace OS_Project
             
             while(Memory.Instance.currentSize <= 1024)
             {
-                if(loop > 50)
+                if(loop > 25)
                 {
                     break;
                 }
@@ -95,17 +99,6 @@ namespace OS_Project
             }
         }
 
-        public void Clean()
-        {
-            Memory.Instance.wipeMemory();
-            if (nextJob == 31)
-            {
-                lts = new LongTermScheduler(16);
-            }
-            else
-                Console.WriteLine("Error");
-            LongTermScheduler.Instance.UpdateLTS();
-        }
         public void AddToSTScheduler()
         {
             int pc = 0;
