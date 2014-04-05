@@ -18,7 +18,7 @@ namespace OS_Project
         public const int Accumulator = 0;
         public const int Zero = 1;
         public int pc = 0;
-        public int pageSet;
+        public int pageSet = 1;
         public List<String> instructionCache;
         public List<String> inputCache;
         public List<String> outputCache;
@@ -65,13 +65,21 @@ namespace OS_Project
             
             for(pc = 0; pc<currentPCB.instrLength  ; pc++ )//get from pcb
             {
+                //converts the pc to operate inside of the instruction cache and not the full list of instructions
+                if (pageSet > 1)
+                {
+                    pc = pc - ((pageSet - 1) * 16);
+                }
+
+                //pagefault
                 if(pc<0)
                 {
                     instructionCache = PageManager.Instance.PageFault(pageSet, "down");
                     pageSet--;
                 }
 
-                if (pc >= 0 &&pc < 16)
+                //pc is in current page context and executes instruction
+                else if (pc >= 0 &&pc < 16)
                 {
 
                     //              Console.WriteLine(pc);
@@ -107,9 +115,10 @@ namespace OS_Project
                 }
 
                 //pagefault
-                if (pc >= 16)
+                else if (pc >= 16)
                 {
-                    instructionCache = PageManager.Instance.PageFault(pageSet,"up");
+
+                    instructionCache = PageManager.Instance.PageFault(currentPCB, pageSet,"up");
                     pageSet++;
                 }
             }
@@ -252,11 +261,11 @@ namespace OS_Project
                 case "000010": //ST
                     if (D != 0 && B != 0)
                     {
-                        if(d<16)
+                        if(D<16)
                             instructionCache[register[D]] = register[B].ToString(); 
-                        if(d>=16 && d<32)
+                        if(D>=16 && D<32)
                             inputCache[register[D]] = register[B].ToString();
-                        if(d=>32)
+                        if(D>=32)
                             outputCache[register[D]] = register[B].ToString();
 
 
