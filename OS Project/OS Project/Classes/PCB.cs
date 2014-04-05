@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using OS_Project;
 
-namespace OS_Project.Classes
+namespace OS_Project
 {
 
     public class PCB
@@ -36,6 +36,7 @@ namespace OS_Project.Classes
         public enum Status { error, created, ready, waiting, running, terminated }; //created instead of new since new is resered word
         public Status state;
         public Stopwatch elapsedTime;
+        public Stopwatch waitingTime;
         public int[] registers;
 
         public PCB(int id, int priority, int diskInstrStartPos){
@@ -60,6 +61,7 @@ namespace OS_Project.Classes
 
             state = Status.created;
             elapsedTime = new Stopwatch();
+            waitingTime = new Stopwatch();
             registers = new int[16];
             for (int i = 0; i < 16; i++){
                 registers[i] = 0;

@@ -1,4 +1,4 @@
-﻿/*using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +10,7 @@ namespace OS_Project
     public class Dispatcher
     {
         public static Dispatcher dis;
-        private bool idle;
+        public bool idle = true;
         public Dispatcher()
         {
         }
@@ -26,24 +26,15 @@ namespace OS_Project
             }
         }
         //Drew will write the dispatcher
-        public void contextSwitch(CPU cpu, PCB pcb){
-        
-            //Get cpu current process(pcb)
-            //update that pcb and push to the disk table
-            //push the PCB back onto the Ready Queue
-            //use dma to write the program cache back to memory
-            //call sendProcess function with cpu to load new process
-            
-        
-        }
         public void sendProcess(CPU cpu)
         {
             PCB pid = ShortTermScheduler.Instance.getNextJob();
             //CPU.Instance.instructionList = Memory.Instance.memory[current.memPos];
-            List<string> instuctionList = Memory.memory.GetRange(pid.memInstrStartPos, pid.totalLength);
-            cpu.ProgramCache = instructionList;
+            List<string> instuctionList = Memory.Instance.memory.GetRange(pid.memInstrStartPos, pid.totalLength);
+            cpu.ProgramCache = instuctionList;
+            cpu.register = pid.registers;
             pid.elapsedTime.Start();
-            pid.Status.state = running;
+            pid.state = PCB.Status.running;
             cpu.currentPCB = pid;
             cpu.idle = false;
         }
@@ -60,4 +51,4 @@ namespace OS_Project
 
     }
 }
-*/
+
