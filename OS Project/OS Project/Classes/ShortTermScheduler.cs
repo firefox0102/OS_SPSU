@@ -31,65 +31,8 @@ namespace OS_Project.Classes
                 ReadyQueue = new List<PCB>();
             }
             ReadyQueue.Add(p);
-            ReadyQueue.OrderByDescending(x => x.instrLength);
         }
-
-
-
-        public PCB getNextJobSJF()
-        {
-            
-
-            if(Driver.cpu.currentPCB.instrLength - Driver.cpu.processPosition > ReadyQueue[0].instrLength- ReadyQueue[0].processPosition )
-            {
-                Dispatcher.contextSwitch(ReadyQueue[0], Driver.cpu);
-                ReadyQueue[0].waitingTime.Stop();
-            }
-
-
-            if (Driver.cpu2.currentPCB.instrLength - Driver.cpu.processPosition > ReadyQueue[0].instrLength - ReadyQueue[0].processPosition)
-            {
-                Dispatcher.contextSwitch(ReadyQueue[0], Driver.cpu2);
-                ReadyQueue[0].waitingTime.Stop();
-            }
-
-
-            if (Driver.cpu3.currentPCB.instrLength - Driver.cpu.processPosition > ReadyQueue[0].instrLength - ReadyQueue[0].processPosition)
-            {
-                Dispatcher.contextSwitch(ReadyQueue[0], Driver.cpu3);
-                ReadyQueue[0].waitingTime.Stop();
-            }
-
-
-            if (Driver.cpu4.currentPCB.instrLength - Driver.cpu.processPosition > ReadyQueue[0].instrLength - ReadyQueue[0].processPosition)
-            {
-                Dispatcher.contextSwitch(ReadyQueue[0], Driver.cpu4);
-                ReadyQueue[0].waitingTime.Stop();
-            }
-
-            
-
-
-
-        }
-
-
-        public PCB getNextJobPriority()
-        {
-
-
-
-
-
-        }
-
-
-
-
-     /* code from part one kept for refrence
-      * 
-      * 
-      * 
+        
         public PCB getNextJob()
         {
             if (ReadyQueue.Count > 0)
@@ -101,13 +44,23 @@ namespace OS_Project.Classes
             }
             else
             {
-                LongTermScheduler.Instance.Clean();
+                PageManager.Instance.Clean();
                 PCB i = ReadyQueue[0];//gets first element
                 ReadyQueue.RemoveAt(0);//removed first element like a pop front
                 return i;
             }
 
         }
-      */
+
+        public PCB Swap(PCB p)
+        {
+            ReadyQueue[0].waitingTime.Stop();
+            PCB temp = ReadyQueue[0];
+            //add running context switch********************************
+            ReadyQueue[0] = p;
+            ReadyQueue[0].waitingTime.Start();
+            //add wait context switch***********************************
+            return temp;
+        }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.IO;
 
 
 
@@ -18,6 +19,7 @@ namespace OS_Project
         public int pc = 0;
         public List<String> ProgramCache;
         public bool idle;
+        public int[] iocounter = new int[33];
         
         
         public CPU()
@@ -347,6 +349,10 @@ namespace OS_Project
 
         void IO()
         {
+           
+            
+            iocounter[currentPCB.id] = iocounter[currentPCB.id] +1;
+
             String opCode = currentProcess.Substring(2, 6);
             int tempRegister1 = Convert.ToInt32(currentProcess.Substring(8, 4),2);
             int tempRegister2 = Convert.ToInt32(currentProcess.Substring(12, 4),2);

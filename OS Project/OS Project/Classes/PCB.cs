@@ -24,7 +24,6 @@ namespace OS_Project
 
         public int instrLength;
         public int dataLength;
-        public int processPosition;
         // Instructions and Data together
         public int totalLength;
         public int sizeInBytes;

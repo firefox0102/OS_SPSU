@@ -31,10 +31,5 @@ namespace OS_Project{
                 return Ram;
             }
         }
-        public void wipeMemory()
-        {
-            Ram = null;
-        }
-
     }
 }
