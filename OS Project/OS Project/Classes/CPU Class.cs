@@ -14,6 +14,7 @@ namespace OS_Project
 
         public String currentProcess;
         public PCB currentPCB;
+        publicc int offset = currentPCB.;
         public int processPosition;
         public const int Accumulator = 0;
         public const int Zero = 1;
@@ -261,23 +262,27 @@ namespace OS_Project
                 case "000010": //ST
                     if (D != 0 && B != 0)
                     {
-                        if(D<16)
-                            instructionCache[register[D]] = register[B].ToString(); 
-                        if(D>=16 && D<32)
-                            inputCache[register[D]] = register[B].ToString();
-                        if(D>=32)
+                       if(D>offset)
                             outputCache[register[D]] = register[B].ToString();
+                       else if(D<offset)
+                           Console.WriteLine("ST instruction is out of bounds");
 
 
                     }
                     else
                     {
-                        Console.WriteLine("ST");
+                        Console.WriteLine("ST instruction broke");
                     }
                     
                     break;
                 case "000011": //LW
-                    register[D] = int.Parse(ProgramCache[register[B]]) ;
+                    if(D<=offset)
+                      register[D] = int.Parse(instructionCache[register[B]]) ;
+                    else if(D>offset)
+                    {
+                        
+                    }
+
                     break;
 
             }
@@ -293,6 +298,7 @@ namespace OS_Project
                     Console.WriteLine("process halted");
             //        Console.ReadLine();
                     currentPCB.state = PCB.Status.terminated;
+                    PageManager.Instance.Clean(currentPCB);
 
                     break;
                 case "010100": //JMP
