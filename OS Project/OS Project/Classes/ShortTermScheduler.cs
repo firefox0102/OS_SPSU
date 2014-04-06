@@ -31,6 +31,7 @@ namespace OS_Project.Classes
                 ReadyQueue = new List<PCB>();
             }
             ReadyQueue.Add(p);
+            Sort();
         }
         
         public PCB getNextJob()
@@ -52,6 +53,10 @@ namespace OS_Project.Classes
 
         }
 
+        //***************************************************************************
+        //New Stuff
+        //***************************************************************************
+
         public PCB Swap(PCB p)
         {
             ReadyQueue[0].waitingTime.Stop();
@@ -61,6 +66,24 @@ namespace OS_Project.Classes
             ReadyQueue[0].waitingTime.Start();
             //add wait context switch***********************************
             return temp;
+        }
+
+        public void Sort()
+        {
+            //Shortest Job first 
+            ShortestJobFirst();
+            //Priority Sort
+            //PrioritySort();
+        }
+
+        public void ShortestJobFirst()
+        {
+            //sort the readyqueue by shortest job first
+        }
+
+        public void PrioritySort()
+        {
+            //priority sort the ready queue
         }
     }
 }
