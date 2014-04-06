@@ -126,7 +126,7 @@ namespace OS_Project
         {
            //get current process start and end and then clear ram
         }
-        //write void contextSwitch(){}
+        //write void contextSwitch(PCB, cpu){}
 
     }
 }
