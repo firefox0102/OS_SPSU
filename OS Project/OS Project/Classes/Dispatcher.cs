@@ -46,11 +46,35 @@ namespace OS_Project
             //16 words/instrcuions/data per cache.
             
         }
-        public List<string> PageFault(PCB currentPCB, int y, String x)
+        public List<string> PageFault(PCB currentPCB, int y, String x, string cache)
         {
-            //y is teh current frame, the retrun is the next or previous frame based on up or down
+            //y is teh current set of 4 frames, the retrun is the next or previous frame based on up or down
             //in sting x
             //if up, return the instruction set from the page before this one
+            //cache can be instrcution, input or output 
+            
+            //if teh next set has less than 4 frames, send it just whats left over.  cache does not need
+            //to alwasy be full
+            if(cache.Equals("instructiion")){
+                if (x.Equals("up"))
+                {
+                    if(y > 0)
+                    {
+                        //interact with instruction logicl memory and page table
+                        //logical_mem
+                    }
+                }
+            //if down, return the instruction set from the page after this one
+                if (x.Equals("down"))
+                {
+                    if (y < /*page table size-1*/)
+                    {
+                        //somehow get the currentPcb.pagetable[y+1] instruction set
+                    }
+                }
+                
+            }
+            //end instrcution
             if (x.Equals("up"))
             {
                 if(y > 0)
