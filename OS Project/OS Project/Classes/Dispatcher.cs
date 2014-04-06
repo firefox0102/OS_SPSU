@@ -55,7 +55,7 @@ namespace OS_Project
             
             //if teh next set has less than 4 frames, send it just whats left over.  cache does not need
             //to alwasy be full
-            if(cache.Equals("instructiion")){
+            if(cache.Equals("instruction")){
                 if (x.Equals("up"))
                 {
                     if(y > 0)
