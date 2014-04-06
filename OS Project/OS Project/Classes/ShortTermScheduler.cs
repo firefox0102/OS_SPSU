@@ -85,5 +85,59 @@ namespace OS_Project.Classes
         {
             //priority sort the ready queue
         }
+         public PCB getNextJobSJF()
+ +        {
+ +            
+ +
+ +            if(Driver.cpu.currentPCB.instrLength - Driver.cpu.processPosition > ReadyQueue[0].instrLength- ReadyQueue[0].processPosition )
+ +            {
+ +                Dispatcher.contextSwitch(ReadyQueue[0], Driver.cpu);
+ +                ReadyQueue[0].waitingTime.Stop();
+ +            }
+ +
+ +
+ +            if (Driver.cpu2.currentPCB.instrLength - Driver.cpu.processPosition > ReadyQueue[0].instrLength - ReadyQueue[0].processPosition)
+ +            {
+ +                Dispatcher.contextSwitch(ReadyQueue[0], Driver.cpu2);
+ +                ReadyQueue[0].waitingTime.Stop();
+ +            }
+ +
+ +
+ +            if (Driver.cpu3.currentPCB.instrLength - Driver.cpu.processPosition > ReadyQueue[0].instrLength - ReadyQueue[0].processPosition)
+ +            {
+ +                Dispatcher.contextSwitch(ReadyQueue[0], Driver.cpu3);
+ +                ReadyQueue[0].waitingTime.Stop();
+ +            }
+ +
+ +
+ +            if (Driver.cpu4.currentPCB.instrLength - Driver.cpu.processPosition > ReadyQueue[0].instrLength - ReadyQueue[0].processPosition)
+ +            {
+ +                Dispatcher.contextSwitch(ReadyQueue[0], Driver.cpu4);
+ +                ReadyQueue[0].waitingTime.Stop();
+ +            }
+ +
+ +            
+ +
+ +
+ +
+ +        }
+ +
+ +
+ +        public PCB getNextJobPriority()
+ +        {
+ +
+ +
+ +
+ +
+ +
+ +        }
+ +
+ +
+ +
+ +
+ +     /* code from part one kept for refrence
+ +      * 
+ +      * 
+ +      * 
     }
 }
