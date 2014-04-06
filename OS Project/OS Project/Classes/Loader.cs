@@ -26,12 +26,14 @@ namespace OS_Project{
             int[] tempDataStartPos = new int[2];
             int[] tempDataEndPos = new int[2];
 
+            bool stillInstr = true;
             foreach (string line in lines)
             {
                 string tempLine = "";
                 if (line.Contains("JOB"))
                 {
                     jobID++;
+                    stillInstr = true;
                     // Gets the priority and converts it to an int
                     int lastSpace = line.LastIndexOf(' ');
                     string stringPriority = line.Substring(lastSpace + 1);
@@ -42,6 +44,7 @@ namespace OS_Project{
                 }
                 else if (line.Contains("Data"))
                 {
+                    stillInstr = false;
                     if (disk.currentElement != 0)
                     {
                         disk.diskProcessTable[jobID - 1].diskInstrEndPos = new int[] { disk.currentPage, disk.currentElement - 1 };
@@ -84,6 +87,7 @@ namespace OS_Project{
                     //will call the convert hex to binary then to string
                     tempLine = line.Substring(2);
                     disk.diskData[disk.currentPage].Add(tempLine);
+                    if(stillInstr) disk.diskProcessTable[jobID - 1].instrLength++;
                     diskPos++;
                 }
             }
