@@ -28,7 +28,7 @@ namespace OS_Project
         //Drew will write the dispatcher
         public void sendProcess(CPU cpu)
         {
-            PCB pid = ShortTermScheduler.Instance.getNextJob();
+           /* PCB pid = ShortTermScheduler.Instance.getNextJob();
             //CPU.Instance.instructionList = Memory.Instance.memory[current.memPos];
             List<string> instuctionList = Memory.Instance.memory.GetRange(pid.memInstrStartPos, pid.totalLength);
             cpu.ProgramCache = instuctionList;
@@ -36,7 +36,10 @@ namespace OS_Project
             pid.elapsedTime.Start();
             pid.state = PCB.Status.running;
             cpu.currentPCB = pid;
-            cpu.idle = false;
+            cpu.idle = false;*/
+            
+            //what is the input cache, what is the output cache and what is teh instruction class
+            
         }
         
         //dispatcher seems to send instuctions one at a time to the cpu. we can implement this by calling a get current instuction function or some other way
