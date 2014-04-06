@@ -42,6 +42,27 @@ namespace OS_Project
             //only need to pass output chache in if it has been changed and is not zero
             
         }
+        public List<string> PageFault(PCB currentPCB, int y, String x)
+        {
+            //y is teh current frame, the retrun is the next or previous frame based on up or down
+            //in sting x
+            //if up, return the instruction set from the page before this one
+            if (x.Equals("up"))
+            {
+                if(y > 0)
+                {
+                    //somehow get the currentPcb.pagetable[y-1] instruction set
+                }
+            }
+            //if down, return the instruction set from the page after this one
+            if (x.Equals("down"))
+            {
+                if (y < /*page table size-1*/)
+                {
+                    //somehow get the currentPcb.pagetable[y+1] instruction set
+                }
+            }
+        }
         
         //dispatcher seems to send instuctions one at a time to the cpu. we can implement this by calling a get current instuction function or some other way
         public bool isIdle()
