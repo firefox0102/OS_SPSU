@@ -39,6 +39,7 @@ namespace OS_Project
             cpu.idle = false;*/
             
             //what is the input cache, what is the output cache and what is teh instruction class
+            //only need to pass output chache in if it has been changed and is not zero
             
         }
         
