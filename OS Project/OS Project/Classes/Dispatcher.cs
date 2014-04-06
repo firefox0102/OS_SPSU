@@ -61,7 +61,7 @@ namespace OS_Project
                     if(y > 0)
                     {
                         //interact with instruction logicl memory and page table
-                        //logical_mem
+                        //logical_memInstr
                     }
                 }
             //if down, return the instruction set from the page after this one
@@ -74,22 +74,47 @@ namespace OS_Project
                 }
                 
             }
-            //end instrcution
-            if (x.Equals("up"))
-            {
-                if(y > 0)
+             else if(cache.Equals("input")){
+                if (x.Equals("up"))
                 {
-                    //somehow get the currentPcb.pagetable[y-1] instruction set
+                    if(y > 0)
+                    {
+                        //interact with data in logicl memory and page table
+                        //logical_memDataIn
+                    }
                 }
-            }
             //if down, return the instruction set from the page after this one
-            if (x.Equals("down"))
-            {
-                if (y < /*page table size-1*/)
+                if (x.Equals("down"))
                 {
-                    //somehow get the currentPcb.pagetable[y+1] instruction set
+                    if (y < /*page table size-1*/)
+                    {
+                        //somehow get the currentPcb.pagetable[y+1] instruction set
+                    }
                 }
+                
             }
+            //end input
+            else if(cache.Equals("output")){
+                if (x.Equals("up"))
+                {
+                    if(y > 0)
+                    {
+                        //interact with data out logicl memory and page table
+                        //logical_memDataOut
+                    }
+                }
+            //if down, return the instruction set from the page after this one
+                if (x.Equals("down"))
+                {
+                    if (y < /*page table size-1*/)
+                    {
+                        //somehow get the currentPcb.pagetable[y+1] instruction set
+                    }
+                }
+                
+            }
+            //end output
+            
         }
         
         //dispatcher seems to send instuctions one at a time to the cpu. we can implement this by calling a get current instuction function or some other way
