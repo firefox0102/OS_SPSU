@@ -28,6 +28,9 @@ namespace OS_Project
         //Drew will write the dispatcher
         public void sendProcess(CPU cpu)
         {
+            //instructionCache
+            //inputCache
+            //outputCache
            /* PCB pid = ShortTermScheduler.Instance.getNextJob();
             //CPU.Instance.instructionList = Memory.Instance.memory[current.memPos];
             List<string> instuctionList = Memory.Instance.memory.GetRange(pid.memInstrStartPos, pid.totalLength);
@@ -40,6 +43,7 @@ namespace OS_Project
             
             //what is the input cache, what is the output cache and what is teh instruction class
             //only need to pass output chache in if it has been changed and is not zero
+            //16 words/instrcuions/data per cache.
             
         }
         public List<string> PageFault(PCB currentPCB, int y, String x)
