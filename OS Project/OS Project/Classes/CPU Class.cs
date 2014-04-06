@@ -14,7 +14,7 @@ namespace OS_Project
 
         public String currentProcess;
         public PCB currentPCB;
-        publicc int offset = currentPCB.;
+        publicc int offset = currentPCB.instrLength;
         public int processPosition;
         public const int Accumulator = 0;
         public const int Zero = 1;
@@ -75,7 +75,7 @@ namespace OS_Project
                 //pagefault
                 if(pc<0)
                 {
-                    instructionCache = PageManager.Instance.PageFault(pageSet, "down");
+                    instructionCache = PageManager.Instance.PageFault(currentPCB, pageSet, "down","instructionCache");
                     pageSet--;
                 }
 
@@ -119,7 +119,7 @@ namespace OS_Project
                 else if (pc >= 16)
                 {
 
-                    instructionCache = PageManager.Instance.PageFault(currentPCB, pageSet,"up");
+                    instructionCache = PageManager.Instance.PageFault(currentPCB, pageSet,"up","instruction");
                     pageSet++;
                 }
             }
@@ -186,6 +186,12 @@ namespace OS_Project
 
             return newCurrentProcess;
         }
+
+        void writeThrough(List<String> writeback){
+
+
+        }
+
 
         void BranchandImmediate()
         {
@@ -263,7 +269,23 @@ namespace OS_Project
                     if (D != 0 && B != 0)
                     {
                        if(D>offset)
-                            outputCache[register[D]] = register[B].ToString();
+                       {
+                           if(D-offset>16)
+                              PageManager.Instance.PageFault(currentPCB, pageSet,"up","input",inputCache);
+                           else if(D-offset<0)
+                              PageManager.Instance.PageFault(currentPCB, pageSet,"down","input",inputCache);
+                           else
+                            inputCache[register[D-offset]] = register[B].ToString();
+                       }
+                       else if(D>offset+20)
+                       {
+                           if(D-(offset+20)<0)
+                               PageManager.Instance.PageFault(currentPCB, pageSet,"down","output",outputCache);
+                           else if (D-(offset+20)>16)
+                               PageManager.Instance.PageFault(currentPCB, pageSet,"up","output",outputCache);
+                           else
+                            inputCache[register[D-(offset-20)]] = register[B].ToString();
+                       }
                        else if(D<offset)
                            Console.WriteLine("ST instruction is out of bounds");
 
