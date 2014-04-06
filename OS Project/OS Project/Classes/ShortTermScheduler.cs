@@ -132,7 +132,7 @@ namespace OS_Project.Classes
  +
  +        }
  +
- +
+ +      //run a sorting algorithm to sort the ready queue
  +
  +
  +     /* code from part one kept for refrence
