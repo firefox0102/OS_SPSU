@@ -80,7 +80,7 @@ namespace OS_Project{
 
             if ((this.instrLength - this.pc) > (p.instrLength - p.pc))
                 return 1;
-            else if ((this.instrLength - -this.pc) < (p.instrLength - p.pc))
+            else if ((this.instrLength - this.pc) < (p.instrLength - p.pc))
                 return -1;
             else
                 return 0;
