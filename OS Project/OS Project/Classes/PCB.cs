@@ -7,7 +7,7 @@ using OS_Project;
 
 namespace OS_Project{
 
-    public class PCB{
+    public class PCB : IComparable<PCB>{
 
         public static PCB pcb;
         public int id;
@@ -70,6 +70,36 @@ namespace OS_Project{
             Console.WriteLine("Disk Data End   : "+diskDataEndPos[0]+","+diskDataEndPos[1] );
         }
 
+        //********************************************************
+        //Sorting stuff
+        //********************************************************
+        public int CompareTo(PCB p)
+        {
+            //If you are sorting by Shortest Job First, use this code
+            //*************************************************************
+
+            if ((this.instrLength - this.pc) > (p.instrLength - p.pc))
+                return 1;
+            else if ((this.instrLength - -this.pc) < (p.instrLength - p.pc))
+                return -1;
+            else
+                return 0;
+
+            //*************************************************************
+
+
+            //If you are sorting by Priority, use this code
+            //*************************************************************
+            /*
+            if (this.priority > p.priority)
+                return 1;
+            else if (this.priority < p.priority)
+                return -1;
+            else
+                return 0;
+            */
+            //*************************************************************
+        }
     }
 
 }

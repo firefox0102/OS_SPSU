@@ -36,6 +36,7 @@ namespace OS_Project.Classes
         
         public PCB getNextJob()
         {
+            LongTermScheduler.Instance.Clean();
             if (ReadyQueue.Count > 0)
             {
                 PCB i = ReadyQueue[0];//gets first element
@@ -45,99 +46,125 @@ namespace OS_Project.Classes
             }
             else
             {
-                PageManager.Instance.Clean();
+                //This is so dirty lol
                 PCB i = ReadyQueue[0];//gets first element
+                ReadyQueue[0].waitingTime.Stop();
                 ReadyQueue.RemoveAt(0);//removed first element like a pop front
                 return i;
             }
-
         }
 
         //***************************************************************************
         //New Stuff
         //***************************************************************************
 
-        public PCB Swap(PCB p)
+        //Don't think I need this anymore, but hey...
+        /*public PCB Swap(PCB p)
         {
             ReadyQueue[0].waitingTime.Stop();
             PCB temp = ReadyQueue[0];
-            //add running context switch********************************
             ReadyQueue[0] = p;
             ReadyQueue[0].waitingTime.Start();
-            //add wait context switch***********************************
+            ReadyQueue[0].state = PCB.Status.waiting;
+            //Assuming the process is being sent to the CPU
+            temp.state = PCB.Status.running;
             return temp;
-        }
+        }*/
 
         public void Sort()
         {
-            //Shortest Job first 
-            ShortestJobFirst();
-            //Priority Sort
-            //PrioritySort();
+            //Sorting algorithm is determined by the CompareTo Method in the PCB class
+            ReadyQueue.Sort();
         }
 
-        public void ShortestJobFirst()
+        //Context Switching
+        //Checks to see if the next job is shorter than any of the currently running jobs
+        public void switchNextJobSJF()
         {
-            //sort the readyqueue by shortest job first
+            if((Driver.cpu.currentPCB.instrLength - Driver.cpu.processPosition) > (ReadyQueue[0].instrLength- ReadyQueue[0].processPosition))
+            {
+                PCB temp = Driver.cpu.currentPCB;
+                temp.state = PCB.Status.waiting;
+                temp.waitingTime.Start();
+                Dispatcher.Instance.sendProcess(Driver.cpu);
+                ReadyQueue.Add(temp);
+                Sort();
+            }
+
+            if ((Driver.cpu2.currentPCB.instrLength - Driver.cpu2.processPosition) > (ReadyQueue[0].instrLength - ReadyQueue[0].processPosition))
+            {
+                PCB temp = Driver.cpu2.currentPCB;
+                temp.state = PCB.Status.waiting;
+                temp.waitingTime.Start();
+                Dispatcher.Instance.sendProcess(Driver.cpu2);
+                ReadyQueue.Add(temp);
+                Sort();
+            }
+
+            if ((Driver.cpu3.currentPCB.instrLength - Driver.cpu3.processPosition) > (ReadyQueue[0].instrLength - ReadyQueue[0].processPosition))
+            {
+                PCB temp = Driver.cpu3.currentPCB;
+                temp.state = PCB.Status.waiting;
+                temp.waitingTime.Start();
+                Dispatcher.Instance.sendProcess(Driver.cpu3);
+                ReadyQueue.Add(temp);
+                Sort();
+            }
+
+            if ((Driver.cpu4.currentPCB.instrLength - Driver.cpu4.processPosition) > (ReadyQueue[0].instrLength - ReadyQueue[0].processPosition))
+            {
+                PCB temp = Driver.cpu4.currentPCB;
+                temp.state = PCB.Status.waiting;
+                temp.waitingTime.Start();
+                Dispatcher.Instance.sendProcess(Driver.cpu4);
+                ReadyQueue.Add(temp);
+                Sort();
+            }
         }
 
-        public void PrioritySort()
+        //Context Switching
+        //Checks to see if the next job is higher priority than any of the currently running jobs
+        public void switchNextJobPriority()
         {
-            //priority sort the ready queue
+            if ((Driver.cpu.currentPCB.priority) < (ReadyQueue[0].priority))
+            {
+                PCB temp = Driver.cpu.currentPCB;
+                temp.state = PCB.Status.waiting;
+                temp.waitingTime.Start();
+                Dispatcher.Instance.sendProcess(Driver.cpu);
+                ReadyQueue.Add(temp);
+                Sort();
+            }
+
+            if ((Driver.cpu2.currentPCB.priority) < (ReadyQueue[0].priority))
+            {
+                PCB temp = Driver.cpu2.currentPCB;
+                temp.state = PCB.Status.waiting;
+                temp.waitingTime.Start();
+                Dispatcher.Instance.sendProcess(Driver.cpu2);
+                ReadyQueue.Add(temp);
+                Sort();
+            }
+
+            if ((Driver.cpu3.currentPCB.priority) < (ReadyQueue[0].priority))
+            {
+                PCB temp = Driver.cpu3.currentPCB;
+                temp.state = PCB.Status.waiting;
+                temp.waitingTime.Start();
+                Dispatcher.Instance.sendProcess(Driver.cpu3);
+                ReadyQueue.Add(temp);
+                Sort();
+            }
+
+            if ((Driver.cpu4.currentPCB.priority) < (ReadyQueue[0].priority))
+            {
+                PCB temp = Driver.cpu4.currentPCB;
+                temp.state = PCB.Status.waiting;
+                temp.waitingTime.Start();
+                Dispatcher.Instance.sendProcess(Driver.cpu4);
+                ReadyQueue.Add(temp);
+                Sort();
+            }
         }
-         public PCB getNextJobSJF()
- +        {
- +            
- +
- +            if(Driver.cpu.currentPCB.instrLength - Driver.cpu.processPosition > ReadyQueue[0].instrLength- ReadyQueue[0].processPosition )
- +            {
- +                Dispatcher.contextSwitch(ReadyQueue[0], Driver.cpu);
- +                ReadyQueue[0].waitingTime.Stop();
- +            }
- +
- +
- +            if (Driver.cpu2.currentPCB.instrLength - Driver.cpu.processPosition > ReadyQueue[0].instrLength - ReadyQueue[0].processPosition)
- +            {
- +                Dispatcher.contextSwitch(ReadyQueue[0], Driver.cpu2);
- +                ReadyQueue[0].waitingTime.Stop();
- +            }
- +
- +
- +            if (Driver.cpu3.currentPCB.instrLength - Driver.cpu.processPosition > ReadyQueue[0].instrLength - ReadyQueue[0].processPosition)
- +            {
- +                Dispatcher.contextSwitch(ReadyQueue[0], Driver.cpu3);
- +                ReadyQueue[0].waitingTime.Stop();
- +            }
- +
- +
- +            if (Driver.cpu4.currentPCB.instrLength - Driver.cpu.processPosition > ReadyQueue[0].instrLength - ReadyQueue[0].processPosition)
- +            {
- +                Dispatcher.contextSwitch(ReadyQueue[0], Driver.cpu4);
- +                ReadyQueue[0].waitingTime.Stop();
- +            }
- +
- +            
- +
- +
- +
- +        }
- +
- +
- +        public PCB getNextJobPriority()
- +        {
- +
- +
- +
- +
- +
- +        }
- +
- +      //run a sorting algorithm to sort the ready queue
- +
- +
- +     /* code from part one kept for refrence
- +      * 
- +      * 
- +      * 
     }
 }
