@@ -39,13 +39,14 @@ namespace OS_Project{
 
         public void memDump()
         {
-            for (int i = 0; i < 15; i++)
-            {
-                string temp = Memory.Instance.memory[i][0];
-                temp += ", " + Memory.Instance.memory[i][1];
-                temp += ", " + Memory.Instance.memory[i][2];
-                temp += ", " + Memory.Instance.memory[i][3];
-                Console.WriteLine(temp);
+            int k = 0;
+            for (int i = 0; i < Memory.Instance.memory.Count; i++){
+                int temp = Memory.Instance.memory[i].Count;
+                for (int j = 0; j < temp; j++){
+                    Console.WriteLine(k+": "+Memory.Instance.memory[i][j]);
+                    k++;
+                }
+                
             }
         }
 

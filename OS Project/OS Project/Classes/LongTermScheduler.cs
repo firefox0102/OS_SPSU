@@ -42,7 +42,7 @@ namespace OS_Project
         public void addToSTScheduler(){
         // will need to ensure that the STS has a queue that
         // can be accessed without disrupting operation
-            PCB tempPCB = Disk.Instance.diskProcessTable[nextJob];
+            PCB tempPCB = Disk.Instance.diskProcessTable[0];
             //if (Memory.Instance.emptyFrameIndexes.Count > tempPCB.totalPages){
 
                 // Instr Coordinates
@@ -52,30 +52,46 @@ namespace OS_Project
                 // Data Coordinates
                 int current_dataStartPage = tempPCB.diskDataStartPos;
                 int current_dataEndPage = tempPCB.diskDataEndPos;
-                
-                
-                int j = 0;
-                for (int i = 0; i + current_instrStartPage < current_instrEndPage;){
-                    string element = Disk.Instance.diskData[i + current_instrStartPage][j];
-                    Memory.Instance.memory[   Memory.Instance.emptyFrameIndexes[0]   ].Add(element);
-                    j++;
-                    if (j > 3){
-                        Memory.Instance.emptyFrameIndexes.RemoveAt(0);
-                        i++;
-                        j = 0;
-                    }
-                }
 
-                j = 0;
-                for (int i = 0; i + current_dataStartPage < current_dataEndPage; )
+                int j = 0;
+                for (; current_instrStartPage <= current_instrEndPage; )
                 {
-                    string element = Disk.Instance.diskData[i + current_instrStartPage][j];
-                    Memory.Instance.memory[Memory.Instance.emptyFrameIndexes[0]].Add(element);
+                    try
+                    {
+                        string element = Disk.Instance.diskData[current_instrStartPage][j];
+                        Memory.Instance.memory[Memory.Instance.emptyFrameIndexes[0]].Add(element);
+                    }
+                    catch
+                    {
+                        break;
+                    }
                     j++;
                     if (j > 3)
                     {
                         Memory.Instance.emptyFrameIndexes.RemoveAt(0);
-                        i++;
+                        current_instrStartPage++;
+                        j = 0;
+                    }
+                }
+   
+
+                j = 0;
+                for (; current_dataStartPage <= current_dataEndPage; )
+                {
+                    try
+                    {
+                        string element = Disk.Instance.diskData[current_dataStartPage][j];
+                        Memory.Instance.memory[Memory.Instance.emptyFrameIndexes[0]].Add(element);
+                    }
+                    catch
+                    {
+                        break;
+                    }
+                    j++;
+                    if (j > 3)
+                    {
+                        Memory.Instance.emptyFrameIndexes.RemoveAt(0);
+                        current_dataStartPage++;
                         j = 0;
                     }
                 }

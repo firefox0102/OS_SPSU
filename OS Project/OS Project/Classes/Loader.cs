@@ -22,7 +22,7 @@ namespace OS_Project{
     
             int jobID = 0;
             bool stillInstr = true;
-
+    
             foreach (string line in lines)
             {
                 if (line.Contains("JOB"))
@@ -41,34 +41,45 @@ namespace OS_Project{
                 }
                 else if (line.Contains("Data"))
                 {
-                    stillInstr = false;
-                    Disk.Instance.diskProcessTable[jobID - 1].diskInstrEndPos = Disk.Instance.currentPage;
-                    Disk.Instance.currentPage++;
-                    Disk.Instance.currentElement = 0;
-                    Disk.Instance.diskUsedPages++;
-                    Disk.Instance.diskProcessTable[jobID - 1].diskDataStartPos = Disk.Instance.currentPage;
-
+                    if (Disk.Instance.currentElement > 0){
+                        stillInstr = false;
+                        Disk.Instance.diskProcessTable[jobID - 1].diskInstrEndPos = Disk.Instance.currentPage;
+                        Disk.Instance.currentPage++;
+                        Disk.Instance.currentElement = 0;
+                        Disk.Instance.diskUsedPages++;
+                        Disk.Instance.diskProcessTable[jobID - 1].diskDataStartPos = Disk.Instance.currentPage;
+                    }
+                    else
+                    {
+                        stillInstr = false;
+                        Disk.Instance.diskProcessTable[jobID - 1].diskInstrEndPos = Disk.Instance.currentPage - 1;
+                        Disk.Instance.currentElement = 0;
+                        Disk.Instance.diskProcessTable[jobID - 1].diskDataStartPos = Disk.Instance.currentPage;
+                    }
                 }
                 else if (line.Contains("END"))
                 {
+                    if (Disk.Instance.currentElement > 0){ 
+                         Disk.Instance.diskProcessTable[jobID - 1].diskDataEndPos = Disk.Instance.currentPage;
+                         Disk.Instance.diskProcessTable[jobID - 1].totalPages = (int)Math.Ceiling(Disk.Instance.diskProcessTable[jobID - 1].totalLength / 4.0);
+                         Disk.Instance.currentPage++;
+                         Disk.Instance.currentElement = 0;
+                         Disk.Instance.diskUsedPages++;
+                    }
+                    else
+                    {
+                        Disk.Instance.diskProcessTable[jobID - 1].diskDataEndPos = Disk.Instance.currentPage - 1 ;
+                        Disk.Instance.diskProcessTable[jobID - 1].totalPages = (int)Math.Ceiling(Disk.Instance.diskProcessTable[jobID - 1].totalLength / 4.0);
+                        Disk.Instance.currentElement = 0;
+                    }
 
-                    Disk.Instance.diskProcessTable[jobID - 1].diskDataEndPos = Disk.Instance.currentPage;
-                    Disk.Instance.diskProcessTable[jobID - 1].totalPages = (int)Math.Ceiling(Disk.Instance.diskProcessTable[jobID - 1].totalLength / 4.0);
-                    Disk.Instance.currentPage++;
-                    Disk.Instance.currentElement = 0;
-                    Disk.Instance.diskUsedPages++;
                 }
                 else
                 {
                     // Checks to see if currentElement is greater than 3
                     // if it is it will mean a new page is
 
-                    if (Disk.Instance.currentElement > 3)
-                    {
-                        Disk.Instance.currentElement = 0;
-                        Disk.Instance.currentPage++;
-                        Disk.Instance.diskUsedPages++;
-                    } 
+                
                     //will call the convert hex to binary then to string
                     string tempLine = line.Substring(2);
                     Disk.Instance.diskData[Disk.Instance.currentPage].Add(tempLine);
@@ -77,6 +88,12 @@ namespace OS_Project{
                     Disk.Instance.diskProcessTable[jobID - 1].totalLength++;
 
                     Disk.Instance.currentElement++;
+                    if (Disk.Instance.currentElement > 3)
+                    {
+                        Disk.Instance.currentElement = 0;
+                        Disk.Instance.currentPage++;
+                        Disk.Instance.diskUsedPages++;
+                    } 
                 }
             }
             Disk.Instance.printDiskProcessTable();
