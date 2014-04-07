@@ -11,7 +11,7 @@ namespace OS_Project
         // Will first get empty pages from RAM
         // then will take next job not loaded into RAM
         // load job into RAM into available pages.
-        // Will have to update the the RAM emptyFrameIndexes
+        // Will have to update the the RAM pageManager
         // to show no longer empty.
 
         public static LongTermScheduler LTS;
@@ -22,7 +22,7 @@ namespace OS_Project
 
         public LongTermScheduler()
         {
-            nextJob = 1;
+            nextJob = 0;
             LoadedProcesses = new List<int>();
         }
 
@@ -39,79 +39,102 @@ namespace OS_Project
             }
         }
 
-        public void addToSTScheduler(){
-        // will need to ensure that the STS has a queue that
-        // can be accessed without disrupting operation
-            PCB tempPCB = Disk.Instance.diskProcessTable[0];
-            //if (Memory.Instance.emptyFrameIndexes.Count > tempPCB.totalPages){
+        public void addToSTScheduler()
+        {
+            // will need to ensure that the STS has a queue that
+            // can be accessed without disrupting operation
 
-                // Instr Coordinates
-                int current_instrStartPage =  tempPCB.diskInstrStartPos;
-                int current_instrEndPage = tempPCB.diskInstrEndPos;
-  
-                // Data Coordinates
-                int current_dataStartPage = tempPCB.diskDataStartPos;
-                int current_dataEndPage = tempPCB.diskDataEndPos;
-
-                int j = 0;
-                for (; current_instrStartPage <= current_instrEndPage; )
+            //The while loop can be removed because it was for testing
+            bool keepGoing = true;
+            while (keepGoing)
+            {
+                PCB tempPCB = Disk.Instance.diskProcessTable[nextJob];
+                if (Memory.Instance.pageManager.Count > tempPCB.totalPages)
                 {
-                    try
-                    {
-                        string element = Disk.Instance.diskData[current_instrStartPage][j];
-                        Memory.Instance.memory[Memory.Instance.emptyFrameIndexes[0]].Add(element);
-                    }
-                    catch
-                    {
-                        break;
-                    }
-                    j++;
-                    if (j > 3)
-                    {
-                        Memory.Instance.emptyFrameIndexes.RemoveAt(0);
-                        current_instrStartPage++;
-                        j = 0;
-                    }
-                }
-   
 
-                j = 0;
-                for (; current_dataStartPage <= current_dataEndPage; )
+                    // Instructions Disk Pages
+                    int current_instrStartPage = tempPCB.diskInstrStartPos;
+                    int current_instrEndPage = tempPCB.diskInstrEndPos;
+
+                    // Data Disk Pages
+                    int current_dataStartPage = tempPCB.diskDataStartPos;
+                    int current_dataEndPage = tempPCB.diskDataEndPos;
+
+                    int k = 0;
+                    int j = 0;
+                    for (; current_instrStartPage <= current_instrEndPage; )
+                    {
+                        // The try block is in case that a page is not a full 4 words
+                        // to prevent a null element that causes an error
+                        try
+                        {
+                            string element = Disk.Instance.diskData[current_instrStartPage][j];
+                            Memory.Instance.memory[Memory.Instance.pageManager[0]].Add(element);
+                        }
+                        catch
+                        {
+                            tempPCB.logicalMemInstr.Add(k);
+                            tempPCB.pageTable.Add(Memory.Instance.pageManager[0]);
+                            Memory.Instance.pageManager.RemoveAt(0);
+                            break;
+                        }
+                        j++;
+                        if (j > 3)
+                        {
+                            tempPCB.logicalMemInstr.Add(k);
+                            k++;
+                            tempPCB.pageTable.Add(Memory.Instance.pageManager[0]);
+                            Memory.Instance.pageManager.RemoveAt(0);
+                            current_instrStartPage++;
+                            j = 0;
+                        }
+                    }
+
+                    k = 0;
+                    j = 0;
+                    for (; current_dataStartPage <= current_dataEndPage; )
+                    {
+                        // The try block is in case that a page is not a full 4 words
+                        // to prevent a null element that causes an error
+                        try
+                        {
+                            string element = Disk.Instance.diskData[current_dataStartPage][j];
+                            Memory.Instance.memory[Memory.Instance.pageManager[0]].Add(element);
+                        }
+                        catch
+                        {
+                            tempPCB.logicalMemData.Add(k);
+                            tempPCB.pageTable.Add(Memory.Instance.pageManager[0]);
+                            Memory.Instance.pageManager.RemoveAt(0);
+                            break;
+                        }
+                        j++;
+                        if (j > 3)
+                        {
+                            tempPCB.logicalMemData.Add(k);
+                            k++;
+                            tempPCB.pageTable.Add(Memory.Instance.pageManager[0]);
+                            Memory.Instance.pageManager.RemoveAt(0);
+                            current_dataStartPage++;
+                            j = 0;
+                        }
+                    }
+                    tempPCB.state = OS_Project.PCB.Status.ready;
+                    LoadedProcesses.Add(tempPCB.id);
+                    nextJob++;
+                    Console.WriteLine("Loaded Job: " + (nextJob - 1));
+                    Console.WriteLine("----------------------------");
+                   // ShortTermScheduler.Instance.ReadyQue.add(tempPCB);
+
+                }
+                else
                 {
-                    try
-                    {
-                        string element = Disk.Instance.diskData[current_dataStartPage][j];
-                        Memory.Instance.memory[Memory.Instance.emptyFrameIndexes[0]].Add(element);
-                    }
-                    catch
-                    {
-                        break;
-                    }
-                    j++;
-                    if (j > 3)
-                    {
-                        Memory.Instance.emptyFrameIndexes.RemoveAt(0);
-                        current_dataStartPage++;
-                        j = 0;
-                    }
+                    keepGoing = false;
                 }
 
+            }
 
-
-                // Load the Processes Instructions and Data into RAM
-                // Update the PCB's logical_memInstr
-                // Update the PCB's logical_memData
-                // Update RAM emptyFrameIndexes
-                // Update the PCB's pageTable 
-
-            //}
-
-
-
-            
         }
-
-
 
         
     }// end of class

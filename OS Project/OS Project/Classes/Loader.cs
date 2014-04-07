@@ -99,8 +99,14 @@ namespace OS_Project{
             Disk.Instance.printDiskProcessTable();
             Console.ReadLine();
             LongTermScheduler.Instance.addToSTScheduler();
-            Memory.Instance.memDump();
+            Memory.Instance.printMemDump();
             Console.ReadLine();
+            for (int i = 0; i < Memory.Instance.pageManager.Count; i++)
+            {
+                Console.WriteLine(Memory.Instance.pageManager[i]);
+            }
+            Console.ReadLine();
+
         }//end main
    
 

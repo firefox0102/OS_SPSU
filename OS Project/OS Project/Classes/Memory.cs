@@ -11,18 +11,16 @@ namespace OS_Project{
     {
         public static Memory Ram;
         public List<List<string>> memory;
-        public int pagesEmpty;
-        public List<int> emptyFrameIndexes;
+        public List<int> pageManager;
         
         public Memory(){
             memory = new List<List<string>>(256);
-            emptyFrameIndexes = new List<int>(256);
+             pageManager= new List<int>(256);
             for (int i = 0; i < 256; i++){
                 List<string> temp = new List<string>(4);
                 memory.Add(temp);
-                emptyFrameIndexes.Add(i);
+                pageManager.Add(i);
             }
-            pagesEmpty = 256;
         }
 
         public static Memory Instance
@@ -37,16 +35,15 @@ namespace OS_Project{
             }
         }
 
-        public void memDump()
+        public void printMemDump()
         {
-            int k = 0;
             for (int i = 0; i < Memory.Instance.memory.Count; i++){
                 int temp = Memory.Instance.memory[i].Count;
+                Console.Write("Frame " + i + ": ");
                 for (int j = 0; j < temp; j++){
-                    Console.WriteLine(k+": "+Memory.Instance.memory[i][j]);
-                    k++;
+                    Console.Write(j+": "+Memory.Instance.memory[i][j]+" ");
                 }
-                
+                Console.WriteLine();
             }
         }
 

@@ -60,7 +60,8 @@ namespace OS_Project{
 
         public void printPCBInfo(){
             Console.WriteLine("ID : "+id );
-            Console.WriteLine("PC : "+pc );
+            Console.WriteLine("Instruction Length : "+instrLength );
+            Console.WriteLine("Instcution Pages Count: " + (int)Math.Ceiling(instrLength / 4.0) );
             Console.WriteLine("Priority   : "+priority );
             Console.WriteLine("Total Length   : " + totalLength);
             Console.WriteLine("Total Pages    : " + totalPages);
@@ -68,6 +69,7 @@ namespace OS_Project{
             Console.WriteLine("Disk Intructions End   : "+ diskInstrEndPos);
             Console.WriteLine("Disk Data Start   : "+diskDataStartPos );
             Console.WriteLine("Disk Data End   : "+diskDataEndPos );
+            Console.WriteLine("-----------------------------------");
         }
 
         //********************************************************
