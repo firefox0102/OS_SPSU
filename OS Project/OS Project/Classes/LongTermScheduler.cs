@@ -90,7 +90,10 @@ namespace OS_Project
                         }
                     }
 
-                    k = 0;
+                    // k = 0;
+                    // need k to not be zero because the element at index 0
+                    // for the logicalMemData will be the first page for data pages
+                    // in RAM DO NOT CHANGEs
                     j = 0;
                     for (; current_dataStartPage <= current_dataEndPage; )
                     {
