@@ -120,6 +120,7 @@ namespace OS_Project
                         }
                     }
                     tempPCB.state = OS_Project.PCB.Status.ready;
+                    tempPCB.waitingTime.Start();
                     LoadedProcesses.Add(tempPCB.id);
                     nextJob++;
                     Console.WriteLine("Loaded Job: " + (nextJob - 1));
