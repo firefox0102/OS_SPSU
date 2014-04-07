@@ -103,6 +103,32 @@ namespace OS_Project{
             */
             //*************************************************************
         }
+        public List<int> getLocations(int start, int kind){
+            List<int> loc = new List();
+            if(kind == 1){
+                 //instuctons
+                 int x = logicalMemInstr.Count - start;
+                 for (int i = 0; i<x; i++){
+                     loc.add(logicalMemInstr[start]);
+                     start++;
+                 }
+                 return loc;
+             }
+             else if(kind ==2){
+                 //data
+                 int x = logicalMemData.Count - start;
+                 for (int i = 0; i<x; i++){
+                     loc.add(logicalMemData[start]);
+                     start++;
+                 }
+                 return loc;
+             }
+             else{
+                CustomException ex =
+                     new CustomException("Instrcutions or data not specified in geLocations() PCB");
+         
+                throw ex;
+         }
     }
 
 }
