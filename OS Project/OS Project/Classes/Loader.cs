@@ -12,88 +12,78 @@ namespace OS_Project{
 
         static void Main()
         {
-            Disk disk = new Disk();
             //Need to find a standard place for the file within our visual studio project folder
-            string[] lines = System.IO.File.ReadAllLines(@"C:\Users\j\Documents\Visual Studio 2012\Projects\OS_TESTER\OS_TESTER\DataFile2-Cleaned.txt");
+            string[] lines = System.IO.File.ReadAllLines(@"C:\Users\j\Documents\Visual Studio 2013\Projects\OS_Project\OS_Project\DataFile2-Cleaned.txt");
             lines.ToList();
 
-            int jobID = 0;
-            int diskPos = 0;
+            
             // Creates a temp array that will pass the Frame information 
             // about a Procss to the PCB for storage
-            int[] tempInstrStartPos = new int[2];
-            int[] tempInstrEndPos = new int[2];
-            int[] tempDataStartPos = new int[2];
-            int[] tempDataEndPos = new int[2];
-
+    
+            int jobID = 0;
             bool stillInstr = true;
+
             foreach (string line in lines)
             {
-                string tempLine = "";
                 if (line.Contains("JOB"))
                 {
                     jobID++;
                     stillInstr = true;
+
                     // Gets the priority and converts it to an int
                     int lastSpace = line.LastIndexOf(' ');
                     string stringPriority = line.Substring(lastSpace + 1);
                     int tempPriority = Convert.ToInt32(stringPriority, 16);
-                    tempInstrStartPos = new int[2] { disk.currentPage, disk.currentElement };
-                    disk.diskProcessTable.Add(new PCB(jobID, tempPriority, tempInstrStartPos));
-                    disk.numberProcesses++;
+
+                    int tempInstrStartPos = Disk.Instance.currentPage;
+                    Disk.Instance.diskProcessTable.Add(new PCB(jobID, tempPriority, tempInstrStartPos));
+                    Disk.Instance.numberProcesses++;
                 }
                 else if (line.Contains("Data"))
                 {
                     stillInstr = false;
-                    if (disk.currentElement != 0)
-                    {
-                        disk.diskProcessTable[jobID - 1].diskInstrEndPos = new int[] { disk.currentPage, disk.currentElement - 1 };
-                        disk.diskProcessTable[jobID - 1].diskDataStartPos = new int[] { disk.currentPage, disk.currentElement };
-                    }
-                    else
-                    {
-                        disk.diskProcessTable[jobID - 1].diskInstrEndPos = new int[] { disk.currentPage - 1, 3 };
-                        disk.diskProcessTable[jobID - 1].diskDataStartPos = new int[] { disk.currentPage, disk.currentElement };
-                    }
-                    // WILL CREATE A WAY TO CALCULATE JOB LENGTH
-                    //disk.diskProcessTable[jobID - 1].instrLength = disk.diskProcessTable[jobID - 1].diskInstrEndPos - disk.diskProcessTable[jobID - 1].diskInstrStartPos;
+                    Disk.Instance.diskProcessTable[jobID - 1].diskInstrEndPos = Disk.Instance.currentPage;
+                    Disk.Instance.currentPage++;
+                    Disk.Instance.currentElement = 0;
+                    Disk.Instance.diskUsedPages++;
+                    Disk.Instance.diskProcessTable[jobID - 1].diskDataStartPos = Disk.Instance.currentPage;
+
                 }
                 else if (line.Contains("END"))
                 {
-                    if (disk.currentElement != 0)
-                    {
-                        disk.diskProcessTable[jobID - 1].diskDataEndPos = new int[] { disk.currentPage, disk.currentElement - 1 };
-                    }
-                    else
-                    {
-                        disk.diskProcessTable[jobID - 1].diskDataEndPos = new int[] { disk.currentPage - 1, 3 };
-                    }
-                    //WILL NEED TO RECALCULATE THIS VARIABLES AT SOME POINT
-                    //disk.diskProcessTable[jobID - 1].dataLength = disk.diskProcessTable[jobID - 1].diskDataEndPos - disk.diskProcessTable[jobID - 1].diskDataStartPos;
-                    //disk.diskProcessTable[jobID - 1].totalLength = disk.diskProcessTable[jobID - 1].instrLength + disk.diskProcessTable[jobID - 1].dataLength + 2;
-                    //Multiply each line in the job by 32 for number of bits and then divide by 8 to get bytes
-                    //disk.diskProcessTable[jobID - 1].sizeInBytes = (disk.diskProcessTable[jobID - 1].totalLength);
 
+                    Disk.Instance.diskProcessTable[jobID - 1].diskDataEndPos = Disk.Instance.currentPage;
+                    Disk.Instance.diskProcessTable[jobID - 1].totalPages = (int)Math.Ceiling(Disk.Instance.diskProcessTable[jobID - 1].totalLength / 4.0);
+                    Disk.Instance.currentPage++;
+                    Disk.Instance.currentElement = 0;
+                    Disk.Instance.diskUsedPages++;
                 }
                 else
                 {
                     // Checks to see if currentElement is greater than 3
                     // if it is it will mean a new page is
-                    disk.currentElement++;
-                    if (disk.currentElement > 3){
-                        disk.currentElement = 0;
-                        disk.currentPage++;
+
+                    if (Disk.Instance.currentElement > 3)
+                    {
+                        Disk.Instance.currentElement = 0;
+                        Disk.Instance.currentPage++;
+                        Disk.Instance.diskUsedPages++;
                     } 
                     //will call the convert hex to binary then to string
-                    tempLine = line.Substring(2);
-                    disk.diskData[disk.currentPage].Add(tempLine);
-                    if(stillInstr) disk.diskProcessTable[jobID - 1].instrLength++;
-                    diskPos++;
+                    string tempLine = line.Substring(2);
+                    Disk.Instance.diskData[Disk.Instance.currentPage].Add(tempLine);
+
+                    if (stillInstr) Disk.Instance.diskProcessTable[jobID - 1].instrLength++;
+                    Disk.Instance.diskProcessTable[jobID - 1].totalLength++;
+
+                    Disk.Instance.currentElement++;
                 }
             }
-            disk.printDiskProcessTable();
-            Console.Read();
-
+            Disk.Instance.printDiskProcessTable();
+            Console.ReadLine();
+            LongTermScheduler.Instance.addToSTScheduler();
+            Memory.Instance.memDump();
+            Console.ReadLine();
         }//end main
    
 

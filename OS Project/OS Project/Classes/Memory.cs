@@ -37,12 +37,17 @@ namespace OS_Project{
             }
         }
 
-        public List<int> getEmptyPages(){
-            List<int> emptyPages = new List<int>(0);
-            return null;
+        public void memDump()
+        {
+            for (int i = 0; i < 15; i++)
+            {
+                string temp = Memory.Instance.memory[i][0];
+                temp += ", " + Memory.Instance.memory[i][1];
+                temp += ", " + Memory.Instance.memory[i][2];
+                temp += ", " + Memory.Instance.memory[i][3];
+                Console.WriteLine(temp);
+            }
         }
-
-
 
     }// end class
 }// end namespace

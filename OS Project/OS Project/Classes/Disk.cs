@@ -9,13 +9,13 @@ namespace OS_Project{
 
     public class Disk{
 
-        //public static Disk disk;
+        public static Disk disk;
         //Changed disk data structure to a List of Lists containing 4 words each (1 page)
         public List<List<string>> diskData;
         public int currentPage;
         public int currentElement;
         public List<PCB> diskProcessTable;
-        public int diskSize;
+        public int diskUsedPages;
         public int numberProcesses;
 
         public Disk(){
@@ -27,30 +27,33 @@ namespace OS_Project{
             }
 
             diskProcessTable = new List<PCB>(0);
-            diskSize = 0;
+            diskUsedPages = 0;
             numberProcesses = 0;
             currentPage = 0;
             currentElement = 0;
         }
 
-        
-        //public static Disk Instance
-        //{
-        //    get
-        //    {
-        //        if (disk == null)
-        //        {
-        //            disk = new Disk();
-        //        }
-        //        return disk;
-        //    }
-        //}
-        
 
+        public static Disk Instance
+        {
+            get
+            {
+                if (disk == null)
+                {
+                    disk = new Disk();
+                }
+                return disk;
+            }
+        }
+        
         public void printDiskProcessTable(){
             foreach (PCB job in diskProcessTable){
                 job.printPCBInfo();
             }
+            Console.WriteLine("----------------------------------------");
+            Console.WriteLine("TOTAL USED DISK PAGES: " + diskUsedPages);
+
+
         }
 
 
