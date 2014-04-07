@@ -69,7 +69,7 @@ namespace OS_Project
             if(cache.Equals("instruction")){
                 if (x.Equals("up"))
                 {
-                    if(y > 0)
+                    if(y >= 0)
                     {
                         //interact with instruction logicl memory and page table
                         //logical_memInstr
@@ -91,7 +91,7 @@ namespace OS_Project
              else if(cache.Equals("input")){
                 if (x.Equals("up"))
                 {
-                    if(y > 0)
+                    if(y >= 0)
                     {
                         //interact with data in logicl memory and page table
                         //logical_memDataIn
@@ -115,7 +115,7 @@ namespace OS_Project
             else if(cache.Equals("output")){
                 if (x.Equals("up"))
                 {
-                    if(y > 0)
+                    if(y >= 0)
                     {
                         //interact with data out logicl memory and page table
                         //logical_memDataOut
@@ -127,7 +127,7 @@ namespace OS_Project
             //if down, return the instruction set from the page after this one
                 if (x.Equals("down"))
                 {
-                    if (y < /*page table size-1*/)
+                    if (y >0)
                     {
                         //somehow get the currentPcb.pagetable[y+1] instruction set
                         int offset = (y-1)*4;
