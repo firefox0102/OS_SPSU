@@ -31,20 +31,27 @@ namespace OS_Project
             //instructionCache
             //inputCache
             //outputCache
-           /* PCB pid = ShortTermScheduler.Instance.getNextJob();
+            PCB pid = ShortTermScheduler.Instance.getNextJob();
             //CPU.Instance.instructionList = Memory.Instance.memory[current.memPos];
-            List<string> instuctionList = Memory.Instance.memory.GetRange(pid.memInstrStartPos, pid.totalLength);
-            cpu.ProgramCache = instuctionList;
-            cpu.register = pid.registers;
-            pid.elapsedTime.Start();
+            //List<string> instuctionList = Memory.Instance.memory.GetRange(pid.memInstrStartPos, pid.totalLength);
+            //cpu.ProgramCache = instuctionList;
+            //cpu.register = pid.registers;
+           // pid.elapsedTime.Start();
             pid.state = PCB.Status.running;
             cpu.currentPCB = pid;
-            cpu.idle = false;*/
+            cpu.idle = false;
             
             //what is the input cache, what is the output cache and what is teh instruction class
             //only need to pass output chache in if it has been changed and is not zero
             //16 words/instrcuions/data per cache.
             
+        }
+        public List<string> getFrames(List<string> log){
+            List<string> hold = new List();
+            for (int i = 0; i< log.length; i++){
+                hold.AddRange(Memory.Instance.memory[log[i]]);
+            }
+            return hold;
         }
         public List<string> PageFault(PCB currentPCB, int y, String x, string cache)
         {
