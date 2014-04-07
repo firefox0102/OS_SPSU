@@ -35,8 +35,11 @@ namespace OS_Project
             //CPU.Instance.instructionList = Memory.Instance.memory[current.memPos];
             //List<string> instuctionList = Memory.Instance.memory.GetRange(pid.memInstrStartPos, pid.totalLength);
             //cpu.ProgramCache = instuctionList;
-            //cpu.register = pid.registers;
-           // pid.elapsedTime.Start();
+            cpu.instructionCache = PageFault(pid, 0,"up", "instruction" );
+            cpu.inputCache = PageFault(pid, 0,"up", "input" );
+            cpu.outputCache = PageFault(pid, 0,"up", "output" );
+            cpu.register = pid.registers;
+            pid.elapsedTime.Start();
             pid.state = PCB.Status.running;
             cpu.currentPCB = pid;
             cpu.idle = false;
