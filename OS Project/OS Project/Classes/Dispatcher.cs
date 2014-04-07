@@ -48,20 +48,21 @@ namespace OS_Project
         }
         public List<string> getFrames(List<string> log){
             List<string> hold = new List();
-            for (int i = 0; i< log.length; i++){
+            for (int i = 0; i< log.Count; i++){
                 hold.AddRange(Memory.Instance.memory[log[i]]);
             }
             return hold;
         }
         public List<string> PageFault(PCB currentPCB, int y, String x, string cache)
         {
-            //y is teh current set of 4 frames, the retrun is the next or previous frame based on up or down
+            //y is teh current set of 4 frames, the retrun is the next or previous frame set based on up or down
             //in sting x
             //if up, return the instruction set from the page before this one
             //cache can be instrcution, input or output 
             
             //if teh next set has less than 4 frames, send it just whats left over.  cache does not need
             //to alwasy be full
+            List set = new List;
             if(cache.Equals("instruction")){
                 if (x.Equals("up"))
                 {
@@ -69,14 +70,17 @@ namespace OS_Project
                     {
                         //interact with instruction logicl memory and page table
                         //logical_memInstr
+                        List memLoc = PCB.Instance.getLocations(y*4, 1);
                     }
                 }
             //if down, return the instruction set from the page after this one
                 if (x.Equals("down"))
                 {
-                    if (y < /*page table size-1*/)
+                    if (y >=1)
                     {
                         //somehow get the currentPcb.pagetable[y+1] instruction set
+                        int h = y-1;
+                        List memLoc = PCB.Instance.getLocations(h*4, 1);
                     }
                 }
                 
@@ -88,14 +92,18 @@ namespace OS_Project
                     {
                         //interact with data in logicl memory and page table
                         //logical_memDataIn
+                         
+                        List memLoc = PCB.Instance.getLocations(y*4, 2);
                     }
                 }
             //if down, return the instruction set from the page after this one
                 if (x.Equals("down"))
                 {
-                    if (y < /*page table size-1*/)
+                    if (y >0)
                     {
                         //somehow get the currentPcb.pagetable[y+1] instruction set
+                         int h = y-1;
+                        List memLoc = PCB.Instance.getLocations(h*4, 2);
                     }
                 }
                 
@@ -108,6 +116,9 @@ namespace OS_Project
                     {
                         //interact with data out logicl memory and page table
                         //logical_memDataOut
+                        int offset = y*4;
+                        int od = 19+y;
+                        List memLoc = PCB.Instance.getLocations(od, 2);
                     }
                 }
             //if down, return the instruction set from the page after this one
@@ -116,12 +127,18 @@ namespace OS_Project
                     if (y < /*page table size-1*/)
                     {
                         //somehow get the currentPcb.pagetable[y+1] instruction set
+                        int offset = (y-1)*4;
+                        int od = 19+y;
+                        List memLoc = PCB.Instance.getLocations(od, 2);
                     }
                 }
                 
             }
             //end output
+            for(int i = 0; i<memLoc.Count; i++)
+                set.AddRange(Memory.Instance.memory[memLoc[i]]);
             
+            return set;
         }
         
         //dispatcher seems to send instuctions one at a time to the cpu. we can implement this by calling a get current instuction function or some other way
