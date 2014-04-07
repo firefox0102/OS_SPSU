@@ -31,6 +31,7 @@ namespace OS_Project{
         public Status state;
         public Stopwatch elapsedTime;
         public Stopwatch waitingTime;
+        public int[] registers;
 
         public PCB(int id, int priority, int startPos){
             this.id = id;
@@ -50,7 +51,7 @@ namespace OS_Project{
             totalLength = 0;
             totalPages = 0;
 
-            
+            registers = new int[16];
     
             state = Status.created;
             elapsedTime = new Stopwatch();
@@ -101,33 +102,6 @@ namespace OS_Project{
                 return 0;
             */
             //*************************************************************
-        }
-        //start is the start position and kind will be 1 for instr or 2 for data
-        public List<int> getLocations(int start, int kind){
-            List<int> loc = new List();
-            if(kind == 1){
-                //instuctons
-                int x = logicalMemInstr.Count - start;
-                for (int i = 0; i<x; i++){
-                    loc.add(logicalMemInstr[start]);
-                    start++;
-                }
-                return loc;
-            }
-            else if(kind ==2){
-                //data
-                int x = logicalMemData.Count - start;
-                for (int i = 0; i<x; i++){
-                    loc.add(logicalMemData[start]);
-                    start++;
-                }
-                return loc;
-            }
-            else{
-               CustomException ex =
-                    new CustomException("Instrcutions or data not specified in geLocations() PCB");
-        
-               throw ex;
         }
     }
 
