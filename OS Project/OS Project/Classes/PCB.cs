@@ -111,6 +111,7 @@ namespace OS_Project
         public List<int> getLocations(int start, int kind)
         {
             List<int> loc = new List<int>();
+            List<int> act = new List<int>();
             if (kind == 1)
             {
                 //instuctons
@@ -120,7 +121,10 @@ namespace OS_Project
                     loc.Add(logicalMemInstr[start]);
                     start++;
                 }
-                return loc;
+                for (int i=0; i<loc.Count; i++){
+                    act.Add(pageTable[loc[i]]);
+                }
+                return act;
             }
             else if (kind == 2)
             {
@@ -131,7 +135,10 @@ namespace OS_Project
                     loc.Add(logicalMemData[start]);
                     start++;
                 }
-                return loc;
+               for (int i=0; i<loc.Count; i++){
+                    act.Add(pageTable[loc[i]]);
+                }
+                return act;
             }
             else
             {
