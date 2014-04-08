@@ -14,7 +14,7 @@ namespace OS_Project
 
         public String currentProcess;
         public PCB currentPCB;
-        publicc int offset = currentPCB.instrLength;
+        public int offset = 0;
         public int processPosition;
         public const int Accumulator = 0;
         public const int Zero = 1;
@@ -39,7 +39,7 @@ namespace OS_Project
         {
             pc = 0;
             Console.WriteLine(pc);
-
+            offset = currentPCB.instrLength;
             Fetch();
             Execute();
             Console.WriteLine("this job is: "+this.currentPCB.id);
@@ -66,6 +66,8 @@ namespace OS_Project
             
             for(pc = 0; pc<currentPCB.instrLength  ; pc++ )//get from pcb
             {
+                currentPCB.pc = pc;
+
                 //converts the pc to operate inside of the instruction cache and not the full list of instructions
                 if (pageSet > 1)
                 {
@@ -75,7 +77,7 @@ namespace OS_Project
                 //pagefault
                 if(pc<0)
                 {
-                    instructionCache = PageManager.Instance.PageFault(currentPCB, pageSet, "down","instructionCache");
+                    instructionCache = Dispatcher.Instance.PageFault(currentPCB, pageSet, "down","instructionCache");
                     pageSet--;
                 }
 
@@ -119,14 +121,94 @@ namespace OS_Project
                 else if (pc >= 16)
                 {
 
-                    instructionCache = PageManager.Instance.PageFault(currentPCB, pageSet,"up","instruction");
+                    instructionCache = Dispatcher.Instance.PageFault(currentPCB, pageSet,"up","instruction");
                     pageSet++;
+                    
                 }
+
+
+                writeThrough();
+
+
             }
             
             idle = true;
             currentPCB.state = PCB.Status.terminated;
-            currentPCB.elapsedTime.Stop();            
+            currentPCB.elapsedTime.Stop();
+            
+        }
+
+        void writeThrough()
+        {
+            int count1 = 0;
+            int count2 = 0;
+
+            List<String> writethroughinput1 = new List<String>();
+            List<String> writethroughinput2 = new List<String>();
+            List<String> writethroughinput3 = new List<String>();
+            List<String> writethroughinput4 = new List<String>();
+
+            List<String> writethroughoutput1 = new List<String>();
+            List<String> writethroughoutput2 = new List<String>();
+            List<String> writethroughoutput3 = new List<String>();
+            List<String> writethroughoutput4 = new List<String>();
+
+            foreach(String y in inputCache)
+            {
+                if (count1 < 4)
+                    writethroughinput1[count1] = inputCache[count1];
+                if (count1 >= 4 && count1 < 8)
+                    writethroughinput2[count1] = inputCache[count1];
+                if (count1 >= 8 && count1 < 12)
+                    writethroughinput3[count1] = inputCache[count1];
+                if (count1 >= 12 && count1 < 16)
+                    writethroughinput4[count1] = inputCache[count1];
+               
+                count1++;
+            }
+
+            foreach(String z in outputCache)
+            {
+                if (count2 < 4)
+                    writethroughoutput1[count2] = outputCache[count2];
+                if (count2 >= 4 && count2 < 8)
+                    writethroughoutput2[count2] = outputCache[count2];
+                if (count2 >= 8 && count2 < 12)
+                    writethroughoutput3[count2] = outputCache[count2];
+                if (count2 >= 12 && count2 < 16)
+                    writethroughoutput4[count2] = outputCache[count2];
+              
+                count2++;
+            }
+
+            List<int> location = currentPCB.getLocations(0 + ((pageSet - 1) * 16), 2);
+            for (int i = 0; i<location.Count; i++)
+            {
+                if (i == 0)
+                    Memory.Instance.memory[location[i]].InsertRange(0, writethroughinput1);
+                if (i == 1)
+                    Memory.Instance.memory[location[i]].InsertRange(0, writethroughinput2);
+                if (i == 2)
+                    Memory.Instance.memory[location[i]].InsertRange(0, writethroughinput3);
+                if (i == 3)
+                    Memory.Instance.memory[location[i]].InsertRange(0, writethroughinput4);
+            }
+
+
+            List<int> location2 = currentPCB.getLocations(19 + 0 + ((pageSet - 1) * 16), 2);
+            for(int j = 0;j< location2.Count; j++)
+            {
+            Memory.Instance.memory[location2[j]].InsertRange(0, writethroughoutput1);
+           
+            Memory.Instance.memory[location2[j]].InsertRange(0, writethroughoutput2);
+            
+            Memory.Instance.memory[location2[j]].InsertRange(0, writethroughoutput3);
+            
+            Memory.Instance.memory[location2[j]].InsertRange(0, writethroughoutput4);
+            }
+          
+        
+        
         }
 
         void Arithmetic()
@@ -187,10 +269,7 @@ namespace OS_Project
             return newCurrentProcess;
         }
 
-        void writeThrough(List<String> writeback){
 
-
-        }
 
 
         void BranchandImmediate()
@@ -271,18 +350,18 @@ namespace OS_Project
                        if(D>offset)
                        {
                            if(D-offset>16)
-                              PageManager.Instance.PageFault(currentPCB, pageSet,"up","input",inputCache);
+                               Dispatcher.Instance.PageFault(currentPCB, pageSet, "up", "input");
                            else if(D-offset<0)
-                              PageManager.Instance.PageFault(currentPCB, pageSet,"down","input",inputCache);
+                              Dispatcher.Instance.PageFault(currentPCB, pageSet,"down","input");
                            else
                             inputCache[register[D-offset]] = register[B].ToString();
                        }
                        else if(D>offset+20)
                        {
                            if(D-(offset+20)<0)
-                               PageManager.Instance.PageFault(currentPCB, pageSet,"down","output",outputCache);
+                               Dispatcher.Instance.PageFault(currentPCB, pageSet,"down","output");
                            else if (D-(offset+20)>16)
-                               PageManager.Instance.PageFault(currentPCB, pageSet,"up","output",outputCache);
+                               Dispatcher.Instance.PageFault(currentPCB, pageSet,"up","output");
                            else
                             inputCache[register[D-(offset-20)]] = register[B].ToString();
                        }
@@ -320,7 +399,7 @@ namespace OS_Project
                     Console.WriteLine("process halted");
             //        Console.ReadLine();
                     currentPCB.state = PCB.Status.terminated;
-                    PageManager.Instance.Clean(currentPCB);
+//                    PageManager.Instance.Clean(currentPCB);
 
                     break;
                 case "010100": //JMP
