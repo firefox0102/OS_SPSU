@@ -9,7 +9,7 @@ namespace OS_Project.Classes
     public class ShortTermScheduler
     {
         public static ShortTermScheduler sts;
-        public static List<PCB> ReadyQueue;
+        public List<PCB> ReadyQueue;
 
         //singleton for remote access in other classes
         public static ShortTermScheduler Instance
