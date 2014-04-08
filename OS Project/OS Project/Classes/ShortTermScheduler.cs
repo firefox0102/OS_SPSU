@@ -9,7 +9,7 @@ namespace OS_Project.Classes
     public class ShortTermScheduler
     {
         public static ShortTermScheduler sts;
-        public List<PCB> ReadyQueue;
+        public static List<PCB> ReadyQueue;
 
         //singleton for remote access in other classes
         public static ShortTermScheduler Instance
@@ -24,19 +24,21 @@ namespace OS_Project.Classes
             }
         }
 
+        //Constructor
+        public ShortTermScheduler()
+        {
+            ReadyQueue = new List<PCB>();
+        }
+
+        //Might not need this method anymore
         public void AddToShortTermScheduler(PCB p)
         {
-            if(ReadyQueue == null)
-            {
-                ReadyQueue = new List<PCB>();
-            }
             ReadyQueue.Add(p);
             Sort();
         }
         
         public PCB getNextJob()
         {
-            LongTermScheduler.Instance.Clean();
             if (ReadyQueue.Count > 0)
             {
                 PCB i = ReadyQueue[0];//gets first element
