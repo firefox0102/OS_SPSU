@@ -347,22 +347,22 @@ namespace OS_Project
                 case "000010": //ST
                     if (D != 0 && B != 0)
                     {
-                       if(D>offset)
+                       if(D>offset && D<offset+20)
                        {
                            if(D-offset>16)
                                Dispatcher.Instance.PageFault(currentPCB, pageSet, "up", "input");
-                           else if(D-offset<0)
+                           if(D-offset<0)
                               Dispatcher.Instance.PageFault(currentPCB, pageSet,"down","input");
-                           else
+                           
                             inputCache[register[D-offset]] = register[B].ToString();
                        }
-                       else if(D>offset+20)
+                       else if(D>=offset+20 )
                        {
                            if(D-(offset+20)<0)
                                Dispatcher.Instance.PageFault(currentPCB, pageSet,"down","output");
-                           else if (D-(offset+20)>16)
+                           if (D-(offset+20)>16)
                                Dispatcher.Instance.PageFault(currentPCB, pageSet,"up","output");
-                           else
+                           
                             inputCache[register[D-(offset-20)]] = register[B].ToString();
                        }
                        else if(D<offset)
@@ -377,13 +377,47 @@ namespace OS_Project
                     
                     break;
                 case "000011": //LW
+
+                    if (D < offset)
+                    {
+                        if (offset > 16)
+                            Dispatcher.Instance.PageFault(currentPCB, pageSet, "up", "input");
+
+                        register[D] = int.Parse(instructionCache[register[B]]);
+
+                    }
+                    if (D > offset && D<=offset +20)
+                    {
+                        if (D - offset > 16)
+                            Dispatcher.Instance.PageFault(currentPCB, pageSet, "up", "input");
+                        if (D - offset < 0)
+                            Dispatcher.Instance.PageFault(currentPCB, pageSet, "down", "input");
+
+                        register[D] = int.Parse(inputCache[register[B]]);
+                    }
+                    else if (D > offset + 20)
+                    {
+                        if (D - (offset + 20) < 0)
+                            Dispatcher.Instance.PageFault(currentPCB, pageSet, "down", "output");
+                        if (D - (offset + 20) > 16)
+                            Dispatcher.Instance.PageFault(currentPCB, pageSet, "up", "output");
+
+                        register[D] = int.Parse(outputCache[register[B]]);
+                    }
+
+
+
+
+
+
+                    /*
                     if(D<=offset)
                       register[D] = int.Parse(instructionCache[register[B]]) ;
-                    else if(D>offset)
+                    if(D>offset && D<offset+20)
                     {
                         
                     }
-
+                    */
                     break;
 
             }
