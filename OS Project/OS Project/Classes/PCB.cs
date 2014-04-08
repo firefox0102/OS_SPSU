@@ -115,7 +115,12 @@ namespace OS_Project
             if (kind == 1)
             {
                 //instuctons
-                int x = logicalMemInstr.Count - start;
+                if(logicalMemInstr.Count < (start +4)){
+                    int x = logicalMemInstr.Count;
+                }else{
+                    int x = 4;
+                }
+                    
                 for (int i = 0; i < x; i++)
                 {
                     loc.Add(logicalMemInstr[start]);
@@ -129,7 +134,11 @@ namespace OS_Project
             else if (kind == 2)
             {
                 //data
-                int x = logicalMemData.Count - start;
+               if(logicalMemInstr.Count < (start +4)){
+                    int x = logicalMemInstr.Count;
+                }else{
+                    int x = 4;
+                }
                 for (int i = 0; i < x; i++)
                 {
                     loc.Add(logicalMemData[start]);
