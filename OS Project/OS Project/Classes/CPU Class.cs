@@ -461,11 +461,59 @@ namespace OS_Project
                 case "000000":
                     if (tempRegister1 != 0 && tempRegister2 != 0)
                     {
-                        register[tempRegister1] = int.Parse(ProgramCache[register[tempRegister2]], System.Globalization.NumberStyles.HexNumber);
+
+                        //instructioncache
+                        if (tempRegister2 < offset)
+                        {
+                            if (tempRegister2 > 16)
+                            {
+                                Dispatcher.Instance.PageFault(currentPCB, pageSet, "up", "input");
+                                tempRegister2 = tempRegister2 - 16;
+                            }
+                            register[tempRegister1] = int.Parse(instructionCache[register[tempRegister2]], System.Globalization.NumberStyles.HexNumber);
+                        }
+                        
+                        //inputcache
+
+                        if (tempRegister2 > offset && tempRegister2<offset+20)
+                        {
+                            if (tempRegister2 > offset + 16)
+                            {
+                                Dispatcher.Instance.PageFault(currentPCB, pageSet, "up", "input");
+                                tempRegister2 = tempRegister2 - (offset + 16);
+                            }
+                            else
+                                tempRegister2 = tempRegister2 - offset;
+                           
+                            register[tempRegister1] = int.Parse(instructionCache[register[tempRegister2]], System.Globalization.NumberStyles.HexNumber);
+                        }
+
+
+
+                        //outputcache
+
+                         if (tempRegister2 > offset && tempRegister2<offset+20)
+                        {
+                            if (tempRegister2 > offset + 16)
+                            {
+                                Dispatcher.Instance.PageFault(currentPCB, pageSet, "up", "input");
+                                tempRegister2 = tempRegister2 - (offset + 16);
+                            }
+                            else
+                                tempRegister2 = tempRegister2 - offset;
+                           
+                            register[tempRegister1] = int.Parse(instructionCache[register[tempRegister2]], System.Globalization.NumberStyles.HexNumber);
+                        }
+                    
                     }
+
+
+                       // Dispatcher.Instance.PageFault(currentPCB, pageSet, "up", "input");
+
+
                     else
                     {
-                        register[tempRegister1] = int.Parse(ProgramCache[address/4],System.Globalization.NumberStyles.HexNumber);
+                        register[tempRegister1] = int.Parse(ProgramCache[address / 4], System.Globalization.NumberStyles.HexNumber);
                     }
                     break;
                 case "000001":
