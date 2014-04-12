@@ -4,3 +4,7 @@ c:\users\j\documents\visual studio 2012\Projects\OS_Project\OS_Project\bin\Debug
 c:\users\j\documents\visual studio 2012\Projects\OS_Project\OS_Project\bin\Debug\OS_Project.pdb
 c:\users\j\documents\visual studio 2012\Projects\OS_Project\OS_Project\obj\Debug\OS_Project.exe
 c:\users\j\documents\visual studio 2012\Projects\OS_Project\OS_Project\obj\Debug\OS_Project.pdb
+C:\Users\j\Documents\GitHub\OS_SPSU\OS Project\OS_Project\OS_Project\bin\Debug\OS_Project.exe.config
+C:\Users\j\Documents\GitHub\OS_SPSU\OS Project\OS_Project\OS_Project\obj\Debug\OS_Project.exe
+C:\Users\j\Documents\GitHub\OS_SPSU\OS Project\OS_Project\OS_Project\obj\Debug\OS_Project.pdb
+C:\Users\j\Documents\GitHub\OS_SPSU\OS Project\OS_Project\OS_Project\obj\Debug\OS_Project.csprojResolveAssemblyReference.cache
