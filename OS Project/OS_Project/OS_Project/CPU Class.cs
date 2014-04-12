@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -66,72 +65,65 @@ namespace OS_Project
         {
             int count1 = 0;
             int count2 = 0;
+            int count3 = 0;
+        
+
 
             List<String> writethroughinput1 = new List<String>();
-            List<String> writethroughinput2 = new List<String>();
-            List<String> writethroughinput3 = new List<String>();
-            List<String> writethroughinput4 = new List<String>();
-
             List<String> writethroughoutput1 = new List<String>();
-            List<String> writethroughoutput2 = new List<String>();
-            List<String> writethroughoutput3 = new List<String>();
-            List<String> writethroughoutput4 = new List<String>();
+
+            List<int> location = currentPCB.getLocations(0 + ((inputPageSet - 1) * 16), 2);
+            List<int> location2 = currentPCB.getLocations(19 + 0 + ((outputPageSet - 1) * 16), 2);
+
 
             foreach (String y in inputCache)
             {
-                if (count1 < 4)
-                    writethroughinput1[count1] = inputCache[count1];
-                if (count1 >= 4 && count1 < 8)
-                    writethroughinput2[count1] = inputCache[count1];
-                if (count1 >= 8 && count1 < 12)
-                    writethroughinput3[count1] = inputCache[count1];
-                if (count1 >= 12 && count1 < 16)
-                    writethroughinput4[count1] = inputCache[count1];
+
+                writethroughinput1[count2] = inputCache[count1];
+                count2++;
+                
+                if (count1 % 4 == 0)
+                {
+                //    int i = count1 / 4;
+                    Memory.Instance.memory[location[count3]].InsertRange(0, writethroughinput1);
+                    writethroughinput1.Clear();
+                    count2 = 0;
+                    count3++;
+
+                }
+
 
                 count1++;
+                
+
             }
 
-            foreach (String z in outputCache)
-            {
-                if (count2 < 4)
-                    writethroughoutput1[count2] = outputCache[count2];
-                if (count2 >= 4 && count2 < 8)
-                    writethroughoutput2[count2] = outputCache[count2];
-                if (count2 >= 8 && count2 < 12)
-                    writethroughoutput3[count2] = outputCache[count2];
-                if (count2 >= 12 && count2 < 16)
-                    writethroughoutput4[count2] = outputCache[count2];
+            count1 = 0;
+            count2 = 0;
+            count3 = 0;
 
+
+            foreach (String y in outputCache)
+            {
+
+                writethroughinput1[count2] = outputCache[count1];
                 count2++;
+
+                if (count1 % 4 == 0)
+                {
+                    //    int i = count1 / 4;
+                    Memory.Instance.memory[location[count3]].InsertRange(0, writethroughinput1);
+                    writethroughinput1.Clear();
+                    count2 = 0;
+                    count3++;
+
+                }
+
+
+                count1++;
+
+
             }
-
-            List<int> location = currentPCB.getLocations(0 + ((pageSet - 1) * 16), 2);
-            for (int i = 0; i < location.Count; i++)
-            {
-                if (i == 0)
-                    Memory.Instance.memory[location[i]].InsertRange(0, writethroughinput1);
-                if (i == 1)
-                    Memory.Instance.memory[location[i]].InsertRange(0, writethroughinput2);
-                if (i == 2)
-                    Memory.Instance.memory[location[i]].InsertRange(0, writethroughinput3);
-                if (i == 3)
-                    Memory.Instance.memory[location[i]].InsertRange(0, writethroughinput4);
-            }
-
-
-            List<int> location2 = currentPCB.getLocations(19 + 0 + ((pageSet - 1) * 16), 2);
-            for (int j = 0; j < location2.Count; j++)
-            {
-                Memory.Instance.memory[location2[j]].InsertRange(0, writethroughoutput1);
-
-                Memory.Instance.memory[location2[j]].InsertRange(0, writethroughoutput2);
-
-                Memory.Instance.memory[location2[j]].InsertRange(0, writethroughoutput3);
-
-                Memory.Instance.memory[location2[j]].InsertRange(0, writethroughoutput4);
-            }
-
-
 
         }
 
