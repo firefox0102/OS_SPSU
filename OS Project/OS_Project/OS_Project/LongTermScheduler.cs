@@ -39,6 +39,20 @@ namespace OS_Project
             }
         }
 
+        public void removeFromRAM(PCB tempPCB)
+        {
+            // Gets a PCB's physical Memory Frame locations and clears them
+            // The Indexes for the Frames that are cleared get
+            for (int i = 0; i < tempPCB.pageTable.Count; ++i)
+            {
+                Memory.Instance.memory[tempPCB.pageTable[i]].Clear();
+                Memory.Instance.pageManager.Add(tempPCB.pageTable[i]);
+            }
+            tempPCB.pageTable.Clear();
+        }
+
+
+
         public void addToSTScheduler()
         {
             // will need to ensure that the STS has a queue that
@@ -94,6 +108,7 @@ namespace OS_Project
                     // need k to not be zero because the element at index 0
                     // for the logicalMemData will be the first page for data pages
                     // in RAM DO NOT CHANGEs
+                    k++;
                     j = 0;
                     for (; current_dataStartPage <= current_dataEndPage; )
                     {

@@ -94,35 +94,35 @@ namespace OS_Project
                 Sort();
             }
 
-            if ((Driver.cpu2.currentPCB.instrLength - Driver.cpu2.processPosition) > (ReadyQueue[0].instrLength - ReadyQueue[0].pc))
-            {
-                PCB temp = Driver.cpu2.currentPCB;
-                temp.state = PCB.Status.waiting;
-                temp.waitingTime.Start();
-                Dispatcher.Instance.sendProcess(Driver.cpu2);
-                ReadyQueue.Add(temp);
-                Sort();
-            }
+            //if ((Driver.cpu2.currentPCB.instrLength - Driver.cpu2.processPosition) > (ReadyQueue[0].instrLength - ReadyQueue[0].pc))
+            //{
+            //    PCB temp = Driver.cpu2.currentPCB;
+            //    temp.state = PCB.Status.waiting;
+            //    temp.waitingTime.Start();
+            //    Dispatcher.Instance.sendProcess(Driver.cpu2);
+            //    ReadyQueue.Add(temp);
+            //    Sort();
+            //}
 
-            if ((Driver.cpu3.currentPCB.instrLength - Driver.cpu3.processPosition) > (ReadyQueue[0].instrLength - ReadyQueue[0].pc))
-            {
-                PCB temp = Driver.cpu3.currentPCB;
-                temp.state = PCB.Status.waiting;
-                temp.waitingTime.Start();
-                Dispatcher.Instance.sendProcess(Driver.cpu3);
-                ReadyQueue.Add(temp);
-                Sort();
-            }
+            //if ((Driver.cpu3.currentPCB.instrLength - Driver.cpu3.processPosition) > (ReadyQueue[0].instrLength - ReadyQueue[0].pc))
+            //{
+            //    PCB temp = Driver.cpu3.currentPCB;
+            //    temp.state = PCB.Status.waiting;
+            //    temp.waitingTime.Start();
+            //    Dispatcher.Instance.sendProcess(Driver.cpu3);
+            //    ReadyQueue.Add(temp);
+            //    Sort();
+            //}
 
-            if ((Driver.cpu4.currentPCB.instrLength - Driver.cpu4.processPosition) > (ReadyQueue[0].instrLength - ReadyQueue[0].pc))
-            {
-                PCB temp = Driver.cpu4.currentPCB;
-                temp.state = PCB.Status.waiting;
-                temp.waitingTime.Start();
-                Dispatcher.Instance.sendProcess(Driver.cpu4);
-                ReadyQueue.Add(temp);
-                Sort();
-            }
+            //if ((Driver.cpu4.currentPCB.instrLength - Driver.cpu4.processPosition) > (ReadyQueue[0].instrLength - ReadyQueue[0].pc))
+            //{
+            //    PCB temp = Driver.cpu4.currentPCB;
+            //    temp.state = PCB.Status.waiting;
+            //    temp.waitingTime.Start();
+            //    Dispatcher.Instance.sendProcess(Driver.cpu4);
+            //    ReadyQueue.Add(temp);
+            //    Sort();
+            //}
         }
 
         //Context Switching
@@ -139,35 +139,35 @@ namespace OS_Project
                 Sort();
             }
 
-            if ((Driver.cpu2.currentPCB.priority) < (ReadyQueue[0].priority))
-            {
-                PCB temp = Driver.cpu2.currentPCB;
-                temp.state = PCB.Status.waiting;
-                temp.waitingTime.Start();
-                Dispatcher.Instance.sendProcess(Driver.cpu2);
-                ReadyQueue.Add(temp);
-                Sort();
-            }
+            //if ((Driver.cpu2.currentPCB.priority) < (ReadyQueue[0].priority))
+            //{
+            //    PCB temp = Driver.cpu2.currentPCB;
+            //    temp.state = PCB.Status.waiting;
+            //    temp.waitingTime.Start();
+            //    Dispatcher.Instance.sendProcess(Driver.cpu2);
+            //    ReadyQueue.Add(temp);
+            //    Sort();
+            //}
 
-            if ((Driver.cpu3.currentPCB.priority) < (ReadyQueue[0].priority))
-            {
-                PCB temp = Driver.cpu3.currentPCB;
-                temp.state = PCB.Status.waiting;
-                temp.waitingTime.Start();
-                Dispatcher.Instance.sendProcess(Driver.cpu3);
-                ReadyQueue.Add(temp);
-                Sort();
-            }
+            //if ((Driver.cpu3.currentPCB.priority) < (ReadyQueue[0].priority))
+            //{
+            //    PCB temp = Driver.cpu3.currentPCB;
+            //    temp.state = PCB.Status.waiting;
+            //    temp.waitingTime.Start();
+            //    Dispatcher.Instance.sendProcess(Driver.cpu3);
+            //    ReadyQueue.Add(temp);
+            //    Sort();
+            //}
 
-            if ((Driver.cpu4.currentPCB.priority) < (ReadyQueue[0].priority))
-            {
-                PCB temp = Driver.cpu4.currentPCB;
-                temp.state = PCB.Status.waiting;
-                temp.waitingTime.Start();
-                Dispatcher.Instance.sendProcess(Driver.cpu4);
-                ReadyQueue.Add(temp);
-                Sort();
-            }
+            //if ((Driver.cpu4.currentPCB.priority) < (ReadyQueue[0].priority))
+            //{
+            //    PCB temp = Driver.cpu4.currentPCB;
+            //    temp.state = PCB.Status.waiting;
+            //    temp.waitingTime.Start();
+            //    Dispatcher.Instance.sendProcess(Driver.cpu4);
+            //    ReadyQueue.Add(temp);
+            //    Sort();
+            //}
         }
     }
 }

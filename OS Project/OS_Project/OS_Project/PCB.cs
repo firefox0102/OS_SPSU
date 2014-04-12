@@ -116,18 +116,22 @@ namespace OS_Project
             if (kind == 1)
             {
                 //instuctons
-                if(logicalMemInstr.Count < (start +4)){
-                     x = logicalMemInstr.Count;
-                }else{
-                     x = 4;
+                if (logicalMemInstr.Count < (start + 4))
+                {
+                    x = logicalMemInstr.Count;
                 }
-                    
+                else
+                {
+                    x = 4;
+                }
+
                 for (int i = 0; i < x; i++)
                 {
                     loc.Add(logicalMemInstr[start]);
                     start++;
                 }
-                for (int i=0; i<loc.Count; i++){
+                for (int i = 0; i < loc.Count; i++)
+                {
                     act.Add(pageTable[loc[i]]);
                 }
                 return act;
@@ -135,17 +139,21 @@ namespace OS_Project
             else if (kind == 2)
             {
                 //data
-               if(logicalMemInstr.Count < (start +4)){
-                     x = logicalMemInstr.Count;
-                }else{
-                     x = 4;
+                if (logicalMemData.Count < (start + 4))
+                {
+                    x = logicalMemData.Count;
+                }
+                else
+                {
+                    x = 4;
                 }
                 for (int i = 0; i < x; i++)
                 {
                     loc.Add(logicalMemData[start]);
                     start++;
                 }
-               for (int i=0; i<loc.Count; i++){
+                for (int i = 0; i < loc.Count; i++)
+                {
                     act.Add(pageTable[loc[i]]);
                 }
                 return act;

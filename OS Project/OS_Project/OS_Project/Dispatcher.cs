@@ -74,7 +74,7 @@ namespace OS_Project
                     {
                         //interact with instruction logicl memory and page table
                         //logical_memInstr
-                         memLoc = currentPCB.getLocations(y, 1);
+                         memLoc = currentPCB.getLocations(y+1, 1);
                     }
                 }
             //if down, return the instruction set from the page after this one
@@ -97,7 +97,7 @@ namespace OS_Project
                         //interact with data in logicl memory and page table
                         //logical_memDataIn
                          
-                         memLoc = currentPCB.getLocations(y, 2);
+                         memLoc = currentPCB.getLocations(y+1, 2);
                     }
                 }
             //if down, return the instruction set from the page after this one
