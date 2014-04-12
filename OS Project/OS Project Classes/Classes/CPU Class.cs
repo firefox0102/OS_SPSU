@@ -1,8 +1,9 @@
-﻿using System;
+
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.IO;
 
 
 
@@ -19,7 +20,9 @@ namespace OS_Project
         public const int Accumulator = 0;
         public const int Zero = 1;
         public int pc = 0;
-        public int pageSet = 1;
+        public int instructionPageSet = 1;
+        public int inputPageSet = 1;
+        public int outputPageSet = 1;
         public List<String> instructionCache;
         public List<String> inputCache;
         public List<String> outputCache;
@@ -39,8 +42,10 @@ namespace OS_Project
         {
             pc = 0;
             Console.WriteLine(pc);
-            offset = currentPCB.instrLength;
+
             Fetch();
+            offset = currentPCB.instrLength;
+            Decode();
             Execute();
             Console.WriteLine("this job is: "+this.currentPCB.id);
 
@@ -55,87 +60,7 @@ namespace OS_Project
              Dispatcher.Instance.sendProcess(this);
             //is passed pcb id then gets pcb info
             //FILLS instructionList
-         
-
-        }
-
-
-        public void Execute()
-        {
-
-            
-            for(pc = 0; pc<currentPCB.instrLength  ; pc++ )//get from pcb
-            {
-                currentPCB.pc = pc;
-
-                //converts the pc to operate inside of the instruction cache and not the full list of instructions
-                if (pageSet > 1)
-                {
-                    pc = pc - ((pageSet - 1) * 16);
-                }
-
-                //pagefault
-                if(pc<0)
-                {
-                    instructionCache = Dispatcher.Instance.PageFault(currentPCB, pageSet, "down","instructionCache");
-                    pageSet--;
-                }
-
-                //pc is in current page context and executes instruction
-                else if (pc >= 0 &&pc < 16)
-                {
-
-                    //              Console.WriteLine(pc);
-                    currentProcess = Convert.ToString(Convert.ToInt32(instructionCache[pc], 16), 2);
-                    currentProcess = currentProcess.PadLeft(32, '0');
-
-                    string instructionFormat = currentProcess.Substring(0, 2);
-
-                    if (instructionFormat.Equals("00"))
-                    {
-                        Arithmetic();
-                        //           Console.WriteLine(pc);
-                    }
-                    else if (instructionFormat.Equals("01"))
-                    {
-                        BranchandImmediate();
-                        //           Console.WriteLine(pc);
-                    }
-                    else if (instructionFormat.Equals("10"))
-                        UnconditionalJump();
-                    else if (instructionFormat.Equals("11"))
-                        IO();
-                    else
-                        Console.Out.WriteLine("INSTRUCTION FORMAT DETERMINATION MUFFED UP");
-
-                    /*           for (int j = 0; j < 16; j++)
-                               {
-                                   Console.WriteLine(register[j]);
-                                   //    Console.WriteLine("j is equal to" + j);
-                               }
-                               Console.WriteLine("i is equal to::" + pc);
-                      */
-                }
-
-                //pagefault
-                else if (pc >= 16)
-                {
-
-                    instructionCache = Dispatcher.Instance.PageFault(currentPCB, pageSet,"up","instruction");
-                    pageSet++;
-                    
-                }
-
-
-                writeThrough();
-
-
-            }
-            
-            idle = true;
-            currentPCB.state = PCB.Status.terminated;
-            currentPCB.elapsedTime.Stop();
-            
+          
         }
 
         void writeThrough()
@@ -153,7 +78,7 @@ namespace OS_Project
             List<String> writethroughoutput3 = new List<String>();
             List<String> writethroughoutput4 = new List<String>();
 
-            foreach(String y in inputCache)
+            foreach (String y in inputCache)
             {
                 if (count1 < 4)
                     writethroughinput1[count1] = inputCache[count1];
@@ -163,11 +88,11 @@ namespace OS_Project
                     writethroughinput3[count1] = inputCache[count1];
                 if (count1 >= 12 && count1 < 16)
                     writethroughinput4[count1] = inputCache[count1];
-               
+
                 count1++;
             }
 
-            foreach(String z in outputCache)
+            foreach (String z in outputCache)
             {
                 if (count2 < 4)
                     writethroughoutput1[count2] = outputCache[count2];
@@ -177,12 +102,12 @@ namespace OS_Project
                     writethroughoutput3[count2] = outputCache[count2];
                 if (count2 >= 12 && count2 < 16)
                     writethroughoutput4[count2] = outputCache[count2];
-              
+
                 count2++;
             }
 
             List<int> location = currentPCB.getLocations(0 + ((pageSet - 1) * 16), 2);
-            for (int i = 0; i<location.Count; i++)
+            for (int i = 0; i < location.Count; i++)
             {
                 if (i == 0)
                     Memory.Instance.memory[location[i]].InsertRange(0, writethroughinput1);
@@ -196,69 +121,177 @@ namespace OS_Project
 
 
             List<int> location2 = currentPCB.getLocations(19 + 0 + ((pageSet - 1) * 16), 2);
-            for(int j = 0;j< location2.Count; j++)
+            for (int j = 0; j < location2.Count; j++)
             {
-            Memory.Instance.memory[location2[j]].InsertRange(0, writethroughoutput1);
-           
-            Memory.Instance.memory[location2[j]].InsertRange(0, writethroughoutput2);
-            
-            Memory.Instance.memory[location2[j]].InsertRange(0, writethroughoutput3);
-            
-            Memory.Instance.memory[location2[j]].InsertRange(0, writethroughoutput4);
+                Memory.Instance.memory[location2[j]].InsertRange(0, writethroughoutput1);
+
+                Memory.Instance.memory[location2[j]].InsertRange(0, writethroughoutput2);
+
+                Memory.Instance.memory[location2[j]].InsertRange(0, writethroughoutput3);
+
+                Memory.Instance.memory[location2[j]].InsertRange(0, writethroughoutput4);
             }
-          
-        
-        
+
+
+
+        }
+
+        public void Execute()
+        {
+            
+
+            for(pc = 0; pc<currentPCB.instrLength  ; pc++ )//get from pcb
+            {
+
+
+
+
+                //checks size of cache
+                //page faults if not same size
+                //compares pc to see what cache to use
+                if (pc < offset)
+                {
+                    if (pc > instructionCache.Count)
+                    {
+                        instructionCache.addRange(Dispatcher.Instance.PageFault(currentPCB, instructionPageSet, "up", "instruction"));
+                        instructionPageSet++;
+                    }
+                    currentProcess = Convert.ToString(Convert.ToInt32(instructionCache[pc], 16), 2);
+
+                }
+                if (pc > offset && pc < offset + 20)
+                {
+                    pc = pc - offset;
+                    if (pc > inputCache.Count)
+                    {
+                        inputCache.addRange(Dispatcher.Instance.PageFault(currentPCB, inputPageSet, "up", "input"));
+                        inputPageSet++;
+                    }
+                    currentProcess = Convert.ToString(Convert.ToInt32(inputCache[pc], 16), 2);
+                }
+                if (pc > offset + 20)
+                {
+                    pc = pc - (offset + 20);
+                    if (pc > outputCache.Count)
+                    {
+                        outputCache.addRange(Dispatcher.Instance.PageFault(currentPCB, outputPageSet, "up", "output"));
+                        outputPageSet++;
+                    }
+                    currentProcess = Convert.ToString(Convert.ToInt32(outputCache[pc], 16), 2);
+                }
+
+
+
+
+  //              Console.WriteLine(pc);
+               
+                currentProcess = currentProcess.PadLeft(32, '0');
+              
+                string instructionFormat = currentProcess.Substring(0, 2);
+
+                if (instructionFormat.Equals("00"))
+                {
+                    Arithmetic();
+         //           Console.WriteLine(pc);
+                }
+                else if (instructionFormat.Equals("01"))
+                {
+                    BranchandImmediate();
+                    //           Console.WriteLine(pc);
+                }
+                else if (instructionFormat.Equals("10"))
+                    UnconditionalJump();
+                else if (instructionFormat.Equals("11"))
+                    IO();
+                else
+                    Console.Out.WriteLine("INSTRUCTION FORMAT DETERMINATION MUFFED UP");
+
+
+
+
+
+
+
+
+                writeThrough();
+                
+                
+                
+                
+                
+                
+                
+/*           for (int j = 0; j < 16; j++)
+                {
+                    Console.WriteLine(register[j]);
+                    //    Console.WriteLine("j is equal to" + j);
+                }
+                Console.WriteLine("i is equal to::" + pc);
+       */       
+            }
+            
+            idle = true;
+            currentPCB.state = PCB.Status.terminated;
+            currentPCB.elapsedTime.Stop();            
         }
 
         void Arithmetic()
         {
-            string opCode = currentProcess.Substring(2, 6);
-            int s1 = Convert.ToInt32(currentProcess.Substring(8, 4),2);
-            int s2 = Convert.ToInt32(currentProcess.Substring(12, 4),2);
-            int D = Convert.ToInt32(currentProcess.Substring(16, 4),2);
-
-            switch (opCode)
+            try
             {
-                case "000100":  //MOV
-                    register[s1] = register[s2];
-                    break;
-                case "000101":  //ADD
-                    register[D] = register[s1] + register[s2];
-                    break;
-                case "000110":  //SUB
-                    register[D] = register[s1] - register[s2];
-                    break;
-                case "000111":  //MUL
-                    register[D] = register[s1] * register[s2];
-                    break;
-                case "001000":  //DIV
-                    register[D] = register[s1] / register[s2];
-                    break;
-                case "001001":  //AND
-                    if (register[s1] != 0 && register[s2] != 0)
-                        register[D] = 1;
-                    else
-                        register[D] = 0;
-                    break;
-                case "001010":  //OR
-                    if (register[s1] == 0 && register[s2] == 0)
-                        register[D] = 0;
-                    else
-                        register[D] = 1;
-                    break;
-                case "010000":  //SLT
-                    if (register[s1] < register[s2])
-                        register[D] = 1;
-                    else
-                        register[D] = 0;
-                    break;
-                default:
-                    break;
+                string opCode = currentProcess.Substring(2, 6);
+                int s1 = Convert.ToInt32(currentProcess.Substring(8, 4), 2);
+                int s2 = Convert.ToInt32(currentProcess.Substring(12, 4), 2);
+                int D = Convert.ToInt32(currentProcess.Substring(16, 4), 2);
+
+                switch (opCode)
+                {
+                    case "000100":  //MOV
+                        register[s1] = register[s2];
+                        break;
+                    case "000101":  //ADD
+                        register[D] = register[s1] + register[s2];
+                        break;
+                    case "000110":  //SUB
+                        register[D] = register[s1] - register[s2];
+                        break;
+                    case "000111":  //MUL
+                        register[D] = register[s1] * register[s2];
+                        break;
+                    case "001000":  //DIV
+                        register[D] = register[s1] / register[s2];
+                        break;
+                    case "001001":  //AND
+                        if (register[s1] != 0 && register[s2] != 0)
+                            register[D] = 1;
+                        else
+                            register[D] = 0;
+                        break;
+                    case "001010":  //OR
+                        if (register[s1] == 0 && register[s2] == 0)
+                            register[D] = 0;
+                        else
+                            register[D] = 1;
+                        break;
+                    case "010000":  //SLT
+                        if (register[s1] < register[s2])
+                            register[D] = 1;
+                        else
+                            register[D] = 0;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+
+                //increment all of the caches
+
             }
         }    
         
-        String Decode(int address)
+        String convertAddress(int address)
         {
             String newCurrentProcess;
             String currentaddress = address.ToString();
@@ -268,9 +301,6 @@ namespace OS_Project
 
             return newCurrentProcess;
         }
-
-
-
 
         void BranchandImmediate()
         {
@@ -347,77 +377,115 @@ namespace OS_Project
                 case "000010": //ST
                     if (D != 0 && B != 0)
                     {
-                       if(D>offset && D<offset+20)
-                       {
-                           if(D-offset>16)
-                               Dispatcher.Instance.PageFault(currentPCB, pageSet, "up", "input");
-                           if(D-offset<0)
-                              Dispatcher.Instance.PageFault(currentPCB, pageSet,"down","input");
-                           
-                            inputCache[register[D-offset]] = register[B].ToString();
-                       }
-                       else if(D>=offset+20 )
-                       {
-                           if(D-(offset+20)<0)
-                               Dispatcher.Instance.PageFault(currentPCB, pageSet,"down","output");
-                           if (D-(offset+20)>16)
-                               Dispatcher.Instance.PageFault(currentPCB, pageSet,"up","output");
-                           
-                            inputCache[register[D-(offset-20)]] = register[B].ToString();
-                       }
-                       else if(D<offset)
-                           Console.WriteLine("ST instruction is out of bounds");
+        //                ProgramCache[register[D]] = register[B].ToString(); 
+                 
+                        
+                    //instructionCache
+                    if(register[D] < offset)
+                    {
+                        while(register[D]>instructionCache.Count)
+                        {
+                            instructionCache.addRange(Dispatcher.Instance.PageFault(currentPCB, pageSet, "up", "instruction"));
+                            instructionPageSet++;
+                        }
+                        
+                        instructionCache[register[D]] =  register[B].ToString();
+                    }
 
+                    //inputCache
+                    if(register[D] > offset && register[D] < offset +20)
+                    {
+                        int temp = register[D];
+                        temp = temp - offset;
 
+                        while(temp > inputCache.Count)
+                        {
+                            inputCache.addRange(Dispatcher.Instance.PageFault(currentPCB, pageSet, "up", "input"));
+                            inputPageSet++;
+                        }
+
+                        inputCache[temp] = register[B].ToString();
+
+                    }
+                   
+                    //outputCache
+                    
+                    
+                    if(register[D] > offset +20)
+                    {
+
+                        int temp = register[D];
+                        temp = temp - (offset+20);
+
+                        while(temp > outputCache.Count)
+                        {
+                            outputCache.addRange(Dispatcher.Instance.PageFault(currentPCB, pageSet, "up", "output"));
+                            outputPageSet++;
+                        }
+
+                         outputCache[temp] = register[B].ToString();
+
+                    }
+                    
                     }
                     else
                     {
-                        Console.WriteLine("ST instruction broke");
+                        Console.WriteLine("ST");
                     }
                     
                     break;
                 case "000011": //LW
+  //                  register[D] = int.Parse(ProgramCache[register[B]]) ;
 
-                    if (D < offset)
+
+                     //instructionCache
+                    if(register[B] < offset)
                     {
-                        if (offset > 16)
-                            Dispatcher.Instance.PageFault(currentPCB, pageSet, "up", "input");
-
-                        register[D] = int.Parse(instructionCache[register[B]]);
-
-                    }
-                    if (D > offset && D<=offset +20)
-                    {
-                        if (D - offset > 16)
-                            Dispatcher.Instance.PageFault(currentPCB, pageSet, "up", "input");
-                        if (D - offset < 0)
-                            Dispatcher.Instance.PageFault(currentPCB, pageSet, "down", "input");
-
-                        register[D] = int.Parse(inputCache[register[B]]);
-                    }
-                    else if (D > offset + 20)
-                    {
-                        if (D - (offset + 20) < 0)
-                            Dispatcher.Instance.PageFault(currentPCB, pageSet, "down", "output");
-                        if (D - (offset + 20) > 16)
-                            Dispatcher.Instance.PageFault(currentPCB, pageSet, "up", "output");
-
-                        register[D] = int.Parse(outputCache[register[B]]);
+                        while(register[B]>instructionCache.Count)
+                        {
+                            instructionCache.addRange(Dispatcher.Instance.PageFault(currentPCB, pageSet, "up", "instruction"));
+                            instructionPageSet++;
+                        }
+                    register[D] = int.Parse(instructionCache[register[B]]) ;
                     }
 
-
-
-
-
-
-                    /*
-                    if(D<=offset)
-                      register[D] = int.Parse(instructionCache[register[B]]) ;
-                    if(D>offset && D<offset+20)
+                    //inputCache
+                    if(register[B] > offset && register[B] < offset +20)
                     {
-                        
+                        int temp = register[B];
+                        temp = temp - offset;
+
+                        while(temp > inputCache.Count)
+                        {
+                            inputCache.addRange(Dispatcher.Instance.PageFault(currentPCB, pageSet, "up", "input"));
+                            inputPageSet++;
+                        }
+
+                        register[D] = int.Parse(inputCache[register[temp]]) ;
+
                     }
-                    */
+                   
+                    //outputCache
+                    
+                    
+                    if(register[B] > offset +20)
+                    {
+
+                        int temp = register[B];
+                        temp = temp - (offset+20);
+
+                        while(temp > outputCache.Count)
+                        {
+                            outputCache.addRange(Dispatcher.Instance.PageFault(currentPCB, pageSet, "up", "output"));
+                            outputPageSet++;
+                        }
+
+                         register[D] = int.Parse(outputCache[register[temp]]) ;
+
+                    }
+
+
+
                     break;
 
             }
@@ -433,7 +501,6 @@ namespace OS_Project
                     Console.WriteLine("process halted");
             //        Console.ReadLine();
                     currentPCB.state = PCB.Status.terminated;
-//                    PageManager.Instance.Clean(currentPCB);
 
                     break;
                 case "010100": //JMP
@@ -448,10 +515,6 @@ namespace OS_Project
 
         void IO()
         {
-           
-            
-            iocounter[currentPCB.id] = iocounter[currentPCB.id] +1;
-
             String opCode = currentProcess.Substring(2, 6);
             int tempRegister1 = Convert.ToInt32(currentProcess.Substring(8, 4),2);
             int tempRegister2 = Convert.ToInt32(currentProcess.Substring(12, 4),2);
@@ -461,59 +524,99 @@ namespace OS_Project
                 case "000000":
                     if (tempRegister1 != 0 && tempRegister2 != 0)
                     {
+               //         register[tempRegister1] = int.Parse(ProgramCache[register[tempRegister2]], System.Globalization.NumberStyles.HexNumber);
 
-                        //instructioncache
-                        if (tempRegister2 < offset)
+                        int temp = tegister[tempRegister2];
+
+                        //instructionCache
+                        if (temp < offset)
                         {
-                            if (tempRegister2 > 16)
+                            while(temp > outputCache.Count)
                             {
-                                Dispatcher.Instance.PageFault(currentPCB, pageSet, "up", "input");
-                                tempRegister2 = tempRegister2 - 16;
+                                  instructionCache.addRange(Dispatcher.Instance.PageFault(currentPCB, pageSet, "up", "instruction"));
+                                instructionPageSet++;
                             }
-                            register[tempRegister1] = int.Parse(instructionCache[register[tempRegister2]], System.Globalization.NumberStyles.HexNumber);
+                            
+                            
+                            register[tempRegister1] = int.Parse(instructionCache[temp], System.Globalization.NumberStyles.HexNumber);
                         }
-                        
-                        //inputcache
-
-                        if (tempRegister2 > offset && tempRegister2<offset+20)
+                        //inputCache
+                        if (temp > offset && temp < offset + 20)
                         {
-                            if (tempRegister2 > offset + 16)
+                            temp = temp - offset;
+                             while(temp > inputCache.Count)
                             {
-                                Dispatcher.Instance.PageFault(currentPCB, pageSet, "up", "input");
-                                tempRegister2 = tempRegister2 - (offset + 16);
+                                 inputCache.addRange(Dispatcher.Instance.PageFault(currentPCB, pageSet, "up", "input"));
+                                 inputPageSet++;
                             }
-                            else
-                                tempRegister2 = tempRegister2 - offset;
-                           
-                            register[tempRegister1] = int.Parse(instructionCache[register[tempRegister2]], System.Globalization.NumberStyles.HexNumber);
+                            register[tempRegister1] = int.Parse(inputCache[temp], System.Globalization.NumberStyles.HexNumber);
                         }
-
-
-
-                        //outputcache
-
-                         if (tempRegister2 > offset && tempRegister2<offset+20)
+                        //outputCache
+                        if (temp > offset + 20)
                         {
-                            if (tempRegister2 > offset + 16)
+                            temp = temp - (offset+20);
+                            while(temp > outputCache.Count)
                             {
-                                Dispatcher.Instance.PageFault(currentPCB, pageSet, "up", "input");
-                                tempRegister2 = tempRegister2 - (offset + 16);
+                                 outputCache.addRange(Dispatcher.Instance.PageFault(currentPCB, pageSet, "up", "output"));
+                                outputPageSet++;
                             }
-                            else
-                                tempRegister2 = tempRegister2 - offset;
-                           
-                            register[tempRegister1] = int.Parse(instructionCache[register[tempRegister2]], System.Globalization.NumberStyles.HexNumber);
+
+                            register[tempRegister1] = int.Parse(outputCache[temp], System.Globalization.NumberStyles.HexNumber);
                         }
-                    
+
+
+
+
+
+
                     }
-
-
-                       // Dispatcher.Instance.PageFault(currentPCB, pageSet, "up", "input");
-
-
                     else
                     {
-                        register[tempRegister1] = int.Parse(ProgramCache[address / 4], System.Globalization.NumberStyles.HexNumber);
+       //                 register[tempRegister1] = int.Parse(ProgramCache[address/4],System.Globalization.NumberStyles.HexNumber);
+
+                        int temp = address/4;
+
+                        //instructionCache
+                        if (temp < offset)
+                        {
+                            while(temp > outputCache.Count)
+                            {
+                                instructionCache.addRange(Dispatcher.Instance.PageFault(currentPCB, pageSet, "up", "instruction"));
+                                instructionPageSet++;
+                            }
+                            
+                            register[tempRegister1] = int.Parse(instructionCache[temp],System.Globalization.NumberStyles.HexNumber);
+                            
+                        }
+                        //inputCache
+                        if (temp > offset && temp < offset + 20)
+                        {
+                            temp = temp - offset;
+                             while(temp > inputCache.Count)
+                            {
+                                 inputCache.addRange(Dispatcher.Instance.PageFault(currentPCB, pageSet, "up", "input"));
+                                 inputPageSet++;
+                            }
+                            register[tempRegister1] = int.Parse(inputCache[temp], System.Globalization.NumberStyles.HexNumber);
+                        }
+                        //outputCache
+                        if (temp > offset + 20)
+                        {
+                            temp = temp - (offset+20);
+                            while(temp > outputCache.Count)
+                            {
+                                 outputCache.addRange(Dispatcher.Instance.PageFault(currentPCB, pageSet, "up", "output"));
+                                outputPageSet++;
+                            }
+
+                            register[tempRegister1] = int.Parse(outputCache[temp], System.Globalization.NumberStyles.HexNumber);
+                        }
+
+
+
+
+
+
                     }
                     break;
                 case "000001":
