@@ -85,14 +85,14 @@ namespace OS_Project
         {
             //If you are sorting by Shortest Job First, use this code
             //*************************************************************
-
+            
             if ((this.instrLength - this.pc) > (p.instrLength - p.pc))
                 return 1;
             else if ((this.instrLength - this.pc) < (p.instrLength - p.pc))
                 return -1;
             else
                 return 0;
-
+            
             //*************************************************************
 
 
@@ -118,7 +118,7 @@ namespace OS_Project
                 //instuctons
                 if (logicalMemInstr.Count < (start + 4))
                 {
-                    x = logicalMemInstr.Count;
+                    x = logicalMemInstr.Count - start;
                 }
                 else
                 {
@@ -141,7 +141,7 @@ namespace OS_Project
                 //data
                 if (logicalMemData.Count < (start + 4))
                 {
-                    x = logicalMemData.Count;
+                    x = logicalMemData.Count - start;
                 }
                 else
                 {
@@ -154,7 +154,7 @@ namespace OS_Project
                 }
                 for (int i = 0; i < loc.Count; i++)
                 {
-                    act.Add(pageTable[loc[i]]);
+                    act.Add(pageTable[ loc[i] ] );
                 }
                 return act;
             }

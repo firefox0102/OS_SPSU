@@ -74,7 +74,7 @@ namespace OS_Project
                     {
                         //interact with instruction logicl memory and page table
                         //logical_memInstr
-                         memLoc = currentPCB.getLocations(y+1, 1);
+                         memLoc = currentPCB.getLocations(y*4, 1);
                     }
                 }
             //if down, return the instruction set from the page after this one
@@ -84,7 +84,7 @@ namespace OS_Project
                     {
                         //somehow get the currentPcb.pagetable[y+1] instruction set
                         int h = y-1;
-                         memLoc = currentPCB.getLocations(h, 1);
+                         memLoc = currentPCB.getLocations(h*4, 1);
                     }
                 }
                 
@@ -97,7 +97,7 @@ namespace OS_Project
                         //interact with data in logicl memory and page table
                         //logical_memDataIn
                          
-                         memLoc = currentPCB.getLocations(y+1, 2);
+                         memLoc = currentPCB.getLocations(y*4, 2);
                     }
                 }
             //if down, return the instruction set from the page after this one
@@ -107,7 +107,7 @@ namespace OS_Project
                     {
                         //somehow get the currentPcb.pagetable[y+1] instruction set
                          int h = y-1;
-                         memLoc = currentPCB.getLocations(h, 2);
+                         memLoc = currentPCB.getLocations(h*4, 2);
                     }
                 }
                 
@@ -121,7 +121,7 @@ namespace OS_Project
                         //interact with data out logicl memory and page table
                         //logical_memDataOut
                         int offset = y*4;
-                        int od = 4+y;
+                        int od = 5+offset;
                         memLoc = currentPCB.getLocations(od, 2);
                     }
                 }
@@ -131,8 +131,8 @@ namespace OS_Project
                     if (y >0)
                     {
                         //somehow get the currentPcb.pagetable[y+1] instruction set
-                        int offset = (y-1);
-                        int od = 4+y;
+                        int offset = (y-1)*4;
+                        int od = 5+offset;
                          memLoc = currentPCB.getLocations(od, 2);
                     }
                 }

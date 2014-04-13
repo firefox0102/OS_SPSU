@@ -5,24 +5,26 @@ using System.Text;
 using System.IO;
 using OS_Project;
 
-namespace OS_Project{
+namespace OS_Project
+{
 
-    public class Loader{
+    public class Loader
+    {
         //public static Disk disk = Disk.Instance;
 
         public void load()
         {
             //Need to find a standard place for the file within our visual studio project folder
-            string[] lines = System.IO.File.ReadAllLines(@"C:\Users\j\Documents\Visual Studio 2012\Projects\OS_Project\OS_Project\DataFile2-Cleaned.txt");
+            string[] lines = System.IO.File.ReadAllLines(@"C:\Users\j\Downloads\OS_SPSU-Part-2-working\OS_SPSU-Part-2\OS Project\OS_Project\OS_Project\DataFile2-Cleaned.txt");
             lines.ToList();
 
-            
+
             // Creates a temp array that will pass the Frame information 
             // about a Procss to the PCB for storage
-    
+
             int jobID = 0;
             bool stillInstr = true;
-    
+
             foreach (string line in lines)
             {
                 if (line.Contains("JOB"))
@@ -41,7 +43,8 @@ namespace OS_Project{
                 }
                 else if (line.Contains("Data"))
                 {
-                    if (Disk.Instance.currentElement > 0){
+                    if (Disk.Instance.currentElement > 0)
+                    {
                         stillInstr = false;
                         Disk.Instance.diskProcessTable[jobID - 1].diskInstrEndPos = Disk.Instance.currentPage;
                         Disk.Instance.currentPage++;
@@ -59,16 +62,17 @@ namespace OS_Project{
                 }
                 else if (line.Contains("END"))
                 {
-                    if (Disk.Instance.currentElement > 0){ 
-                         Disk.Instance.diskProcessTable[jobID - 1].diskDataEndPos = Disk.Instance.currentPage;
-                         Disk.Instance.diskProcessTable[jobID - 1].totalPages = (int)Math.Ceiling(Disk.Instance.diskProcessTable[jobID - 1].totalLength / 4.0);
-                         Disk.Instance.currentPage++;
-                         Disk.Instance.currentElement = 0;
-                         Disk.Instance.diskUsedPages++;
+                    if (Disk.Instance.currentElement > 0)
+                    {
+                        Disk.Instance.diskProcessTable[jobID - 1].diskDataEndPos = Disk.Instance.currentPage;
+                        Disk.Instance.diskProcessTable[jobID - 1].totalPages = (int)Math.Ceiling(Disk.Instance.diskProcessTable[jobID - 1].totalLength / 4.0);
+                        Disk.Instance.currentPage++;
+                        Disk.Instance.currentElement = 0;
+                        Disk.Instance.diskUsedPages++;
                     }
                     else
                     {
-                        Disk.Instance.diskProcessTable[jobID - 1].diskDataEndPos = Disk.Instance.currentPage - 1 ;
+                        Disk.Instance.diskProcessTable[jobID - 1].diskDataEndPos = Disk.Instance.currentPage - 1;
                         Disk.Instance.diskProcessTable[jobID - 1].totalPages = (int)Math.Ceiling(Disk.Instance.diskProcessTable[jobID - 1].totalLength / 4.0);
                         Disk.Instance.currentElement = 0;
                     }
@@ -79,7 +83,7 @@ namespace OS_Project{
                     // Checks to see if currentElement is greater than 3
                     // if it is it will mean a new page is
 
-                
+
                     //will call the convert hex to binary then to string
                     string tempLine = line.Substring(2);
                     Disk.Instance.diskData[Disk.Instance.currentPage].Add(tempLine);
@@ -93,7 +97,7 @@ namespace OS_Project{
                         Disk.Instance.currentElement = 0;
                         Disk.Instance.currentPage++;
                         Disk.Instance.diskUsedPages++;
-                    } 
+                    }
                 }
 
 
@@ -111,7 +115,7 @@ namespace OS_Project{
             //Console.ReadLine();
 
         }//end main
-   
+
 
     }//end class
 

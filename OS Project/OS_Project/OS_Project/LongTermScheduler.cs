@@ -45,7 +45,7 @@ namespace OS_Project
             // The Indexes for the Frames that are cleared get
             for (int i = 0; i < tempPCB.pageTable.Count; ++i)
             {
-                Memory.Instance.memory[tempPCB.pageTable[i]].Clear();
+                Memory.Instance.memory[ tempPCB.pageTable[i] ].Clear();
                 Memory.Instance.pageManager.Add(tempPCB.pageTable[i]);
             }
             tempPCB.pageTable.Clear();
@@ -60,9 +60,10 @@ namespace OS_Project
 
             //The while loop can be removed because it was for testing
             bool keepGoing = true;
-            while (keepGoing)
+            while (keepGoing && nextJob < 30)
             {
                 PCB tempPCB = Disk.Instance.diskProcessTable[nextJob];
+
                 if (Memory.Instance.pageManager.Count > tempPCB.totalPages)
                 {
 
@@ -108,7 +109,7 @@ namespace OS_Project
                     // need k to not be zero because the element at index 0
                     // for the logicalMemData will be the first page for data pages
                     // in RAM DO NOT CHANGEs
-                    k++;
+                    k = tempPCB.logicalMemInstr.Count;
                     j = 0;
                     for (; current_dataStartPage <= current_dataEndPage; )
                     {
@@ -143,8 +144,8 @@ namespace OS_Project
                     nextJob++;
                     Console.WriteLine("Loaded Job: " + (nextJob - 1));
                     Console.WriteLine("----------------------------");
-                    ShortTermScheduler.Instance.ReadyQueue.Add(tempPCB);
-
+                    ShortTermScheduler.Instance.AddToShortTermScheduler(tempPCB);
+                    //ShortTermScheduler.Instance.ReadyQueue.Add(tempPCB);
                 }
                 else
                 {

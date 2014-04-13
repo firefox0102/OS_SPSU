@@ -17,8 +17,11 @@ namespace OS_Project
         /// </summary>
         ///
         public static CPU cpu = new CPU();
+        public static CPU cpu2 = new CPU();
+        public static CPU cpu3 = new CPU();
+        public static CPU cpu4 = new CPU();
 
-        [STAThread]
+  //      [STAThread]
         static void Main()
         {
             //Generic stuff that allows the window to show up
@@ -35,8 +38,13 @@ Application.Run(new Form1());
             while (i < 30)
             {
                 cpu.run();
-                i++;
+                cpu2.run();
+                cpu3.run();
+                cpu4.run();
+                Console.WriteLine("This is driver run: " + i);
                 LongTermScheduler.Instance.addToSTScheduler();
+                i++;
+                
             }
 
 

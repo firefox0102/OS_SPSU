@@ -92,6 +92,7 @@ namespace OS_Project
                 Dispatcher.Instance.sendProcess(Driver.cpu);
                 ReadyQueue.Add(temp);
                 Sort();
+                Console.WriteLine("CONTEXT SWITCH MOTHER FUCKER!!!");
             }
 
             //if ((Driver.cpu2.currentPCB.instrLength - Driver.cpu2.processPosition) > (ReadyQueue[0].instrLength - ReadyQueue[0].pc))
@@ -102,6 +103,7 @@ namespace OS_Project
             //    Dispatcher.Instance.sendProcess(Driver.cpu2);
             //    ReadyQueue.Add(temp);
             //    Sort();
+            //    Console.WriteLine("CONTEXT SWITCH MOTHER FUCKER!!!");
             //}
 
             //if ((Driver.cpu3.currentPCB.instrLength - Driver.cpu3.processPosition) > (ReadyQueue[0].instrLength - ReadyQueue[0].pc))
@@ -112,6 +114,7 @@ namespace OS_Project
             //    Dispatcher.Instance.sendProcess(Driver.cpu3);
             //    ReadyQueue.Add(temp);
             //    Sort();
+            //    Console.WriteLine("CONTEXT SWITCH MOTHER FUCKER!!!");
             //}
 
             //if ((Driver.cpu4.currentPCB.instrLength - Driver.cpu4.processPosition) > (ReadyQueue[0].instrLength - ReadyQueue[0].pc))
@@ -122,6 +125,7 @@ namespace OS_Project
             //    Dispatcher.Instance.sendProcess(Driver.cpu4);
             //    ReadyQueue.Add(temp);
             //    Sort();
+            //    Console.WriteLine("CONTEXT SWITCH MOTHER FUCKER!!!");
             //}
         }
 
@@ -137,6 +141,7 @@ namespace OS_Project
                 Dispatcher.Instance.sendProcess(Driver.cpu);
                 ReadyQueue.Add(temp);
                 Sort();
+                Console.WriteLine("CONTEXT SWITCH");
             }
 
             //if ((Driver.cpu2.currentPCB.priority) < (ReadyQueue[0].priority))
