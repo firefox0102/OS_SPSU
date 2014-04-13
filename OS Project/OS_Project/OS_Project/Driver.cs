@@ -31,24 +31,72 @@ Application.Run(new Form1());
 */
             Loader init_loader = new Loader();
             init_loader.load();
-
-            double counter = 0;
             LongTermScheduler.Instance.addToSTScheduler();
             int i = 0;
+
+
+            Action cpu1R = new Action(cpu.run);
+            Action cpu2R = new Action(cpu2.run);
+            Action cpu3R = new Action(cpu3.run);
+            Action cpu4R = new Action(cpu4.run);
+            //Action ltsr = new Action(LongTermScheduler.Instance.addToSTScheduler);
+
+            Task task1 = new Task(cpu1R);
+            Task task2 = new Task(cpu2R);
+            Task task3 = new Task(cpu3R);
+            Task task4 = new Task(cpu4R);
+
             while (i < 30)
             {
-                cpu.run();
-                cpu2.run();
-                cpu3.run();
-                cpu4.run();
+                if (ShortTermScheduler.Instance.ReadyQueue.Count < 0 )
+                {
+                    break;
+                }
+
+                task1.Start();
+
+                if (ShortTermScheduler.Instance.ReadyQueue.Count < 0)
+                {
+                    break;  
+                }
+ 
+                task2.Start();
+
+                if (ShortTermScheduler.Instance.ReadyQueue.Count < 0)
+                {
+                    break;
+                }
+
+                task3.Start();
+
+                if (ShortTermScheduler.Instance.ReadyQueue.Count < 0)
+                {
+                    break;
+                }
+                
+                task4.Start();
+                
+                task1.Wait();
+                task2.Wait();
+                task3.Wait();
+                task4.Wait();
+
+                task1 = new Task(cpu1R);
+                task2 = new Task(cpu2R);
+                task3 = new Task(cpu3R);
+                task4 = new Task(cpu4R);
+
                 Console.WriteLine("This is driver run: " + i);
                 LongTermScheduler.Instance.addToSTScheduler();
                 i++;
+                Console.ReadLine();
+                
+
                 
             }
 
 
-
+            Console.ReadLine();
 
 
             //string[] results = new string[33];

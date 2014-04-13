@@ -9,14 +9,15 @@ namespace OS_Project{
 
     public class Disk{
 
-        public static Disk disk;
+        public static volatile Disk disk;
         //Changed disk data structure to a List of Lists containing 4 words each (1 page)
-        public List<List<string>> diskData;
+        public  List<List<string>> diskData;
         public int currentPage;
         public int currentElement;
         public List<PCB> diskProcessTable;
         public int diskUsedPages;
         public int numberProcesses;
+        private static Object locker = new Object();
 
         public Disk(){
             // New disk structure is 512 pages of 4 words each
@@ -40,7 +41,10 @@ namespace OS_Project{
             {
                 if (disk == null)
                 {
-                    disk = new Disk();
+                    lock (locker)
+                    {
+                        disk = new Disk();
+                    }
                 }
                 return disk;
             }

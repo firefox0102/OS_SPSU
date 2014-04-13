@@ -9,8 +9,9 @@ namespace OS_Project
 {
     public class ShortTermScheduler
     {
-        public static ShortTermScheduler sts;
+        public static volatile ShortTermScheduler sts;
         public List<PCB> ReadyQueue;
+        private static Object locker = new Object();
 
         //singleton for remote access in other classes
         public static ShortTermScheduler Instance
@@ -19,7 +20,10 @@ namespace OS_Project
             {
                 if (sts == null)
                 {
-                    sts = new ShortTermScheduler();
+                    lock (locker)
+                    {
+                        sts = new ShortTermScheduler();
+                    }
                 }
                 return sts;
             }
@@ -84,7 +88,7 @@ namespace OS_Project
         //Checks to see if the next job is shorter than any of the currently running jobs
         public void switchNextJobSJF()
         {
-            if((Driver.cpu.currentPCB.instrLength - Driver.cpu.processPosition) > (ReadyQueue[0].instrLength- ReadyQueue[0].pc))
+            if((ReadyQueue.Count > 0) && (Driver.cpu.currentPCB.instrLength - Driver.cpu.processPosition) > (ReadyQueue[0].instrLength- ReadyQueue[0].pc))
             {
                 PCB temp = Driver.cpu.currentPCB;
                 temp.state = PCB.Status.waiting;

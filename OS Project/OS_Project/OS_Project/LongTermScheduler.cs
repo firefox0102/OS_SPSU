@@ -14,7 +14,8 @@ namespace OS_Project
         // Will have to update the the RAM pageManager
         // to show no longer empty.
 
-        public static LongTermScheduler LTS;
+        public static volatile LongTermScheduler LTS;
+        private static Object locker = new Object();
 
         //Processes that have been loaded into RAM
         public List<int> LoadedProcesses;
@@ -33,7 +34,10 @@ namespace OS_Project
             {
                 if (LTS == null)
                 {
-                    LTS = new LongTermScheduler();
+                    lock (locker)
+                    {
+                        LTS = new LongTermScheduler();
+                    }
                 }
                 return LTS;
             }

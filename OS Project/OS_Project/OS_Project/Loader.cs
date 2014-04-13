@@ -15,7 +15,7 @@ namespace OS_Project
         public void load()
         {
             //Need to find a standard place for the file within our visual studio project folder
-            string[] lines = System.IO.File.ReadAllLines(@"C:\Users\j\Downloads\OS_SPSU-Part-2-working\OS_SPSU-Part-2\OS Project\OS_Project\OS_Project\DataFile2-Cleaned.txt");
+            string[] lines = System.IO.File.ReadAllLines(@"C:\Users\pfinn\Documents\GitHub\OS_SPSU\OS Project\OS_Project\OS_Project\DataFile2-Cleaned.txt");
             lines.ToList();
 
 

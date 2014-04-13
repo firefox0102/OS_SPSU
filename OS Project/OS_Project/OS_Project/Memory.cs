@@ -10,9 +10,10 @@ using OS_Project;
 namespace OS_Project{
     public class Memory
     {
-        public static Memory Ram;
+        public static volatile Memory Ram;
         public List<List<string>> memory;
         public List<int> pageManager;
+        private static Object locker = new Object();
         
         public Memory(){
             memory = new List<List<string>>(256);
@@ -28,11 +29,17 @@ namespace OS_Project{
         {
             get
             {
-                if (Ram == null)
+                lock (locker)
                 {
-                    Ram = new Memory();
+                    if (Ram == null)
+                    {
+                        lock (locker)
+                        {
+                            Ram = new Memory();
+                        }
+                    }
+                    return Ram;
                 }
-                return Ram;
             }
         }
 

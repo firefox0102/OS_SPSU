@@ -28,3 +28,9 @@ C:\Users\j\Downloads\OS_SPSU-Part-2-working\OS_SPSU-Part-2\OS Project\OS_Project
 C:\Users\j\Downloads\OS_SPSU-Part-2-working\OS_SPSU-Part-2\OS Project\OS_Project\OS_Project\bin\Debug\OS_Project.exe
 C:\Users\j\Downloads\OS_SPSU-Part-2-working\OS_SPSU-Part-2\OS Project\OS_Project\OS_Project\bin\Debug\OS_Project.pdb
 C:\Users\j\Downloads\OS_SPSU-Part-2-working\OS_SPSU-Part-2\OS Project\OS_Project\OS_Project\obj\Debug\OS_Project.csprojResolveAssemblyReference.cache
+C:\Users\pfinn\Documents\GitHub\OS_SPSU\OS Project\OS_Project\OS_Project\bin\Debug\OS_Project.exe.config
+C:\Users\pfinn\Documents\GitHub\OS_SPSU\OS Project\OS_Project\OS_Project\obj\Debug\OS_Project.exe
+C:\Users\pfinn\Documents\GitHub\OS_SPSU\OS Project\OS_Project\OS_Project\obj\Debug\OS_Project.pdb
+C:\Users\pfinn\Documents\GitHub\OS_SPSU\OS Project\OS_Project\OS_Project\bin\Debug\OS_Project.exe
+C:\Users\pfinn\Documents\GitHub\OS_SPSU\OS Project\OS_Project\OS_Project\bin\Debug\OS_Project.pdb
+C:\Users\pfinn\Documents\GitHub\OS_SPSU\OS Project\OS_Project\OS_Project\obj\Debug\OS_Project.csprojResolveAssemblyReference.cache

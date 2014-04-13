@@ -38,14 +38,16 @@ namespace OS_Project
 
         public void run()
         {
-            pc = 0;
-            Console.WriteLine(pc);
+            //if (ShortTermScheduler.Instance.ReadyQueue.Count > 0)
+            //{
+                pc = 0;
+                Console.WriteLine(pc);
 
-            Fetch();
-            offset = currentPCB.instrLength;
-            Execute();
-            Console.WriteLine("this job is: "+this.currentPCB.id);
-
+                Fetch();
+                offset = currentPCB.instrLength;
+                Execute();
+      
+            //}
         }
 
 
@@ -129,7 +131,7 @@ namespace OS_Project
 
                 int temp = pc;
 
-                Console.Out.WriteLine("Current Job id is:" + currentPCB.id);
+              //  Console.Out.WriteLine("Current Job id is:" + currentPCB.id);
 
                 //checks size of cache
                 //page faults if not same size
@@ -199,9 +201,9 @@ namespace OS_Project
 
 
 
-                writeThrough();
+          //      writeThrough();
 
-                ShortTermScheduler.Instance.switchNextJobSJF();
+                //ShortTermScheduler.Instance.switchNextJobSJF();
                 
                 
                 
@@ -218,7 +220,7 @@ namespace OS_Project
             idle = true;
             currentPCB.state = PCB.Status.terminated;
             currentPCB.elapsedTime.Stop();
-            LongTermScheduler.Instance.removeFromRAM(currentPCB);
+           // LongTermScheduler.Instance.removeFromRAM(currentPCB);
         }
 
         void Arithmetic()
@@ -387,6 +389,7 @@ namespace OS_Project
 
                         inputCache[temp] = register[B].ToString();
 
+                        
                     }
                    
                     //outputCache
@@ -406,6 +409,7 @@ namespace OS_Project
 
                          outputCache[temp1] = register[B].ToString();
 
+                         
                     }
                     
                     }
@@ -413,7 +417,7 @@ namespace OS_Project
                     {
                         Console.WriteLine("ST");
                     }
-                    
+                    writeThrough();
                     break;
                 case "000011": //LW
   //                  register[D] = int.Parse(ProgramCache[register[B]]) ;
@@ -428,6 +432,7 @@ namespace OS_Project
                             instructionPageSet++;
                         }
                     register[D] = int.Parse(instructionCache[register[B]]) ;
+
                     }
 
                     //inputCache
@@ -466,7 +471,7 @@ namespace OS_Project
                     }
 
 
-
+                    writeThrough();
                     break;
 
             }
@@ -479,10 +484,11 @@ namespace OS_Project
             switch (opCode)
             {
                 case "010010":  //HLT
-                    Console.WriteLine("process halted");
-                    Console.ReadLine();
+                    Console.WriteLine("process halted:" + currentPCB.id);
+                //    Console.ReadLine();
                     currentPCB.state = PCB.Status.terminated;
-                    
+                    LongTermScheduler.Instance.removeFromRAM(currentPCB);
+                    //LongTermScheduler.Instance.addToSTScheduler();
                     break;
                 case "010100": //JMP
                     
@@ -599,11 +605,12 @@ namespace OS_Project
 
 
                     }
+                    writeThrough();
                     break;
                 case "000001":
                     {
                         string opBuffer = register[0].ToString();
-                        Console.WriteLine("opBuffer is equal to "+opBuffer);
+               //         Console.WriteLine("opBuffer is equal to "+opBuffer);
            //             Console.ReadLine();
                         break;
 

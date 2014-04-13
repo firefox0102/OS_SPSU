@@ -9,20 +9,27 @@ namespace OS_Project
 {
     public class Dispatcher
     {
-        public static Dispatcher dis;
+        public static volatile Dispatcher dis;
         public bool idle = true;
+        private static Object locker = new Object();
         public Dispatcher()
         {
         }
         public static Dispatcher Instance
         {
-            get
-            {
-                if (dis == null)
+           
+                get
                 {
-                    dis = new Dispatcher();
-                }
-                return dis;
+                    
+                    if (dis == null)
+                    {
+                        lock (locker)
+                        {
+                        dis = new Dispatcher();
+                        }
+                    }
+                    return dis;
+                   
             }
         }
         //Drew will write the dispatcher
